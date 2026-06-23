@@ -1,0 +1,19 @@
+/* Live Ready Refinement */
+body.live-ready{min-height:100vh}
+.live-launch-banner{margin:18px auto;max-width:1280px;background:radial-gradient(circle at 10% 0%,rgba(34,197,94,.16),transparent 32%),linear-gradient(180deg,rgba(15,23,42,.94),rgba(2,6,23,.92));border:1px solid rgba(34,197,94,.34);border-radius:18px;padding:14px 16px;color:#d1fae5;line-height:1.55;font-weight:800;box-shadow:0 18px 54px rgba(0,0,0,.22)}
+.live-launch-banner strong{color:#86efac}
+.live-api-warning{margin:18px 0;background:rgba(250,204,21,.10);border:1px solid rgba(250,204,21,.42);border-radius:16px;padding:14px;color:#fde68a;line-height:1.6;font-weight:800}
+.live-api-warning code{background:rgba(2,6,23,.7);border:1px solid rgba(250,204,21,.2);border-radius:8px;padding:2px 6px;color:#fef3c7}
+.live-admin-chip{position:fixed;left:16px;bottom:16px;z-index:90;max-width:280px;background:rgba(2,6,23,.86);border:1px solid rgba(56,189,248,.28);border-radius:999px;padding:10px 13px;color:#dbeafe;font-size:13px;line-height:1.3;backdrop-filter:blur(12px);box-shadow:0 16px 44px rgba(0,0,0,.28);display:none}
+body[data-plan=admin] .live-admin-chip{display:block}
+.live-admin-chip strong{color:#7dd3fc}
+.live-terms-footer{max-width:1280px;margin:30px auto 0;padding:18px 0 6px;color:rgba(203,213,225,.76);font-size:13px;line-height:1.6;border-top:1px solid rgba(148,163,184,.14)}
+.live-terms-footer button{padding:8px 10px;font-size:13px;margin-left:8px}
+.live-modal-backdrop{position:fixed;inset:0;z-index:400;background:rgba(2,6,23,.74);backdrop-filter:blur(14px);display:grid;place-items:center;padding:20px}
+.live-modal{width:min(760px,96vw);max-height:86vh;overflow-y:auto;background:radial-gradient(circle at 12% 0%,rgba(56,189,248,.16),transparent 32%),linear-gradient(180deg,rgba(15,23,42,.98),rgba(2,6,23,.98));border:1px solid rgba(56,189,248,.34);border-radius:24px;padding:24px;box-shadow:0 34px 110px rgba(0,0,0,.48);color:#dbeafe}
+.live-modal h2{color:#7dd3fc;font-size:34px;margin-bottom:12px}
+.live-modal h3{color:#fde68a;margin:18px 0 8px}
+.live-modal p,.live-modal li{line-height:1.68;color:#dbeafe}
+.live-modal ul{margin:10px 0 0 20px}
+@media print{.topbar,.notes-float,.live-admin-chip,.live-terms-footer,button{display:none!important}.panel,.sublesson-section,.card{box-shadow:none!important;border-color:#999!important;color:#000!important}}
+@media(max-width:760px){.live-admin-chip{position:static;margin:12px 18px;border-radius:16px;max-width:none}}

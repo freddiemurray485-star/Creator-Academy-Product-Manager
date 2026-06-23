@@ -1,0 +1,242 @@
+/* Final assessment/home routing polish. */
+.ca-homepage-true .hero-content > p {
+  max-width: 920px;
+}
+
+.ca-home-status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.ca-home-status-card {
+  margin: 0;
+}
+
+.ca-assessment-choice-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.ca-assessment-choice-panel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.16), transparent 32%),
+    radial-gradient(circle at 85% 30%, rgba(34, 197, 94, 0.12), transparent 28%);
+  pointer-events: none;
+}
+
+.ca-assessment-choice-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ca-assessment-choice-header {
+  align-items: flex-start;
+}
+
+.ca-assessment-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.ca-assessment-choice-card {
+  text-align: left;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 28px;
+  padding: 26px;
+  min-height: 260px;
+  color: #e5f4ff;
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(8, 13, 28, 0.98)),
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.18), transparent 36%);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ca-assessment-choice-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.48);
+  box-shadow: 0 26px 70px rgba(56, 189, 248, 0.13);
+}
+
+.ca-assessment-choice-card.exam {
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(8, 13, 28, 0.98)),
+    radial-gradient(circle at 100% 0%, rgba(168, 85, 247, 0.18), transparent 36%);
+}
+
+.ca-choice-kicker {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 14px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  color: #7dd3fc;
+  background: rgba(14, 165, 233, 0.11);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ca-assessment-choice-card h3 {
+  margin: 0 0 10px;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+}
+
+.ca-assessment-choice-card p {
+  margin: 0 0 18px;
+  color: rgba(226, 232, 240, 0.78);
+  line-height: 1.6;
+}
+
+.ca-assessment-choice-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(186, 230, 253, 0.86);
+}
+
+.ca-assessment-choice-card li + li {
+  margin-top: 6px;
+}
+
+@media (max-width: 760px) {
+  .ca-home-status-grid,
+  .ca-assessment-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Direct assessment hubs: prevents Homework/Formal Exams from falling into older gated routes. */
+.ca-direct-assessment-page .course-header {
+  gap: 18px;
+}
+
+.ca-direct-assessment-grid {
+  margin-top: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.ca-direct-assessment-card {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 24px;
+  padding: 22px;
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(5, 10, 24, 0.96)),
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.13), transparent 34%);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+.ca-direct-assessment-card h3 {
+  margin: 12px 0 8px;
+}
+
+.ca-direct-assessment-card p {
+  color: rgba(226, 232, 240, 0.76);
+  line-height: 1.55;
+}
+
+.ca-direct-standard {
+  margin: 20px 0;
+}
+
+.ca-direct-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.ca-direct-mini-task,
+.ca-direct-slot-card {
+  text-align: left;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 11px;
+  background: rgba(15, 23, 42, 0.68);
+  color: #e5f4ff;
+  cursor: pointer;
+}
+
+.ca-direct-mini-task span,
+.ca-direct-slot-card span,
+.ca-direct-slot-card small {
+  display: block;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.ca-direct-mini-task strong,
+.ca-direct-slot-card strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.ca-direct-mini-task.complete,
+.ca-direct-slot-card.complete,
+.ca-direct-exam-card.complete {
+  border-color: rgba(34, 197, 94, 0.42);
+}
+
+.ca-direct-mini-task.started,
+.ca-direct-slot-card.started,
+.ca-direct-exam-card.started {
+  border-color: rgba(56, 189, 248, 0.42);
+}
+
+.ca-direct-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.ca-direct-textarea {
+  width: 100%;
+  min-height: 170px;
+  margin: 14px 0;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(2, 6, 23, 0.66);
+  color: #e5f4ff;
+  resize: vertical;
+}
+
+.ca-direct-exam-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.ca-direct-exam-status span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.66);
+}
+
+.ca-direct-exam-form {
+  display: grid;
+  gap: 18px;
+}
+
+.ca-direct-exam-question strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 720px) {
+  .ca-direct-mini-grid {
+    grid-template-columns: 1fr;
+  }
+}

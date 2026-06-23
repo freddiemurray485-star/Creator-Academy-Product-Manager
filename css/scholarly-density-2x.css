@@ -1,0 +1,273 @@
+/* Scholarly Density 2X
+   Doubles the density by adding a second high-structure coursework layer.
+*/
+
+.scholar2-page {
+	display: grid;
+	gap: 18px;
+}
+
+.scholar2-hero {
+	border-radius: 34px;
+	padding: clamp(24px, 4vw, 54px);
+	border: 1px solid rgba(125, 211, 252, 0.34);
+	background:
+		radial-gradient(circle at 8% 0%, rgba(56, 189, 248, 0.24), transparent 36%),
+		radial-gradient(circle at 86% 16%, rgba(34, 197, 94, 0.16), transparent 40%),
+		radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.12), transparent 42%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.985), rgba(2, 6, 23, 0.985));
+	box-shadow: 0 34px 115px rgba(0,0,0,.45);
+}
+
+.scholar2-hero h2 {
+	font-size: clamp(36px, 5.4vw, 74px);
+	line-height: 1.01;
+	letter-spacing: -0.065em;
+	margin: 10px 0 14px;
+	background: linear-gradient(90deg, #f8fafc, #7dd3fc, #86efac);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.scholar2-hero p {
+	max-width: 1180px;
+	color: #dbeafe;
+	font-size: 17px;
+	line-height: 1.75;
+}
+
+.scholar2-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 10px;
+	margin-top: 18px;
+}
+
+.scholar2-stat {
+	background: rgba(2, 6, 23, .64);
+	border: 1px solid rgba(148, 163, 184, .18);
+	border-radius: 16px;
+	padding: 14px;
+}
+
+.scholar2-stat span {
+	display: block;
+	color: #94a3b8;
+	text-transform: uppercase;
+	letter-spacing: .075em;
+	font-weight: 950;
+	font-size: 11px;
+	margin-bottom: 5px;
+}
+
+.scholar2-stat strong {
+	display: block;
+	color: #7dd3fc;
+	font-size: 20px;
+	line-height: 1.15;
+}
+
+.scholar2-section {
+	border-radius: 26px;
+	border: 1px solid rgba(148, 163, 184, .18);
+	background: linear-gradient(180deg, rgba(15, 23, 42, .955), rgba(8, 13, 29, .955));
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 18px 58px rgba(0,0,0,.26);
+	padding: clamp(18px, 3vw, 34px);
+}
+
+.scholar2-section h3 {
+	color: #7dd3fc;
+	font-size: 29px;
+	letter-spacing: -0.036em;
+	margin-bottom: 12px;
+}
+
+.scholar2-section h4 {
+	color: #fde68a;
+	font-size: 20px;
+	margin: 18px 0 8px;
+}
+
+.scholar2-section p,
+.scholar2-section li {
+	color: #dbeafe;
+	font-size: 16px;
+	line-height: 1.74;
+}
+
+.scholar2-section ul,
+.scholar2-section ol {
+	margin: 10px 0 0 22px;
+}
+
+.scholar2-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 14px;
+}
+
+.scholar2-card {
+	background: rgba(2, 6, 23, .64);
+	border: 1px solid rgba(125, 211, 252, .18);
+	border-radius: 18px;
+	padding: 15px;
+}
+
+.scholar2-card h4 {
+	margin-top: 0;
+	color: #7dd3fc;
+}
+
+.scholar2-pill {
+	display: inline-flex;
+	border-radius: 999px;
+	padding: 6px 9px;
+	background: rgba(56,189,248,.12);
+	border: 1px solid rgba(56,189,248,.30);
+	color: #7dd3fc;
+	font-size: 12px;
+	font-weight: 950;
+	margin-bottom: 10px;
+}
+
+.scholar2-pill.gold {
+	background: rgba(250,204,21,.12);
+	border-color: rgba(250,204,21,.34);
+	color: #fde68a;
+}
+
+.scholar2-pill.green {
+	background: rgba(34,197,94,.12);
+	border-color: rgba(34,197,94,.34);
+	color: #bbf7d0;
+}
+
+.scholar2-pill.red {
+	background: rgba(239,68,68,.12);
+	border-color: rgba(239,68,68,.34);
+	color: #fecaca;
+}
+
+.scholar2-callout {
+	border-radius: 16px;
+	padding: 14px;
+	border: 1px solid rgba(56,189,248,.28);
+	background: rgba(56,189,248,.10);
+	color: #dbeafe;
+	line-height: 1.68;
+}
+
+.scholar2-callout.warning {
+	border-color: rgba(250,204,21,.34);
+	background: rgba(250,204,21,.10);
+	color: #fde68a;
+}
+
+.scholar2-callout.danger {
+	border-color: rgba(239,68,68,.34);
+	background: rgba(239,68,68,.10);
+	color: #fecaca;
+}
+
+.scholar2-table {
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 16px;
+	overflow: hidden;
+	margin-top: 12px;
+}
+
+.scholar2-table th,
+.scholar2-table td {
+	border: 1px solid rgba(148,163,184,.16);
+	padding: 10px;
+	text-align: left;
+	vertical-align: top;
+	color: #dbeafe;
+	line-height: 1.5;
+}
+
+.scholar2-table th {
+	background: rgba(56,189,248,.12);
+	color: #7dd3fc;
+	font-weight: 950;
+}
+
+.scholar2-table td:first-child {
+	color: #fde68a;
+	font-weight: 950;
+}
+
+.scholar2-code {
+	background: #020617;
+	border: 1px solid rgba(148,163,184,.24);
+	color: #86efac;
+	border-radius: 16px;
+	padding: 16px;
+	overflow-x: auto;
+	line-height: 1.55;
+	font-size: 14px;
+}
+
+.scholar2-evidence {
+	width: 100%;
+	min-height: 260px;
+	background: rgba(2, 6, 23, .84);
+	border: 1px solid rgba(148,163,184,.24);
+	color: #f8fafc;
+	border-radius: 16px;
+	padding: 14px;
+	resize: vertical;
+	line-height: 1.62;
+}
+
+.scholar2-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 14px;
+}
+
+.scholar2-ref-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 10px;
+}
+
+.scholar2-ref-list a {
+	display: block;
+	background: rgba(2, 6, 23, .64);
+	border: 1px solid rgba(125,211,252,.20);
+	border-radius: 14px;
+	padding: 12px;
+	color: #7dd3fc;
+	text-decoration: none;
+	font-weight: 900;
+}
+
+.scholar2-ref-list a:hover {
+	text-decoration: underline;
+	border-color: rgba(125,211,252,.46);
+}
+
+@media (max-width: 760px) {
+	.scholar2-section,
+	.scholar2-hero {
+		padding: 18px;
+	}
+
+	.scholar2-table {
+		display: block;
+		overflow-x: auto;
+	}
+
+	.scholar2-actions {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+
+	.scholar2-actions button {
+		width: 100%;
+	}
+}

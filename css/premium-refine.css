@@ -1,0 +1,479 @@
+/* Creator Academy Hub — Premium Refinement Layer
+   Purpose: preserve current functionality while making the UI feel clean, premium, futuristic, and worth paying for.
+   This file intentionally sits after style.css and overrides visuals only.
+*/
+
+:root {
+	--ca-bg: #020617;
+	--ca-surface: rgba(8, 13, 29, 0.84);
+	--ca-surface-strong: rgba(15, 23, 42, 0.94);
+	--ca-border: rgba(148, 163, 184, 0.18);
+	--ca-border-blue: rgba(56, 189, 248, 0.46);
+	--ca-text: #f8fafc;
+	--ca-muted: #cbd5e1;
+	--ca-soft: #94a3b8;
+	--ca-blue: #38bdf8;
+	--ca-cyan: #67e8f9;
+	--ca-green: #22c55e;
+	--ca-gold: #facc15;
+	--ca-purple: #a78bfa;
+	--ca-danger: #ef4444;
+	--ca-radius-xl: 32px;
+	--ca-radius-lg: 24px;
+	--ca-radius-md: 16px;
+	--ca-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+	--ca-glow-blue: 0 0 55px rgba(56, 189, 248, 0.16);
+	--ca-glow-gold: 0 0 55px rgba(250, 204, 21, 0.15);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background:
+		radial-gradient(circle at 9% 8%, rgba(56, 189, 248, 0.20), transparent 31%),
+		radial-gradient(circle at 88% 22%, rgba(34, 197, 94, 0.16), transparent 33%),
+		radial-gradient(circle at 50% 102%, rgba(167, 139, 250, 0.18), transparent 36%),
+		linear-gradient(rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+		#020617 !important;
+	background-size: auto, auto, auto, 82px 82px, 82px 82px, auto !important;
+	color: var(--ca-text);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: geometricPrecision;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: -1;
+	background:
+		linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.035) 45%, transparent 56%),
+		radial-gradient(circle at 50% 0%, rgba(255,255,255,0.045), transparent 30%);
+	mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+/* Top navigation */
+.topbar {
+	background: rgba(2, 6, 23, 0.78) !important;
+	border-bottom: 1px solid rgba(125, 211, 252, 0.14) !important;
+	box-shadow: 0 16px 50px rgba(0,0,0,0.22);
+	backdrop-filter: blur(22px) saturate(145%);
+}
+
+.brand h1 {
+	letter-spacing: -0.055em;
+}
+
+.brand p {
+	color: rgba(203, 213, 225, 0.86);
+}
+
+.logo {
+	box-shadow: 0 0 32px rgba(56, 189, 248, 0.20);
+}
+
+.nav-actions button {
+	border-radius: 16px !important;
+	background: linear-gradient(180deg, #38bdf8, #22a8df) !important;
+	border: 1px solid rgba(255,255,255,0.18) !important;
+	box-shadow: 0 12px 28px rgba(56, 189, 248, 0.16);
+	min-height: 52px;
+}
+
+.nav-actions button:hover {
+	box-shadow: 0 18px 42px rgba(56, 189, 248, 0.24);
+}
+
+/* Global buttons */
+button {
+	border-radius: 15px !important;
+	box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+}
+
+button.secondary {
+	background: rgba(30, 41, 59, 0.72) !important;
+	border: 1px solid rgba(148, 163, 184, 0.22) !important;
+	color: #e2e8f0 !important;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.045);
+}
+
+button.danger,
+button.red {
+	background: linear-gradient(180deg, #ef4444, #b91c1c) !important;
+	color: white !important;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+	outline: 3px solid rgba(56, 189, 248, 0.48);
+	outline-offset: 3px;
+}
+
+/* Page shells */
+#app {
+	padding-top: clamp(24px, 3vw, 44px);
+}
+
+.panel {
+	animation: caFadeUp 0.42s ease both;
+}
+
+.hero,
+.plan-gate-hero,
+.leaderboard-hero,
+.assessment-main-hero,
+.xp-dashboard-hero,
+.detail-panel,
+.level-workshop-panel,
+.exam-panel {
+	position: relative;
+	overflow: hidden;
+	background:
+		radial-gradient(circle at 14% 16%, rgba(56, 189, 248, 0.20), transparent 31%),
+		radial-gradient(circle at 88% 18%, rgba(34, 197, 94, 0.14), transparent 33%),
+		radial-gradient(circle at 50% 120%, rgba(167, 139, 250, 0.15), transparent 38%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.97)) !important;
+	border: 1px solid rgba(125, 211, 252, 0.25) !important;
+	box-shadow: var(--ca-shadow), var(--ca-glow-blue);
+}
+
+.hero::after,
+.plan-gate-hero::after,
+.assessment-main-hero::after,
+.xp-dashboard-hero::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.045) 45%, transparent 60%);
+	opacity: 0.75;
+}
+
+.hero h2,
+.plan-gate-hero h1,
+.assessment-main-hero h2,
+.xp-dashboard-hero h2,
+.page-head h2,
+.course-header h2 {
+	font-weight: 950;
+	letter-spacing: -0.065em !important;
+	background: linear-gradient(90deg, #f8fafc, #7dd3fc 55%, #86efac);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent !important;
+}
+
+/* Cards */
+.card,
+.plan-card,
+.level-card,
+.assessment-main-card,
+.level-workshop-card,
+.xp-stat-card,
+.xp-dashboard-card,
+.admin-card,
+.expanded-practical-card,
+.level-mini-section-card {
+	background:
+		linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(8, 13, 29, 0.92)) !important;
+	border: 1px solid rgba(148, 163, 184, 0.16) !important;
+	box-shadow:
+		inset 0 1px 0 rgba(255,255,255,0.035),
+		0 18px 50px rgba(0,0,0,0.24);
+	backdrop-filter: blur(10px);
+}
+
+.card:hover,
+.plan-card:hover,
+.level-card:hover,
+.assessment-main-card:hover,
+.level-workshop-card:hover {
+	transform: translateY(-5px);
+	border-color: rgba(56, 189, 248, 0.54) !important;
+	box-shadow:
+		inset 0 1px 0 rgba(255,255,255,0.04),
+		0 24px 70px rgba(0,0,0,0.34),
+		0 0 45px rgba(56, 189, 248, 0.10);
+}
+
+.card h3,
+.plan-card h3,
+.level-card h3,
+.assessment-main-card h3,
+.level-workshop-card h3 {
+	letter-spacing: -0.035em;
+}
+
+/* Plan page refinement */
+.plan-status-panel,
+.status-row,
+.level-summary-panel,
+.xp-topbar-card,
+.xp-card,
+.notice,
+.success-note,
+.warning,
+.plan-gate-warning,
+.beginner-plan-lock-note,
+.free-requires-plan-note,
+.course-expansion-note,
+.plan-page-footer-note {
+	background:
+		linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(8, 13, 29, 0.78)) !important;
+	border: 1px solid rgba(148, 163, 184, 0.18) !important;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
+	backdrop-filter: blur(10px);
+}
+
+.plan-card {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.plan-card.preview-only,
+.plan-card.preview {
+	opacity: 0.78;
+}
+
+.plan-card.plus-entry,
+.plan-card.plus {
+	border-color: rgba(34, 197, 94, 0.42) !important;
+}
+
+.plan-card.proplus,
+.grouped-choice-card {
+	border-color: rgba(56, 189, 248, 0.48) !important;
+}
+
+.plan-card.platinum-plan,
+.plan-card.platinum {
+	border-color: rgba(226, 232, 240, 0.58) !important;
+	box-shadow: 0 0 64px rgba(226,232,240,0.10), 0 22px 60px rgba(0,0,0,0.30) !important;
+}
+
+.plan-ribbon,
+.ribbon {
+	border: 1px solid rgba(255,255,255,0.18);
+	box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+}
+
+.plan-price,
+.price {
+	letter-spacing: -0.05em;
+}
+
+.plan-features li,
+.plan-card li {
+	margin-bottom: 5px;
+}
+
+/* Course section UI */
+.course-section-tabs {
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+}
+
+.course-section-tabs button {
+	position: relative;
+	overflow: hidden;
+	min-height: 126px;
+	background:
+		radial-gradient(circle at 14% 0%, rgba(56,189,248,0.16), transparent 34%),
+		linear-gradient(180deg, rgba(15,23,42,0.94), rgba(8,13,29,0.94)) !important;
+	border: 1px solid rgba(148,163,184,0.18) !important;
+	box-shadow: 0 18px 50px rgba(0,0,0,0.24);
+}
+
+.course-section-tabs button.active {
+	border-color: rgba(56,189,248,0.70) !important;
+	box-shadow: 0 20px 70px rgba(56,189,248,0.14) !important;
+}
+
+.course-section-tabs button.active::after {
+	content: "";
+	position: absolute;
+	inset: auto 16px 12px 16px;
+	height: 3px;
+	border-radius: 999px;
+	background: linear-gradient(90deg, var(--ca-blue), var(--ca-green));
+}
+
+.course-section-tabs span,
+.number,
+.leaderboard-rank {
+	box-shadow: 0 0 26px rgba(56,189,248,0.20);
+}
+
+/* Lesson/course cards */
+.lesson-slot-grid,
+.lesson-grid,
+.level-grid,
+.grid {
+	gap: 18px !important;
+}
+
+.lesson-slot,
+.lesson-card,
+.level-card {
+	position: relative;
+	overflow: hidden;
+}
+
+.lesson-slot.complete,
+.lesson-card.complete,
+.level-card.complete,
+.card.complete {
+	border-color: rgba(34,197,94,0.55) !important;
+}
+
+.lesson-slot.locked,
+.lesson-card.locked,
+.level-card.locked,
+.card.locked {
+	opacity: 0.48;
+	filter: grayscale(0.25);
+}
+
+/* Progress bars */
+.level-progress-bar,
+.progress-track,
+.xp-progress-track {
+	background: rgba(2, 6, 23, 0.65) !important;
+	border: 1px solid rgba(148, 163, 184, 0.18) !important;
+	box-shadow: inset 0 1px 4px rgba(0,0,0,0.35);
+}
+
+.level-progress-fill,
+.progress-fill,
+.xp-progress-fill {
+	background: linear-gradient(90deg, #38bdf8, #22c55e, #facc15) !important;
+	box-shadow: 0 0 22px rgba(56,189,248,0.25);
+}
+
+/* Modals */
+.proplus-choice-backdrop,
+.admin-modal,
+.modal-backdrop {
+	backdrop-filter: blur(16px) saturate(135%) !important;
+}
+
+.proplus-choice-modal,
+.admin-box,
+.notes-drawer {
+	background:
+		radial-gradient(circle at 14% 0%, rgba(56,189,248,0.16), transparent 32%),
+		linear-gradient(180deg, rgba(15,23,42,0.985), rgba(2,6,23,0.985)) !important;
+	border: 1px solid rgba(125,211,252,0.28) !important;
+	box-shadow: 0 34px 110px rgba(0,0,0,0.48) !important;
+}
+
+.proplus-choice-card {
+	background:
+		linear-gradient(180deg, rgba(15,23,42,0.94), rgba(8,13,29,0.94)) !important;
+	border: 1px solid rgba(125,211,252,0.24) !important;
+}
+
+.proplus-choice-card.lifetime,
+.platinum-lifetime-choice {
+	border-color: rgba(250,204,21,0.45) !important;
+	box-shadow: 0 0 52px rgba(250,204,21,0.10);
+}
+
+/* Notes */
+.notes-float {
+	box-shadow: 0 20px 50px rgba(56,189,248,0.24);
+}
+
+.notes-editor {
+	box-shadow: inset 0 1px 14px rgba(15,23,42,0.10);
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+	background: rgba(2,6,23,0.82) !important;
+	border: 1px solid rgba(148,163,184,0.22) !important;
+	color: #f8fafc !important;
+}
+
+textarea::placeholder,
+input::placeholder {
+	color: rgba(203,213,225,0.52);
+}
+
+/* Small premium badges */
+.badge,
+.rank-badge,
+.rank,
+.level-workshop-tag,
+.xp-chip {
+	border: 1px solid rgba(125,211,252,0.34) !important;
+	background: rgba(56,189,248,0.10) !important;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+/* Mobile polish */
+@media (max-width: 760px) {
+	.topbar {
+		gap: 14px;
+	}
+
+	.logo {
+		width: 54px;
+		height: 54px;
+		border-radius: 18px;
+	}
+
+	.brand h1 {
+		font-size: 24px;
+	}
+
+	.nav-actions button {
+		min-width: calc(50% - 8px);
+	}
+
+	.hero,
+	.plan-gate-hero,
+	.assessment-main-hero,
+	.xp-dashboard-hero {
+		padding: 30px 20px !important;
+	}
+
+	.hero h2,
+	.plan-gate-hero h1 {
+		font-size: clamp(42px, 12vw, 64px) !important;
+	}
+
+	.clean-home-actions button {
+		width: 100%;
+	}
+}
+
+@keyframes caFadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+}

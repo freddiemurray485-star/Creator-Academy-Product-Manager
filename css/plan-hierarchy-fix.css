@@ -1,0 +1,126 @@
+/* Creator Academy Hub — final plan hierarchy polish */
+.planh-page { display: grid; gap: 18px; }
+.planh-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+  padding: clamp(22px, 4vw, 48px);
+  border: 1px solid rgba(125, 211, 252, 0.32);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.24), transparent 34%),
+    radial-gradient(circle at 92% 10%, rgba(250, 204, 21, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+  box-shadow: 0 30px 100px rgba(0,0,0,.42);
+}
+.planh-hero h2 {
+  margin: 10px 0 12px;
+  font-size: clamp(34px, 5vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: #f8fafc;
+}
+.planh-hero p { max-width: 1050px; color: #dbeafe; line-height: 1.7; font-size: 16px; }
+.planh-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, .20);
+  background: rgba(15,23,42,.86);
+}
+.planh-status.top-access {
+  border-color: rgba(250,204,21,.42);
+  background: linear-gradient(135deg, rgba(113,63,18,.34), rgba(15,23,42,.92));
+}
+.planh-status span { display:block; text-transform: uppercase; letter-spacing:.08em; font-size: 11px; color:#94a3b8; font-weight:950; }
+.planh-status strong { display:block; color:#f8fafc; font-size: 22px; line-height:1.2; }
+.planh-status p { margin: 5px 0 0; color:#cbd5e1; line-height:1.5; }
+.planh-status-actions { display:flex; gap: 10px; flex-wrap: wrap; justify-content:flex-end; }
+.planh-toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(148,163,184,.18);
+  background: rgba(15,23,42,.72);
+}
+.planh-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+.planh-tabs button { border-radius:999px; min-height:38px; padding:8px 13px; font-weight:950; }
+.planh-tabs button.active { background: linear-gradient(135deg,#38bdf8,#22c55e) !important; color:#020617 !important; border-color: transparent !important; }
+.planh-toolbar p { margin:0; color:#cbd5e1; }
+.planh-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)); gap:16px; }
+.planh-card {
+  position: relative;
+  overflow: hidden;
+  display:grid;
+  gap: 13px;
+  border-radius: 26px;
+  padding: 18px;
+  border: 1px solid rgba(148,163,184,.18);
+  background: linear-gradient(180deg, rgba(15,23,42,.96), rgba(8,13,29,.96));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 22px 66px rgba(0,0,0,.30);
+}
+.planh-card::before { content:""; position:absolute; inset:0 auto 0 0; width:5px; background:linear-gradient(180deg,#38bdf8,#22c55e); opacity:.86; }
+.planh-card.platinum { border-color: rgba(250,204,21,.34); box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 26px 82px rgba(250,204,21,.08); }
+.planh-card.platinum::before { background: linear-gradient(180deg,#facc15,#38bdf8); }
+.planh-card.active-card { outline: 2px solid rgba(34,197,94,.34); }
+.planh-card.included-card { opacity: .92; }
+.planh-badge-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.planh-badge, .planh-rank {
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  padding:6px 9px;
+  font-size:12px;
+  font-weight:950;
+  border:1px solid rgba(56,189,248,.30);
+  color:#7dd3fc;
+  background:rgba(56,189,248,.11);
+}
+.planh-card.platinum .planh-badge { border-color: rgba(250,204,21,.36); color:#fde68a; background: rgba(250,204,21,.12); }
+.planh-rank { color:#cbd5e1; border-color:rgba(148,163,184,.22); background:rgba(2,6,23,.45); }
+.planh-card h3 { margin:0; color:#f8fafc; font-size:30px; letter-spacing:-.04em; }
+.planh-description { margin:0; color:#cbd5e1; line-height:1.58; min-height: 50px; }
+.planh-options { display:grid; gap:9px; }
+.planh-option {
+  display:grid;
+  grid-template-columns: 1fr auto auto;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  border-radius:16px;
+  border:1px solid rgba(148,163,184,.16);
+  background:rgba(2,6,23,.45);
+}
+.planh-option.current { border-color:rgba(34,197,94,.48); background:rgba(34,197,94,.09); }
+.planh-option.included { border-color:rgba(125,211,252,.30); background:rgba(56,189,248,.07); }
+.planh-option.platinum { border-color:rgba(250,204,21,.24); }
+.planh-option-main strong { display:block; color:#f8fafc; }
+.planh-option-main small { display:block; color:#94a3b8; line-height:1.42; margin-top:3px; }
+.planh-option-price { text-align:right; min-width:72px; }
+.planh-option-price strong { display:block; color:#7dd3fc; }
+.planh-option-price span { display:block; color:#94a3b8; font-size:12px; font-weight:800; }
+.planh-option button { min-height:39px; border-radius:12px; white-space:nowrap; font-weight:950; }
+.planh-option button:disabled { cursor:default; opacity:.74; background:rgba(15,23,42,.65) !important; color:#cbd5e1 !important; border-color:rgba(148,163,184,.24) !important; }
+.planh-features { display:grid; gap:8px; padding:0; margin:0; list-style:none; }
+.planh-features li { display:grid; grid-template-columns:20px 1fr; gap:8px; color:#dbeafe; line-height:1.5; }
+.planh-features li::before { content:"✓"; color:#86efac; font-weight:950; }
+.planh-compare { border-radius:24px; padding:18px; border:1px solid rgba(148,163,184,.18); background:rgba(15,23,42,.88); }
+.planh-compare h3 { margin:0 0 12px; color:#7dd3fc; font-size:24px; }
+.planh-rules { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; }
+.planh-rules div { padding:13px; border-radius:16px; border:1px solid rgba(148,163,184,.16); background:rgba(2,6,23,.46); }
+.planh-rules strong { display:block; color:#f8fafc; margin-bottom:4px; }
+.planh-rules span { display:block; color:#cbd5e1; line-height:1.5; }
+@media (max-width: 820px) {
+  .planh-status { display:grid; }
+  .planh-status-actions { justify-content:stretch; }
+  .planh-status-actions button { width:100%; }
+  .planh-option { grid-template-columns: 1fr; }
+  .planh-option-price { text-align:left; }
+  .planh-option button { width:100%; }
+}

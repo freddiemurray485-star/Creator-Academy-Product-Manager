@@ -1,0 +1,31 @@
+/* SEO audit fix helpers */
+.seo-only {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.seo-content-panel {
+	margin: 18px 0;
+	background: rgba(56, 189, 248, 0.08);
+	border: 1px solid rgba(56, 189, 248, 0.22);
+	border-radius: 16px;
+	padding: 16px;
+	color: #dbeafe;
+	line-height: 1.65;
+}
+
+.seo-content-panel h2 {
+	color: #7dd3fc;
+	font-size: 24px;
+	margin-bottom: 8px;
+}
+
+.seo-content-panel p,
+.seo-content-panel li {
+	color: #dbeafe;
+	line-height: 1.65;
+}

@@ -1,0 +1,247 @@
+/* Creator Academy Hub — Academic Framework Layer
+   Adds official-grade academy structure: Units, Homework, Coursework, Exams, grade bands, criteria, and textbook-style lesson blocks.
+*/
+
+:root {
+	--academic-ink: #f8fafc;
+	--academic-muted: #cbd5e1;
+	--academic-line: rgba(148, 163, 184, 0.22);
+	--academic-blue: #38bdf8;
+	--academic-green: #22c55e;
+	--academic-gold: #facc15;
+	--academic-purple: #a78bfa;
+}
+
+.academic-framework-ribbon {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+	gap: 14px;
+	margin: 20px 0;
+}
+
+.academic-framework-tile {
+	background:
+		linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.82));
+	border: 1px solid var(--academic-line);
+	border-radius: 18px;
+	padding: 16px;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 48px rgba(0,0,0,0.22);
+}
+
+.academic-framework-tile span {
+	display: block;
+	color: #94a3b8;
+	font-size: 12px;
+	font-weight: 950;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-bottom: 8px;
+}
+
+.academic-framework-tile strong {
+	display: block;
+	color: #7dd3fc;
+	font-size: 22px;
+	line-height: 1.15;
+}
+
+.academic-framework-tile p {
+	margin-top: 8px;
+	color: var(--academic-muted);
+	line-height: 1.55;
+	font-size: 14px;
+}
+
+.unit-code-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 7px 11px;
+	border-radius: 999px;
+	background: rgba(167, 139, 250, 0.12);
+	border: 1px solid rgba(167, 139, 250, 0.40);
+	color: #ddd6fe;
+	font-size: 12px;
+	font-weight: 950;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	margin: 4px 6px 8px 0;
+}
+
+.grade-band-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+	margin: 18px 0;
+}
+
+.grade-band-card {
+	background: rgba(17, 24, 39, 0.86);
+	border: 1px solid var(--academic-line);
+	border-radius: 16px;
+	padding: 15px;
+}
+
+.grade-band-card h4 {
+	color: #f8fafc;
+	font-size: 18px;
+	margin-bottom: 6px;
+}
+
+.grade-band-card p {
+	color: var(--academic-muted);
+	line-height: 1.55;
+	font-size: 14px;
+}
+
+.grade-band-card.pass {
+	border-color: rgba(34, 197, 94, 0.42);
+}
+
+.grade-band-card.merit {
+	border-color: rgba(56, 189, 248, 0.42);
+}
+
+.grade-band-card.distinction {
+	border-color: rgba(250, 204, 21, 0.48);
+}
+
+.grade-band-card.mastery {
+	border-color: rgba(167, 139, 250, 0.50);
+}
+
+.academic-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 20px 0;
+}
+
+.academic-tabs button {
+	background: rgba(30, 41, 59, 0.82) !important;
+	color: #e2e8f0 !important;
+	border: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+.academic-tabs button.active {
+	background: linear-gradient(180deg, #38bdf8, #22a8df) !important;
+	color: #020617 !important;
+	border-color: rgba(56, 189, 248, 0.74) !important;
+}
+
+.academic-definition-panel {
+	background:
+		radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.13), transparent 32%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.94));
+	border: 1px solid rgba(56, 189, 248, 0.28);
+	border-radius: 24px;
+	padding: 22px;
+	margin: 18px 0;
+	box-shadow: 0 22px 64px rgba(0,0,0,0.28);
+}
+
+.academic-definition-panel h3 {
+	color: #7dd3fc;
+	font-size: 25px;
+	margin-bottom: 10px;
+	letter-spacing: -0.03em;
+}
+
+.academic-definition-panel p,
+.academic-definition-panel li {
+	color: var(--academic-muted);
+	line-height: 1.72;
+}
+
+.academic-definition-panel ul,
+.academic-definition-panel ol {
+	margin: 12px 0 0 22px;
+}
+
+.textbook-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 14px;
+	margin: 18px 0;
+}
+
+.textbook-card {
+	background: rgba(17, 24, 39, 0.86);
+	border: 1px solid var(--academic-line);
+	border-radius: 18px;
+	padding: 16px;
+}
+
+.textbook-card h4 {
+	color: #fde68a;
+	font-size: 18px;
+	margin-bottom: 8px;
+}
+
+.textbook-card p,
+.textbook-card li {
+	color: var(--academic-muted);
+	line-height: 1.62;
+	font-size: 14px;
+}
+
+.homework-card {
+	background:
+		radial-gradient(circle at 18% 0%, rgba(34, 197, 94, 0.12), transparent 32%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.92));
+	border: 1px solid rgba(34, 197, 94, 0.34);
+	border-radius: 22px;
+	padding: 20px;
+}
+
+.exam-grade-badge {
+	display: inline-block;
+	padding: 6px 10px;
+	border-radius: 999px;
+	background: rgba(250, 204, 21, 0.12);
+	border: 1px solid rgba(250, 204, 21, 0.38);
+	color: #fde68a;
+	font-size: 12px;
+	font-weight: 950;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	margin-bottom: 10px;
+}
+
+.academic-quality-note {
+	margin-top: 14px;
+	background: rgba(56, 189, 248, 0.10);
+	border: 1px solid rgba(56, 189, 248, 0.34);
+	border-radius: 15px;
+	padding: 14px;
+	color: #dbeafe;
+	line-height: 1.62;
+	font-weight: 700;
+}
+
+.official-wording {
+	color: #f8fafc;
+	font-weight: 800;
+}
+
+.homework-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 7px 11px;
+	border-radius: 999px;
+	background: rgba(34, 197, 94, 0.12);
+	border: 1px solid rgba(34, 197, 94, 0.36);
+	color: #bbf7d0;
+	font-size: 12px;
+	font-weight: 900;
+	margin-bottom: 10px;
+}
+
+@media (max-width: 760px) {
+	.academic-framework-ribbon,
+	.textbook-grid,
+	.grade-band-row {
+		grid-template-columns: 1fr;
+	}
+}

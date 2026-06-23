@@ -1,0 +1,301 @@
+/* Scholarly Density Lessons
+   High-density, guided coursework layer. Designed to be deep without becoming artificially hard.
+*/
+
+.scholar-page {
+	display: grid;
+	gap: 18px;
+}
+
+.scholar-hero {
+	position: relative;
+	overflow: hidden;
+	border-radius: 32px;
+	padding: clamp(24px, 4vw, 50px);
+	border: 1px solid rgba(125, 211, 252, 0.30);
+	background:
+		radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.22), transparent 36%),
+		radial-gradient(circle at 90% 20%, rgba(34, 197, 94, 0.13), transparent 38%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+	box-shadow: 0 32px 105px rgba(0,0,0,.42);
+}
+
+.scholar-hero::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background-image:
+		linear-gradient(rgba(125,211,252,.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(125,211,252,.06) 1px, transparent 1px);
+	background-size: 42px 42px;
+	opacity: .45;
+}
+
+.scholar-hero > * {
+	position: relative;
+	z-index: 1;
+}
+
+.scholar-hero h2 {
+	font-size: clamp(34px, 5vw, 68px);
+	line-height: 1.02;
+	letter-spacing: -0.06em;
+	margin: 10px 0 14px;
+	color: #f8fafc;
+}
+
+.scholar-hero h2 span {
+	background: linear-gradient(90deg, #f8fafc, #7dd3fc, #86efac);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.scholar-hero p {
+	max-width: 1120px;
+	color: #dbeafe;
+	font-size: 17px;
+	line-height: 1.72;
+}
+
+.scholar-intensity-scale {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 10px;
+	margin-top: 18px;
+}
+
+.scholar-intensity-card {
+	background: rgba(2, 6, 23, 0.62);
+	border: 1px solid rgba(148, 163, 184, 0.18);
+	border-radius: 16px;
+	padding: 14px;
+}
+
+.scholar-intensity-card span {
+	display: block;
+	color: #94a3b8;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: .08em;
+	font-weight: 950;
+	margin-bottom: 5px;
+}
+
+.scholar-intensity-card strong {
+	display: block;
+	color: #7dd3fc;
+	font-size: 20px;
+	line-height: 1.15;
+}
+
+.scholar-section {
+	border-radius: 25px;
+	border: 1px solid rgba(148, 163, 184, 0.18);
+	background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(8, 13, 29, 0.95));
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 18px 56px rgba(0,0,0,.25);
+	padding: clamp(18px, 3vw, 32px);
+}
+
+.scholar-section h3 {
+	color: #7dd3fc;
+	font-size: 28px;
+	margin-bottom: 12px;
+	letter-spacing: -0.035em;
+}
+
+.scholar-section h4 {
+	color: #fde68a;
+	font-size: 20px;
+	margin: 18px 0 8px;
+}
+
+.scholar-section p,
+.scholar-section li {
+	color: #dbeafe;
+	font-size: 16px;
+	line-height: 1.72;
+}
+
+.scholar-section ul,
+.scholar-section ol {
+	margin: 10px 0 0 22px;
+}
+
+.scholar-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+	gap: 14px;
+}
+
+.scholar-card {
+	background: rgba(2, 6, 23, 0.62);
+	border: 1px solid rgba(125, 211, 252, 0.18);
+	border-radius: 18px;
+	padding: 15px;
+}
+
+.scholar-card h4 {
+	margin-top: 0;
+	color: #7dd3fc;
+}
+
+.scholar-pill {
+	display: inline-flex;
+	align-items: center;
+	border-radius: 999px;
+	padding: 6px 9px;
+	background: rgba(56, 189, 248, 0.12);
+	border: 1px solid rgba(56, 189, 248, 0.28);
+	color: #7dd3fc;
+	font-size: 12px;
+	font-weight: 950;
+	margin-bottom: 10px;
+}
+
+.scholar-pill.gold {
+	background: rgba(250, 204, 21, 0.12);
+	border-color: rgba(250, 204, 21, 0.32);
+	color: #fde68a;
+}
+
+.scholar-pill.green {
+	background: rgba(34, 197, 94, 0.12);
+	border-color: rgba(34, 197, 94, 0.32);
+	color: #bbf7d0;
+}
+
+.scholar-callout {
+	border-radius: 16px;
+	padding: 14px;
+	border: 1px solid rgba(56, 189, 248, 0.28);
+	background: rgba(56, 189, 248, 0.10);
+	color: #dbeafe;
+	line-height: 1.65;
+}
+
+.scholar-callout.warning {
+	border-color: rgba(250, 204, 21, 0.34);
+	background: rgba(250, 204, 21, 0.10);
+	color: #fde68a;
+}
+
+.scholar-callout.danger {
+	border-color: rgba(239, 68, 68, 0.34);
+	background: rgba(239, 68, 68, 0.10);
+	color: #fecaca;
+}
+
+.scholar-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 12px;
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.scholar-table th,
+.scholar-table td {
+	border: 1px solid rgba(148, 163, 184, 0.16);
+	padding: 10px;
+	text-align: left;
+	vertical-align: top;
+	color: #dbeafe;
+	line-height: 1.48;
+}
+
+.scholar-table th {
+	background: rgba(56, 189, 248, 0.12);
+	color: #7dd3fc;
+	font-weight: 950;
+}
+
+.scholar-table td:first-child {
+	color: #fde68a;
+	font-weight: 950;
+}
+
+.scholar-code {
+	background: #020617;
+	border: 1px solid rgba(148, 163, 184, 0.24);
+	color: #86efac;
+	border-radius: 16px;
+	padding: 16px;
+	overflow-x: auto;
+	line-height: 1.55;
+	font-size: 14px;
+}
+
+.scholar-evidence-box {
+	width: 100%;
+	min-height: 220px;
+	background: rgba(2, 6, 23, 0.84);
+	border: 1px solid rgba(148, 163, 184, 0.24);
+	color: #f8fafc;
+	border-radius: 16px;
+	padding: 14px;
+	resize: vertical;
+	line-height: 1.6;
+}
+
+.scholar-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 14px;
+}
+
+.scholar-reference-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 10px;
+}
+
+.scholar-reference-list a {
+	display: block;
+	background: rgba(2, 6, 23, 0.62);
+	border: 1px solid rgba(125, 211, 252, 0.20);
+	border-radius: 14px;
+	padding: 12px;
+	color: #7dd3fc;
+	text-decoration: none;
+	font-weight: 900;
+}
+
+.scholar-reference-list a:hover {
+	text-decoration: underline;
+	border-color: rgba(125, 211, 252, 0.46);
+}
+
+.scholar-checklist label {
+	display: block;
+	padding: 9px 0;
+	color: #dbeafe;
+	line-height: 1.55;
+}
+
+.scholar-checklist input {
+	margin-right: 8px;
+}
+
+@media (max-width: 760px) {
+	.scholar-section,
+	.scholar-hero {
+		padding: 18px;
+	}
+
+	.scholar-table {
+		display: block;
+		overflow-x: auto;
+	}
+
+	.scholar-actions {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+
+	.scholar-actions button {
+		width: 100%;
+	}
+}

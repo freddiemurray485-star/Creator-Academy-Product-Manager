@@ -1,0 +1,701 @@
+/*
+  Creator Academy Hub topbar modernisation layer.
+  Loaded after academy.bundle.css so it can safely override the historical CSS stack.
+  Keeps the original HTML structure: .topbar > .brand + .nav-actions.
+*/
+
+:root {
+  --topbar-bg: rgba(2, 6, 23, 0.82);
+  --topbar-line: rgba(125, 211, 252, 0.14);
+  --topbar-pill: rgba(15, 23, 42, 0.72);
+  --topbar-pill-border: rgba(148, 163, 184, 0.18);
+  --topbar-pill-hover: rgba(56, 189, 248, 0.20);
+}
+
+.topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 80 !important;
+  min-height: 88px !important;
+  display: grid !important;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(520px, 1.28fr) !important;
+  align-items: center !important;
+  gap: clamp(18px, 3vw, 42px) !important;
+  padding: 14px clamp(18px, 4vw, 56px) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.76)),
+    var(--topbar-bg) !important;
+  border-bottom: 1px solid var(--topbar-line) !important;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(22px) saturate(145%) !important;
+}
+
+.brand {
+  min-width: 0 !important;
+  gap: 14px !important;
+}
+
+.brand-mark {
+  flex: 0 0 auto !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.24) !important;
+}
+
+.brand > div {
+  min-width: 0 !important;
+}
+
+.brand h1 {
+  max-width: 360px !important;
+  margin: 0 !important;
+  font-size: clamp(22px, 2.1vw, 30px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.065em !important;
+  text-wrap: balance !important;
+}
+
+.brand p {
+  margin-top: 5px !important;
+  color: rgba(203, 213, 225, 0.82) !important;
+  font-size: clamp(12px, 1vw, 15px) !important;
+  line-height: 1.15 !important;
+}
+
+.nav-actions {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 9px !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  padding: 4px 0 !important;
+}
+
+.nav-actions::-webkit-scrollbar {
+  height: 5px;
+}
+
+.nav-actions::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 999px;
+}
+
+.nav-actions button {
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 42px !important;
+  padding: 0 15px !important;
+  border-radius: 999px !important;
+  background: var(--topbar-pill) !important;
+  color: #e0f2fe !important;
+  border: 1px solid var(--topbar-pill-border) !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.nav-actions button:hover {
+  transform: translateY(-1px) !important;
+  background: var(--topbar-pill-hover) !important;
+  border-color: rgba(56, 189, 248, 0.38) !important;
+  box-shadow: 0 10px 28px rgba(56, 189, 248, 0.13) !important;
+}
+
+.nav-actions button#navCourse {
+  min-width: 92px !important;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.96), rgba(14, 165, 233, 0.88)) !important;
+  color: #020617 !important;
+  border-color: rgba(186, 230, 253, 0.42) !important;
+}
+
+.topbar .live-admin-chip {
+  position: static !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  order: 99 !important;
+  flex: 0 0 auto !important;
+  height: 34px !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin-left: 2px !important;
+  padding: 0 8px 0 11px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  border-radius: 999px !important;
+  background: rgba(2, 6, 23, 0.76) !important;
+  border: 1px solid rgba(250, 204, 21, 0.34) !important;
+  color: #fde68a !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(14px) !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  cursor: default !important;
+  opacity: 0.96 !important;
+}
+
+.topbar .live-admin-chip strong {
+  color: #fde68a !important;
+  font-weight: 900 !important;
+}
+
+.topbar .live-admin-chip .ca-admin-extra {
+  display: none !important;
+}
+
+.topbar .live-admin-chip .ca-admin-dismiss {
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  background: rgba(250, 204, 21, 0.12) !important;
+  color: #fef3c7 !important;
+  font: 900 12px/18px system-ui, sans-serif !important;
+  opacity: 0.82 !important;
+}
+
+.topbar .live-admin-chip .ca-admin-dismiss:hover {
+  opacity: 1 !important;
+  background: rgba(250, 204, 21, 0.22) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.ca-admin-chip-hidden .topbar .live-admin-chip {
+  display: none !important;
+}
+
+
+body[data-plan="admin"] .live-admin-chip:not(.ca-admin-chip-mounted) {
+  position: fixed !important;
+  right: 18px !important;
+  left: auto !important;
+  bottom: 18px !important;
+  top: auto !important;
+  z-index: 120 !important;
+}
+
+@media (max-width: 980px) {
+  .topbar {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 13px 18px !important;
+  }
+
+  .brand h1 {
+    max-width: none !important;
+  }
+
+  .nav-actions {
+    justify-content: flex-start !important;
+    padding-bottom: 6px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    min-height: auto !important;
+  }
+
+  .brand-mark {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 15px !important;
+    font-size: 17px !important;
+  }
+
+  .brand h1 {
+    font-size: 22px !important;
+  }
+
+  .brand p {
+    font-size: 12px !important;
+  }
+
+  .nav-actions button {
+    height: 38px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+  }
+
+  .topbar .live-admin-chip {
+    height: 30px !important;
+    font-size: 11px !important;
+  }
+}
+
+/*
+  Topbar horizontal scroll rail fix.
+  Prevents the nav from clipping its first buttons when the header is narrower than the full nav set.
+*/
+.topbar {
+  grid-template-columns: minmax(320px, max-content) minmax(0, 1fr) !important;
+  overflow: visible !important;
+}
+
+.topbar .brand {
+  position: relative !important;
+  z-index: 2 !important;
+  max-width: min(520px, 42vw) !important;
+}
+
+.topbar .nav-actions {
+  position: relative !important;
+  z-index: 1 !important;
+  justify-content: flex-start !important;
+  align-self: center !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  overscroll-behavior-inline: contain !important;
+  scroll-snap-type: x proximity !important;
+  -webkit-overflow-scrolling: touch !important;
+  /* Breathing room is intentional: it lets the first and last pills scroll fully into view. */
+  padding: 7px 22px 12px 22px !important;
+  scroll-padding-inline: 22px !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+.topbar .nav-actions > * {
+  scroll-snap-align: start !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar {
+  height: 9px !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.72) !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(148, 163, 184, 0.13) !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.88), rgba(14, 165, 233, 0.72)) !important;
+  border-radius: 999px !important;
+  border: 2px solid rgba(15, 23, 42, 0.72) !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, rgba(125, 211, 252, 0.98), rgba(56, 189, 248, 0.88)) !important;
+}
+
+.topbar .nav-actions {
+  scrollbar-color: rgba(56, 189, 248, 0.8) rgba(15, 23, 42, 0.72) !important;
+  scrollbar-width: thin !important;
+}
+
+.topbar .live-admin-chip {
+  scroll-snap-align: end !important;
+}
+
+body.ca-topbar-rail-active .topbar .nav-actions {
+  box-shadow: inset 18px 0 18px -20px rgba(125, 211, 252, 0.35), inset -18px 0 18px -20px rgba(125, 211, 252, 0.35) !important;
+}
+
+@media (min-width: 1180px) {
+  .topbar .nav-actions {
+    justify-self: end !important;
+  }
+}
+
+@media (max-width: 1220px) {
+  .topbar {
+    grid-template-columns: minmax(280px, 380px) minmax(0, 1fr) !important;
+    gap: 18px !important;
+  }
+
+  .topbar .brand {
+    max-width: 380px !important;
+  }
+
+  .topbar .brand h1 {
+    font-size: clamp(21px, 2.1vw, 27px) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    grid-template-columns: 1fr !important;
+  }
+
+  .topbar .brand {
+    max-width: none !important;
+  }
+
+  .topbar .nav-actions {
+    width: 100% !important;
+    justify-self: stretch !important;
+    padding-inline: 18px !important;
+    scroll-padding-inline: 18px !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+  }
+}
+
+
+/*
+  Topbar edge breathing-room fix.
+  The previous rail used a fade mask, which visually cut off first/last nav pills.
+  This keeps the sideways rail but guarantees full pill visibility at both ends.
+*/
+.topbar .nav-actions::before,
+.topbar .nav-actions::after {
+  content: "" !important;
+  flex: 0 0 1px !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+.topbar .nav-actions > button,
+.topbar .nav-actions > .live-admin-chip {
+  scroll-margin-inline: 18px !important;
+}
+
+body.ca-topbar-rail-active .topbar .nav-actions {
+  background:
+    linear-gradient(90deg, rgba(56, 189, 248, 0.10), transparent 32px),
+    linear-gradient(270deg, rgba(56, 189, 248, 0.10), transparent 32px) !important;
+  background-repeat: no-repeat !important;
+  background-size: 32px calc(100% - 12px), 32px calc(100% - 12px) !important;
+  background-position: left top, right top !important;
+}
+
+@media (max-width: 620px) {
+  .topbar .nav-actions {
+    padding-inline: 14px !important;
+    scroll-padding-inline: 14px !important;
+  }
+
+  .topbar .nav-actions > button,
+  .topbar .nav-actions > .live-admin-chip {
+    scroll-margin-inline: 14px !important;
+  }
+}
+
+/*
+  Topbar rail side shading refinement.
+  Keeps the rail fully scrollable, but shades both empty edge gutters so they look intentional rather than cut off.
+*/
+body.ca-topbar-rail-active .topbar .nav-actions {
+  border-radius: 18px !important;
+  background:
+    linear-gradient(90deg, rgba(2, 6, 23, 0.92) 0%, rgba(15, 23, 42, 0.72) 18px, rgba(15, 23, 42, 0.22) 48px, transparent 82px),
+    linear-gradient(270deg, rgba(2, 6, 23, 0.92) 0%, rgba(15, 23, 42, 0.72) 18px, rgba(15, 23, 42, 0.22) 48px, transparent 82px),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.30), rgba(2, 6, 23, 0.18)) !important;
+  background-repeat: no-repeat !important;
+  background-size: 96px calc(100% - 12px), 96px calc(100% - 12px), 100% calc(100% - 12px) !important;
+  background-position: left top, right top, left top !important;
+  box-shadow:
+    inset 28px 0 28px -18px rgba(56, 189, 248, 0.22),
+    inset -28px 0 28px -18px rgba(56, 189, 248, 0.22) !important;
+}
+
+@media (max-width: 620px) {
+  body.ca-topbar-rail-active .topbar .nav-actions {
+    background-size: 72px calc(100% - 12px), 72px calc(100% - 12px), 100% calc(100% - 12px) !important;
+  }
+}
+
+/*
+  Sleek command-bar refinement.
+  Purpose: make the top navigation feel lighter and more modern while preserving the horizontal rail behaviour.
+*/
+:root {
+  --ca-topbar-shell: rgba(3, 7, 18, 0.72);
+  --ca-topbar-glass: rgba(15, 23, 42, 0.58);
+  --ca-topbar-glass-strong: rgba(15, 23, 42, 0.82);
+  --ca-topbar-stroke: rgba(148, 163, 184, 0.16);
+  --ca-topbar-cyan: #38bdf8;
+  --ca-topbar-cyan-deep: #0ea5e9;
+}
+
+.topbar {
+  min-height: 96px !important;
+  grid-template-columns: minmax(360px, 0.62fr) minmax(0, 1fr) !important;
+  gap: clamp(24px, 4vw, 68px) !important;
+  padding: 18px clamp(24px, 4.5vw, 70px) !important;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.90), rgba(2, 6, 23, 0.82)) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14) !important;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24) !important;
+}
+
+.topbar .brand {
+  gap: 15px !important;
+  align-items: center !important;
+}
+
+.topbar .brand-mark {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 19px !important;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.38), transparent 22%),
+    linear-gradient(145deg, #22d3ee, #34d399) !important;
+  color: #020617 !important;
+  box-shadow:
+    0 18px 38px rgba(45, 212, 191, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42) !important;
+}
+
+.topbar .brand h1 {
+  font-size: clamp(24px, 2.25vw, 31px) !important;
+  letter-spacing: -0.055em !important;
+  line-height: 0.98 !important;
+}
+
+.topbar .brand p {
+  margin-top: 7px !important;
+  color: rgba(203, 213, 225, 0.76) !important;
+  font-size: clamp(13px, 1vw, 15px) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.topbar .nav-actions {
+  isolation: isolate !important;
+  min-height: 74px !important;
+  width: min(100%, 820px) !important;
+  justify-self: end !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 11px 28px 13px 28px !important;
+  border: 1px solid rgba(148, 163, 184, 0.14) !important;
+  border-radius: 30px !important;
+  background:
+    linear-gradient(90deg, rgba(2, 6, 23, 0.78) 0%, rgba(15, 23, 42, 0.52) 10%, rgba(15, 23, 42, 0.50) 90%, rgba(2, 6, 23, 0.78) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)) !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(20px) saturate(145%) !important;
+  scroll-padding-inline: 28px !important;
+}
+
+.topbar .nav-actions::before,
+.topbar .nav-actions::after {
+  flex-basis: 5px !important;
+  width: 5px !important;
+}
+
+.topbar .nav-actions button {
+  height: 44px !important;
+  padding: 0 18px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(148, 163, 184, 0.17) !important;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.62)) !important;
+  color: rgba(226, 232, 240, 0.95) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 18px rgba(0, 0, 0, 0.12) !important;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+  letter-spacing: -0.018em !important;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease !important;
+}
+
+.topbar .nav-actions button:hover {
+  transform: translateY(-1px) !important;
+  border-color: rgba(125, 211, 252, 0.36) !important;
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.82), rgba(15, 23, 42, 0.68)) !important;
+  color: #f8fafc !important;
+  box-shadow:
+    0 12px 28px rgba(56, 189, 248, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.topbar .nav-actions button:focus-visible,
+.topbar .live-admin-chip:focus-visible,
+.topbar .ca-admin-dismiss:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.85) !important;
+  outline-offset: 3px !important;
+}
+
+.topbar .nav-actions button#navCourse {
+  min-width: 112px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.34), transparent 36%),
+    linear-gradient(180deg, rgba(56, 189, 248, 0.98), rgba(14, 165, 233, 0.86)) !important;
+  color: #020617 !important;
+  border-color: rgba(186, 230, 253, 0.52) !important;
+  box-shadow:
+    0 14px 32px rgba(14, 165, 233, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+}
+
+.topbar .live-admin-chip {
+  height: 34px !important;
+  padding: 0 8px 0 12px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(250, 204, 21, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.70), rgba(2, 6, 23, 0.70)) !important;
+  color: #fde68a !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.topbar .live-admin-chip strong {
+  font-size: 12px !important;
+  letter-spacing: -0.01em !important;
+}
+
+.topbar .live-admin-chip .ca-admin-dismiss {
+  width: 20px !important;
+  height: 20px !important;
+  background: rgba(250, 204, 21, 0.10) !important;
+  color: rgba(254, 243, 199, 0.86) !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar {
+  height: 4px !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.34) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  margin-inline: 28px !important;
+}
+
+.topbar .nav-actions::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(125, 211, 252, 0.80), rgba(14, 165, 233, 0.86)) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+}
+
+.topbar .nav-actions {
+  scrollbar-color: rgba(56, 189, 248, 0.78) rgba(15, 23, 42, 0.34) !important;
+  scrollbar-width: thin !important;
+}
+
+body.ca-topbar-rail-active .topbar .nav-actions {
+  background:
+    linear-gradient(90deg, rgba(2, 6, 23, 0.92) 0%, rgba(15, 23, 42, 0.70) 36px, transparent 108px),
+    linear-gradient(270deg, rgba(2, 6, 23, 0.92) 0%, rgba(15, 23, 42, 0.70) 36px, transparent 108px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.014)),
+    rgba(8, 13, 30, 0.58) !important;
+  background-repeat: no-repeat !important;
+  background-size: 128px calc(100% - 10px), 128px calc(100% - 10px), 100% calc(100% - 10px), 100% calc(100% - 10px) !important;
+  background-position: left top, right top, left top, left top !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.20),
+    inset 24px 0 34px -22px rgba(56, 189, 248, 0.22),
+    inset -24px 0 34px -22px rgba(56, 189, 248, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+
+@media (min-width: 1420px) {
+  .topbar .nav-actions {
+    width: min(100%, 880px) !important;
+  }
+}
+
+@media (max-width: 1180px) {
+  .topbar {
+    grid-template-columns: minmax(300px, 390px) minmax(0, 1fr) !important;
+    gap: 20px !important;
+    padding-inline: 32px !important;
+  }
+
+  .topbar .nav-actions {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+    gap: 15px !important;
+    padding: 16px 18px !important;
+  }
+
+  .topbar .brand {
+    max-width: none !important;
+  }
+
+  .topbar .nav-actions {
+    justify-self: stretch !important;
+    width: 100% !important;
+    min-height: 66px !important;
+    border-radius: 24px !important;
+    padding: 9px 20px 12px 20px !important;
+    scroll-padding-inline: 20px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar .brand-mark {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 16px !important;
+  }
+
+  .topbar .brand h1 {
+    font-size: 23px !important;
+  }
+
+  .topbar .brand p {
+    font-size: 12px !important;
+  }
+
+  .topbar .nav-actions {
+    min-height: 60px !important;
+    padding: 8px 16px 11px 16px !important;
+    gap: 8px !important;
+    border-radius: 22px !important;
+    scroll-padding-inline: 16px !important;
+  }
+
+  .topbar .nav-actions button {
+    height: 38px !important;
+    padding: 0 13px !important;
+    font-size: 13px !important;
+  }
+
+  .topbar .nav-actions button#navCourse {
+    min-width: 94px !important;
+  }
+}
+
+
+/*
+  Topbar click safety patch.
+  Decorative rail pieces must never intercept real button clicks.
+*/
+.topbar,
+.topbar .nav-actions,
+.topbar .nav-actions > button,
+.topbar .live-admin-chip,
+.topbar .ca-admin-dismiss {
+  pointer-events: auto !important;
+}
+
+.topbar .nav-actions::before,
+.topbar .nav-actions::after {
+  pointer-events: none !important;
+}

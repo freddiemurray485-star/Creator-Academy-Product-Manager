@@ -1,0 +1,14 @@
+# Creator Academy Hub
+
+Creator Academy Hub is a structured creator training website for Roblox Studio, Roblox Lua, Blender, Moon Animator, UI design, VFX, publishing, coursework, exams and creator business.
+
+Main URL: https://www.freddiemurray.co.uk/
+
+The website includes:
+- Course Section 1: foundation-to-mastery creator training.
+- Course Section 2: specialist creator training.
+- Detailed sublessons.
+- Homework and coursework.
+- Exams and review tasks.
+- XP/progress tracking.
+- Paid plan access levels.

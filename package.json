@@ -1,0 +1,19 @@
+{
+  "name": "creator-academy-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Creator Academy Hub with Vercel backend Stripe Checkout functions.",
+  "scripts": {
+    "start": "vercel dev",
+    "bundle": "node tools/build-bundles.js",
+    "check": "npm run bundle && node --check js/academy.bundle.js && node --check api/*.js && node --check js/*.js",
+    "diagnostics": "node -e \"console.log('Run npm run check, then test /api/health after Vercel deploy.')\"",
+    "build": "npm run bundle"
+  },
+  "dependencies": {
+    "stripe": "^17.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

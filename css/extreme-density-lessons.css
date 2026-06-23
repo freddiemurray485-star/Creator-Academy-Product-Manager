@@ -1,0 +1,269 @@
+/* Extreme Density Lessons
+   Adds high-density, zero-assumption lesson pages with vocabulary dictionaries,
+   microchapters, checks, drills, exams, and reference-backed learning blocks.
+*/
+
+.extreme-lesson-page {
+	display: grid;
+	gap: 18px;
+}
+
+.extreme-hero {
+	background:
+		radial-gradient(circle at 8% 0%, rgba(56, 189, 248, 0.20), transparent 34%),
+		radial-gradient(circle at 86% 12%, rgba(34, 197, 94, 0.13), transparent 36%),
+		linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
+	border: 1px solid rgba(56, 189, 248, 0.32);
+	border-radius: 30px;
+	padding: clamp(22px, 4vw, 46px);
+	box-shadow: 0 30px 90px rgba(0,0,0,.36);
+}
+
+.extreme-hero h2 {
+	font-size: clamp(34px, 5vw, 64px);
+	line-height: 1.02;
+	letter-spacing: -0.055em;
+	margin: 10px 0;
+	background: linear-gradient(90deg, #f8fafc, #7dd3fc, #86efac);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.extreme-hero p {
+	max-width: 1060px;
+	color: #dbeafe;
+	font-size: 17px;
+	line-height: 1.72;
+}
+
+.extreme-meta-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+	margin-top: 18px;
+}
+
+.extreme-meta-card {
+	background: rgba(15, 23, 42, 0.72);
+	border: 1px solid rgba(148, 163, 184, 0.18);
+	border-radius: 16px;
+	padding: 14px;
+}
+
+.extreme-meta-card span {
+	display: block;
+	color: #94a3b8;
+	text-transform: uppercase;
+	letter-spacing: .07em;
+	font-size: 12px;
+	font-weight: 950;
+	margin-bottom: 5px;
+}
+
+.extreme-meta-card strong {
+	color: #7dd3fc;
+	font-size: 20px;
+	line-height: 1.15;
+}
+
+.extreme-section {
+	background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(8, 13, 29, 0.94));
+	border: 1px solid rgba(148, 163, 184, 0.18);
+	border-radius: 24px;
+	padding: clamp(18px, 3vw, 30px);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 18px 54px rgba(0,0,0,.24);
+}
+
+.extreme-section h3 {
+	color: #7dd3fc;
+	font-size: 28px;
+	letter-spacing: -0.035em;
+	margin-bottom: 12px;
+}
+
+.extreme-section h4 {
+	color: #fde68a;
+	font-size: 20px;
+	margin: 18px 0 8px;
+}
+
+.extreme-section p,
+.extreme-section li {
+	color: #dbeafe;
+	line-height: 1.74;
+	font-size: 16px;
+}
+
+.extreme-section ul,
+.extreme-section ol {
+	margin: 10px 0 0 22px;
+}
+
+.extreme-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 14px;
+}
+
+.extreme-microchapter {
+	background: rgba(2, 6, 23, 0.60);
+	border: 1px solid rgba(56, 189, 248, 0.20);
+	border-radius: 20px;
+	padding: 16px;
+}
+
+.extreme-microchapter h4 {
+	color: #7dd3fc;
+	margin-top: 0;
+}
+
+.extreme-microchapter .micro-time {
+	display: inline-flex;
+	border-radius: 999px;
+	padding: 6px 9px;
+	background: rgba(34, 197, 94, 0.12);
+	border: 1px solid rgba(34, 197, 94, 0.28);
+	color: #bbf7d0;
+	font-size: 12px;
+	font-weight: 950;
+	margin-bottom: 10px;
+}
+
+.vocab-table,
+.extreme-rubric-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 12px;
+	overflow: hidden;
+	border-radius: 16px;
+}
+
+.vocab-table th,
+.vocab-table td,
+.extreme-rubric-table th,
+.extreme-rubric-table td {
+	border: 1px solid rgba(148, 163, 184, 0.16);
+	padding: 11px;
+	color: #dbeafe;
+	text-align: left;
+	vertical-align: top;
+	line-height: 1.5;
+}
+
+.vocab-table th,
+.extreme-rubric-table th {
+	background: rgba(56, 189, 248, 0.12);
+	color: #7dd3fc;
+	font-weight: 950;
+}
+
+.vocab-table td:first-child {
+	color: #fde68a;
+	font-weight: 950;
+	white-space: nowrap;
+}
+
+.extreme-check-card {
+	background: rgba(15, 23, 42, 0.74);
+	border: 1px solid rgba(250, 204, 21, 0.24);
+	border-radius: 16px;
+	padding: 14px;
+}
+
+.extreme-check-card h4 {
+	margin-top: 0;
+}
+
+.extreme-callout {
+	border-radius: 16px;
+	padding: 14px;
+	background: rgba(56, 189, 248, 0.10);
+	border: 1px solid rgba(56, 189, 248, 0.28);
+	color: #dbeafe;
+	line-height: 1.65;
+}
+
+.extreme-callout.danger {
+	background: rgba(239, 68, 68, 0.10);
+	border-color: rgba(239, 68, 68, 0.30);
+	color: #fecaca;
+}
+
+.extreme-callout.gold {
+	background: rgba(250, 204, 21, 0.10);
+	border-color: rgba(250, 204, 21, 0.34);
+	color: #fde68a;
+}
+
+.extreme-code {
+	background: #020617;
+	border: 1px solid rgba(148, 163, 184, 0.24);
+	color: #86efac;
+	border-radius: 16px;
+	padding: 16px;
+	overflow-x: auto;
+	line-height: 1.55;
+	font-size: 14px;
+}
+
+.extreme-answer-box {
+	width: 100%;
+	min-height: 160px;
+	background: rgba(2, 6, 23, 0.82);
+	border: 1px solid rgba(148, 163, 184, 0.24);
+	color: #f8fafc;
+	border-radius: 16px;
+	padding: 14px;
+	line-height: 1.6;
+	resize: vertical;
+}
+
+.extreme-reference-list {
+	display: grid;
+	gap: 10px;
+}
+
+.extreme-reference-list a {
+	display: block;
+	padding: 12px;
+	border-radius: 14px;
+	background: rgba(15, 23, 42, 0.72);
+	border: 1px solid rgba(125, 211, 252, 0.20);
+	color: #7dd3fc;
+	text-decoration: none;
+	font-weight: 900;
+}
+
+.extreme-reference-list a:hover {
+	text-decoration: underline;
+	border-color: rgba(125, 211, 252, 0.42);
+}
+
+.extreme-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 16px;
+}
+
+@media (max-width: 760px) {
+	.extreme-section {
+		padding: 17px;
+	}
+
+	.vocab-table,
+	.extreme-rubric-table {
+		display: block;
+		overflow-x: auto;
+	}
+
+	.extreme-actions {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+
+	.extreme-actions button {
+		width: 100%;
+	}
+}
