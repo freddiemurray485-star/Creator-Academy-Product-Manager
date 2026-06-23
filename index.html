@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Creator Academy Hub | Roblox Training</title>
-	<meta name="description" content="Learn Roblox Studio, Lua, Blender, UI, VFX and creator business with structured lessons, homework, exams and XP.">
+	<title>Creator Academy Helper | Project Dashboard</title>
+	<meta name="description" content="A focused helper dashboard for Creator Academy progress, launch tasks, account setup and course building.">
 	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 	<meta name="theme-color" content="#020617">
 	<link rel="canonical" href="https://www.freddiemurray.co.uk/">
 	<link rel="sitemap" type="application/xml" href="sitemap.xml">
-	<meta property="og:title" content="Creator Academy Hub">
-	<meta property="og:description" content="Learn Roblox Studio, Lua, Blender, UI, VFX and creator business with structured lessons, homework, exams and XP.">
+	<meta property="og:title" content="Creator Academy Helper">
+	<meta property="og:description" content="Project guidance, launch status and next actions for Creator Academy Hub.">
 	<meta property="og:type" content="website">
 	<meta property="og:url" content="https://www.freddiemurray.co.uk/">
 	<meta name="twitter:card" content="summary_large_image">
@@ -21,6 +21,7 @@
 	<link rel="stylesheet" href="css/assessment-choice-router.css">
 	<link rel="stylesheet" href="css/ai-tutor.css">
 	<link rel="stylesheet" href="css/plan-hierarchy-fix.css">
+	<link rel="stylesheet" href="css/helper-dashboard.css">
 	<link rel="icon" href="favicon.ico" sizes="any">
 	<link rel="icon" type="image/png" href="favicon.png">
 </head>
@@ -48,163 +49,42 @@
 		<div class="brand">
 			<span class="brand-mark">CA</span>
 			<div>
-				<h1>Creator Academy Hub</h1>
-				<p>Roblox • Blender • Moon Animator</p>
+				<h1>Creator Academy Helper</h1>
+				<p>Project guidance and launch support</p>
 			</div>
 		</div>
 
 		<nav class="nav-actions">
-			<button id="navHome" type="button">Home</button>
-			<button id="navAssessments" type="button">Assessments</button>
-			<button id="navCourse" type="button">Course</button>
-			<button id="navXP" type="button">XP</button>
-			<button id="navProgress" type="button">Progress</button>
+			<button id="navHome" class="active" type="button">Sign in</button>
 		</nav>
 	</header>
 
-	<main id="app" class="app">
-		<section class="hero">
-			<div class="hero-content">
-				<span class="badge">Roblox • Blender • Moon Animator</span>
-				<h2>Welcome to Creator Academy Hub</h2>
-				<p>
-					A structured learning academy for creators who want to script Roblox systems,
-					build 3D assets, and animate objects or characters. Start with the briefing,
-					choose a plan, unlock the Skill Tree, then choose your course path.
-				</p>
-
-				<p id="memoryStatus" class="memory-status">Checking academy memory...</p>
-
-				<div class="actions">
-					<button type="button" onclick="startBriefing()">Start Academy Briefing</button>
-					<button type="button" class="secondary" onclick="showProgress()">View Progress</button>
+	<main id="app" class="app helper-root">
+		<section class="helper-auth-shell" aria-label="Loading Creator Academy Helper">
+			<div class="helper-auth-intro">
+				<div>
+					<span class="helper-kicker">Command assistant</span>
+					<h2>Build with a clear next step.</h2>
+					<p>Creator Academy Helper organises progress, launch tasks, account setup and course building into one focused workspace.</p>
 				</div>
-
-				<div class="info-grid">
-					<div class="info-card">
-						<h3>Organised Learning</h3>
-						<p>Only one lesson opens at a time. The site avoids dumping every lesson on the user at once.</p>
-					</div>
-
-					<div class="info-card">
-						<h3>Free Course Choice</h3>
-						<p>Users can start with Lua, Blender, or Moon Animator. Each path has its own ordered lessons.</p>
-					</div>
-
-					<div class="info-card">
-						<h3>Skill Tree Gateway</h3>
-						<p>The Skill Tree is the central course hub. It shows what is available, locked, and complete.</p>
-					</div>
-				</div>
+			</div>
+			<div class="helper-auth-card">
+				<span class="helper-section-label">Secure workspace</span>
+				<h2>Preparing your helper</h2>
+				<p>Checking account and project status…</p>
 			</div>
 		</section>
 	</main>
 
-	<div id="adminOverlay" class="admin-overlay hidden" aria-hidden="true">
-		<div class="admin-shell">
-			<div class="admin-login" id="adminLoginPanel">
-				<span class="badge">Restricted Area</span>
-				<h3>Admin Access</h3>
-				<p>
-					This is a hidden development admin panel. It is not real security yet because static websites
-					can be inspected by users. Use this for testing only until proper server authentication is added.
-				</p>
-
-				<label class="admin-label" for="adminPasscode">Admin passcode</label>
-				<input id="adminPasscode" class="admin-input" type="password" placeholder="Enter passcode">
-
-				<div class="actions admin-actions">
-					<button type="button" onclick="attemptAdminLogin()">Enter Admin</button>
-					<button type="button" class="secondary" onclick="closeAdmin()">Close</button>
-				</div>
-
-				<div class="google-auth-box">
-					<h3>Google Sign-In</h3>
-					<p>
-						A real Google login can be added later with Google Identity Services and an OAuth Client ID.
-						This site will not copy or fake Google's sign-in page.
-					</p>
-					<button type="button" class="secondary" onclick="showToast('Google OAuth needs a real Client ID and hosted domain')">
-						Google Sign-In Placeholder
-					</button>
-				</div>
-
-				<p id="adminLoginWarning" class="warning hidden">Wrong passcode.</p>
-			</div>
-
-			<div class="admin-dashboard hidden" id="adminDashboard">
-				<div class="admin-dashboard-header">
-					<div>
-						<span class="badge">Admin Dashboard</span>
-						<h3>Creator Academy Control Panel</h3>
-						<p>Hidden local admin tools for testing progress, locks, and course structure.</p>
-					</div>
-					<div class="actions">
-						<button type="button" class="secondary" onclick="lockAdmin()">Lock Admin</button>
-						<button type="button" class="red" onclick="closeAdmin()">Close</button>
-					</div>
-				</div>
-
-				<div class="admin-grid">
-					<div class="admin-card">
-						<h3>Academy State</h3>
-						<p id="adminStateText">Loading...</p>
-						<div class="actions">
-							<button type="button" onclick="adminUnlockAcademy()">Unlock Skill Tree</button>
-							<button type="button" class="secondary" onclick="adminLockAcademy()">Lock Skill Tree</button>
-						</div>
-					</div>
-
-					<div class="admin-card">
-						<h3>Progress Tools</h3>
-						<p>Use these while testing unlock order and lesson behaviour.</p>
-						<div class="actions">
-							<button type="button" onclick="adminCompleteAll()">Complete All</button>
-							<button type="button" class="secondary" onclick="adminResetLessons()">Reset Lessons</button>
-							<button type="button" class="red" onclick="adminResetEverything()">Reset Everything</button>
-						</div>
-					</div>
-
-					<div class="admin-card">
-						<h3>Course Jump</h3>
-						<p>Open a course quickly without using the public navigation.</p>
-						<div class="actions">
-							<button type="button" onclick="adminOpenCourse('lua')">Lua</button>
-							<button type="button" onclick="adminOpenCourse('blender')">Blender</button>
-							<button type="button" onclick="adminOpenCourse('moon')">Moon</button>
-						</div>
-					</div>
-
-					<div class="admin-card">
-						<h3>Evidence Review</h3>
-						<p>
-							Static prototype only. Real evidence review will need server storage or AI/API review later.
-						</p>
-						<div id="adminEvidenceList" class="admin-list"></div>
-					</div>
-				</div>
-
-				<div class="admin-card admin-wide">
-					<h3>Lesson Unlock Overview</h3>
-					<div id="adminLessonList" class="admin-lesson-list"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
 	<!-- Runtime JS bundle generated from the original source layers in js/. -->
 	<script src="js/academy.bundle.js"></script>
 	<script src="js/local-file-mode.js"></script>
-	<script src="js/local-admin-mode.js"></script>
-	<script src="js/owner-access.js"></script>
-	<script src="js/local-admin-rank-fix.js"></script>
-	<script src="js/local-admin-ui-polish.js"></script>
 	<script src="js/topbar-scroll-rail.js"></script>
 	<script src="js/topbar-click-guard.js"></script>
 	<script src="js/assessment-choice-router.js"></script>
 	<script src="js/assessment-direct-hubs.js"></script>
 	<script src="js/ai-tutor.js"></script>
 	<script src="js/plan-hierarchy-fix.js"></script>
+	<script src="js/helper-dashboard.js"></script>
 </body>
 </html>

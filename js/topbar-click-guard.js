@@ -56,6 +56,7 @@
 
   function bindButton(button) {
     if (!button || button.dataset.caTopbarClickGuard === "true") return;
+    if (button.classList && button.classList.contains("helper-nav-button")) return;
     var action = actionFor(button);
     if (!action) return;
     button.dataset.caTopbarClickGuard = "true";
