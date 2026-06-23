@@ -8,6 +8,7 @@
 
   var TASK_STORAGE_KEY = "creatorAcademyHelper.localTasks.v1";
   var NOTES_STORAGE_KEY = "creatorAcademyHelper.localNotes.v1";
+  var INTAKE_STORAGE_KEY = "creatorAcademyHelper.localIntake.v1";
   var VALID_TASK_STATES = ["active", "completed", "blocked"];
 
   var originalActions = {
@@ -46,10 +47,28 @@
     "Public website notes"
   ];
 
+  var intakeFields = [
+    { id: "currentBuild", label: "Current Roblox Studio build", question: "What are you building in Roblox Studio right now?", placeholder: "Example: a tycoon upgrade system, UI flow, event system or Lua practice project" },
+    { id: "biggestBlocker", label: "Biggest blocker", question: "What is slowing the project down most?", placeholder: "Describe the bug, missing decision, skill gap or unclear requirement" },
+    { id: "courseFocus", label: "Course focus", question: "Which Creator Academy lesson, path or course area needs attention?", placeholder: "Example: Lua foundations, UI design, assessment planning or portfolio work" },
+    { id: "requestedHelp", label: "ChatGPT help needed", question: "What do you want ChatGPT to help with?", placeholder: "Example: explain code, debug a script, improve a lesson, write a checklist or review a plan" },
+    { id: "targetOutcome", label: "Target outcome", question: "What should a useful answer or finished task produce?", placeholder: "Example: working Lua code with explanation, a lesson outline, or a launch checklist" },
+    { id: "constraints", label: "Constraints and context", question: "What constraints, tools or details must the answer respect?", placeholder: "Example: beginner-friendly, Roblox server-authoritative, local-only, no paid services" }
+  ];
+
+  var promptModes = {
+    project: { label: "Project adviser", instruction: "Act as a pragmatic Roblox and Creator Academy project adviser. Give one prioritised next step, then a short execution plan." },
+    lua: { label: "Lua debugger", instruction: "Act as a Roblox Lua debugging partner. Explain the likely cause, show a minimal safe fix, and include checks to prove it works." },
+    lesson: { label: "Lesson planner", instruction: "Act as a practical course designer. Create a clear lesson outcome, teaching sequence, example, learner task and evidence check." },
+    launch: { label: "Launch reviewer", instruction: "Act as a cautious launch reviewer. Separate confirmed facts from assumptions and list only the highest-impact blockers and next actions." }
+  };
+
   var helperState = {
     currentView: "dashboard",
     taskState: normaliseTaskState(readLocalJson(TASK_STORAGE_KEY, {})),
-    notes: readLocalText(NOTES_STORAGE_KEY)
+    notes: readLocalText(NOTES_STORAGE_KEY),
+    intake: normaliseIntake(readLocalJson(INTAKE_STORAGE_KEY, {})),
+    promptMode: "project"
   };
 
   function readLocalJson(key, fallback) {
@@ -83,6 +102,14 @@
       if (value === true) value = "completed";
       if (value === false) value = "active";
       clean[task.id] = VALID_TASK_STATES.indexOf(value) >= 0 ? value : "active";
+    });
+    return clean;
+  }
+
+  function normaliseIntake(stored) {
+    var clean = {};
+    intakeFields.forEach(function (field) {
+      clean[field.id] = String(stored && stored[field.id] || "").trim().slice(0, 1200);
     });
     return clean;
   }
@@ -152,6 +179,24 @@
     return counts;
   }
 
+  function intakeProgress() {
+    var answered = intakeFields.filter(function (field) {
+      return Boolean(String(helperState.intake[field.id] || "").trim());
+    }).length;
+    return {
+      answered: answered,
+      total: intakeFields.length,
+      percent: Math.round((answered / intakeFields.length) * 100)
+    };
+  }
+
+  function nextIntakeQuestion() {
+    for (var i = 0; i < intakeFields.length; i += 1) {
+      if (!String(helperState.intake[intakeFields[i].id] || "").trim()) return intakeFields[i];
+    }
+    return null;
+  }
+
   function nextAction() {
     var available = tasks
       .filter(function (task) { return taskStatus(task.id) === "active"; })
@@ -176,6 +221,69 @@
       detail: "The current task list is complete. Add the next focused milestone to local notes.",
       priority: 1
     };
+  }
+
+  function overseerNextAction() {
+    var missing = nextIntakeQuestion();
+    if (missing) {
+      return {
+        id: "",
+        area: "Information needed",
+        title: missing.question,
+        detail: "Answer this once and Overseer will use it to build more specific ChatGPT prompts and project guidance.",
+        kind: "intake",
+        fieldId: missing.id
+      };
+    }
+    var task = nextAction();
+    task.kind = "task";
+    return task;
+  }
+
+  function intakeFieldsHtml() {
+    return intakeFields.map(function (field) {
+      return [
+        '<label class="overseer-intake-field">',
+          '<span>' + escapeHtml(field.label) + '</span>',
+          '<small>' + escapeHtml(field.question) + '</small>',
+          '<textarea id="overseer-intake-' + field.id + '" maxlength="1200" placeholder="' + escapeHtml(field.placeholder) + '">' + escapeHtml(helperState.intake[field.id]) + '</textarea>',
+        '</label>'
+      ].join("");
+    }).join("");
+  }
+
+  function promptModeButtons() {
+    return Object.keys(promptModes).map(function (mode) {
+      return '<button type="button" class="overseer-prompt-mode ' + (helperState.promptMode === mode ? "active" : "") + '" onclick="helperSetPromptMode(\'' + mode + '\')">' + escapeHtml(promptModes[mode].label) + '</button>';
+    }).join("");
+  }
+
+  function promptValue(value, fallback) {
+    var clean = String(value || "").trim();
+    return clean || fallback;
+  }
+
+  function buildPrompt() {
+    var mode = promptModes[helperState.promptMode] || promptModes.project;
+    return [
+      mode.instruction,
+      "",
+      "Project context:",
+      "- Project: Creator Academy, a small founder-led project by Freddie Murray with Mason Harris as a recently joined co-founder/founding member.",
+      "- Current Roblox Studio build: " + promptValue(helperState.intake.currentBuild, "Not provided yet"),
+      "- Biggest blocker: " + promptValue(helperState.intake.biggestBlocker, "Not provided yet"),
+      "- Creator Academy focus: " + promptValue(helperState.intake.courseFocus, "Not provided yet"),
+      "- Help requested: " + promptValue(helperState.intake.requestedHelp, "Not provided yet"),
+      "- Target outcome: " + promptValue(helperState.intake.targetOutcome, "Not provided yet"),
+      "- Constraints and context: " + promptValue(helperState.intake.constraints, "Not provided yet"),
+      "",
+      "Response rules:",
+      "- Be direct, practical and specific.",
+      "- Ask up to three focused questions if critical information is missing.",
+      "- Do not invent completed work, production readiness, secure accounts or paid access.",
+      "- Keep Roblox trust-sensitive logic server-authoritative.",
+      "- End with the single best next action."
+    ].join("\n");
   }
 
   function statusCard(id, name, status) {
@@ -240,8 +348,9 @@
     installShell();
     var app = appRoot();
     if (!app) return;
-    var next = nextAction();
+    var next = overseerNextAction();
     var counts = taskCounts();
+    var intake = intakeProgress();
     var launch = launchStatuses();
     var localLabel = isLocalHost() ? "Local prototype" : "Hosted copy of local prototype";
 
@@ -255,6 +364,14 @@
           '</div>',
           '<span class="helper-session-pill">' + escapeHtml(localLabel) + ' · this device only</span>',
         '</header>',
+
+        '<div class="overseer-command-strip">',
+          '<span class="overseer-live"><i></i> Overseer active</span>',
+          '<span>Information profile <strong>' + intake.percent + '%</strong></span>',
+          '<span>Tasks <strong>' + counts.active + ' active</strong></span>',
+          '<span>Sync <strong>off</strong></span>',
+          '<span>Storage <strong>local only</strong></span>',
+        '</div>',
 
         '<div class="overseer-overview-grid">',
           '<article class="helper-card overseer-lead-card">',
@@ -281,10 +398,31 @@
         '</div>',
 
         '<article class="helper-card helper-next-card">',
-          '<div class="helper-priority">' + (next.id ? "HIGH" : "NEXT") + '</div>',
+          '<div class="helper-priority">' + (next.kind === "intake" ? "INFO" : (next.id ? "HIGH" : "NEXT")) + '</div>',
           '<div><span class="helper-section-label">What should I do next?</span><h3>' + escapeHtml(next.title) + '</h3><p><strong>' + escapeHtml(next.area) + ':</strong> ' + escapeHtml(next.detail) + '</p></div>',
-          (next.id ? '<button type="button" class="helper-button primary" onclick="helperSetTaskStatus(\'' + next.id + '\', \'completed\')">Mark complete</button>' : '<button type="button" class="helper-button primary" onclick="helperFocusNotes()">Open notes</button>'),
+          (next.kind === "intake"
+            ? '<button type="button" class="helper-button primary" onclick="helperFocusIntake(\'' + next.fieldId + '\')">Answer now</button>'
+            : (next.id ? '<button type="button" class="helper-button primary" onclick="helperSetTaskStatus(\'' + next.id + '\', \'completed\')">Mark complete</button>' : '<button type="button" class="helper-button primary" onclick="helperFocusNotes()">Open notes</button>')),
         '</article>',
+
+        '<div class="overseer-intelligence-grid">',
+          '<article id="overseerIntake" class="helper-card overseer-intake-card">',
+            '<div class="overseer-card-heading">',
+              '<div><span class="helper-section-label">Information intake</span><h3>Help Overseer understand the work</h3><p>Answer only what is useful. Everything stays in this browser and is not sent anywhere automatically.</p></div>',
+              '<div class="overseer-progress-ring" style="--progress:' + intake.percent + '"><strong>' + intake.percent + '%</strong><span>' + intake.answered + '/' + intake.total + '</span></div>',
+            '</div>',
+            '<div class="overseer-intake-grid">' + intakeFieldsHtml() + '</div>',
+            '<div class="overseer-intake-footer"><span>Local draft · not secure · avoid sensitive information</span><button type="button" class="helper-button primary" onclick="helperSaveIntake()">Save project information</button></div>',
+          '</article>',
+          '<article class="helper-card overseer-prompt-card">',
+            '<div class="overseer-card-heading compact">',
+              '<div><span class="helper-section-label">ChatGPT prompt lab</span><h3>Turn project context into a useful prompt</h3><p>Choose a mode, review the prompt, then copy it manually into ChatGPT.</p></div>',
+            '</div>',
+            '<div class="overseer-prompt-modes">' + promptModeButtons() + '</div>',
+            '<textarea id="overseerGeneratedPrompt" class="overseer-generated-prompt" readonly>' + escapeHtml(buildPrompt()) + '</textarea>',
+            '<div class="overseer-prompt-footer"><span>Nothing is transmitted automatically.</span><button type="button" class="helper-button primary" onclick="helperCopyPrompt()">Copy prompt</button></div>',
+          '</article>',
+        '</div>',
 
         '<div class="overseer-operations-grid">',
           '<article class="helper-card overseer-area-card roblox">',
@@ -342,6 +480,54 @@
       '</section>'
     ].join("");
   }
+
+  function captureIntakeFromDom(persist) {
+    intakeFields.forEach(function (field) {
+      var input = document.getElementById("overseer-intake-" + field.id);
+      if (input) helperState.intake[field.id] = String(input.value || "").trim().slice(0, 1200);
+    });
+    if (persist) writeLocalJson(INTAKE_STORAGE_KEY, helperState.intake);
+  }
+
+  window.helperSaveIntake = function () {
+    captureIntakeFromDom(true);
+    renderDashboard();
+    showHelperToast("Local project information saved. Prompt guidance updated.");
+  };
+
+  window.helperFocusIntake = function (fieldId) {
+    var field = document.getElementById("overseer-intake-" + fieldId);
+    if (!field) return;
+    field.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(function () { field.focus(); }, 260);
+  };
+
+  window.helperSetPromptMode = function (mode) {
+    if (!promptModes[mode]) return;
+    captureIntakeFromDom(false);
+    helperState.promptMode = mode;
+    renderDashboard();
+    var prompt = document.getElementById("overseerGeneratedPrompt");
+    if (prompt) prompt.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  window.helperCopyPrompt = async function () {
+    captureIntakeFromDom(false);
+    var prompt = buildPrompt();
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        await navigator.clipboard.writeText(prompt);
+      } else {
+        var field = document.getElementById("overseerGeneratedPrompt");
+        if (!field || typeof field.select !== "function") throw new Error("Clipboard unavailable");
+        field.select();
+        if (!document.execCommand || !document.execCommand("copy")) throw new Error("Copy command unavailable");
+      }
+      showHelperToast("Prompt copied. Review it before pasting into ChatGPT.");
+    } catch (error) {
+      showHelperToast("Copy was unavailable. Select the prompt manually.");
+    }
+  };
 
   window.helperSetTaskStatus = function (taskId, status) {
     var exists = tasks.some(function (task) { return task.id === taskId; });
