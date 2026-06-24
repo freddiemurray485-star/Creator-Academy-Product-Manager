@@ -11,7 +11,11 @@
   var INTAKE_STORAGE_KEY = "creatorAcademyHelper.localIntake.v1";
   var SOLO_STORAGE_KEY = "creatorAcademyHelper.soloMode.v1";
   var SKILL_STORAGE_KEY = "creatorAcademyHelper.soloSkills.v1";
+  var UI_STORAGE_KEY = "creatorAcademyHelper.localUi.v1";
+  var DECISIONS_STORAGE_KEY = "creatorAcademyHelper.localDecisions.v1";
+  var VAULT_STORAGE_KEY = "creatorAcademyHelper.localVault.v1";
   var VALID_TASK_STATES = ["active", "completed", "blocked", "parked"];
+  var SECTION_IDS = ["command", "blueprint", "cars", "life", "founder", "roadmap", "brain", "decisions", "vault"];
 
   var originalActions = {
     showLevelHub: typeof window.showLevelHub === "function" ? window.showLevelHub : null,
@@ -130,8 +134,11 @@
 
   var helperState = {
     currentView: "dashboard",
+    activeSection: normaliseSection(readLocalText(UI_STORAGE_KEY)),
     taskState: normaliseTaskState(readLocalJson(TASK_STORAGE_KEY, {})),
     notes: readLocalText(NOTES_STORAGE_KEY),
+    decisions: readLocalText(DECISIONS_STORAGE_KEY),
+    vault: readLocalText(VAULT_STORAGE_KEY),
     intake: normaliseIntake(readLocalJson(INTAKE_STORAGE_KEY, {})),
     promptMode: "project",
     solo: normaliseSoloState(readLocalJson(SOLO_STORAGE_KEY, {})),
@@ -171,6 +178,10 @@
       clean[task.id] = VALID_TASK_STATES.indexOf(value) >= 0 ? value : task.defaultStatus;
     });
     return clean;
+  }
+
+  function normaliseSection(value) {
+    return SECTION_IDS.indexOf(value) >= 0 ? value : "command";
   }
 
   function normaliseIntake(stored) {
@@ -248,12 +259,15 @@
   function renderNavigation() {
     var nav = document.querySelector(".topbar .nav-actions");
     if (!nav) return;
-    nav.innerHTML = [
-      '<button type="button" class="helper-nav-button ' + (helperState.currentView === "dashboard" ? "active" : "") + '" onclick="showCreatorAcademyHelper()">Overseer</button>',
-      '<button type="button" class="helper-nav-button" onclick="helperOpenCourses()">Courses</button>',
-      '<button type="button" class="helper-nav-button" onclick="helperOpenProgress()">Progress</button>',
-      '<button type="button" class="helper-nav-button" onclick="helperFocusNotes()">Notes</button>'
-    ].join("");
+    var sections = [
+      ["command", "Command Center"], ["blueprint", "Game Blueprint"], ["cars", "Car Systems"],
+      ["life", "Life Systems"], ["founder", "Founder Systems"], ["roadmap", "Roadmap"],
+      ["brain", "Overseer Brain"], ["decisions", "Decisions"], ["vault", "Vault"]
+    ];
+    nav.classList.add("overseer-nav");
+    nav.innerHTML = sections.map(function (section) {
+      return '<button type="button" class="helper-nav-button ' + (helperState.activeSection === section[0] ? "active" : "") + '" onclick="helperSetSection(\'' + section[0] + '\')">' + section[1] + '</button>';
+    }).join("");
   }
 
   function taskStatus(taskId) {
@@ -554,7 +568,7 @@
     }).join("") + '</ol>';
   }
 
-  function renderDashboard() {
+  function renderLegacyDashboard() {
     helperState.currentView = "dashboard";
     installShell();
     var app = appRoot();
@@ -750,6 +764,228 @@
     ].join("");
   }
 
+  function compactList(items) {
+    return '<ul class="command-compact-list">' + items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+  }
+
+  function founderTopHtml(next, counts, overload, risk, currentPhase) {
+    var ignored = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; })[0];
+    return [
+      '<section class="founder-identity-bar">',
+        '<div class="founder-identity-main"><span class="founder-monogram">FM</span><div><strong>Freddie Murray</strong><small>Solo Founder · Project Lead · Developer</small></div></div>',
+        '<div class="founder-authority"><span>Founder Access</span><strong>Final Approver</strong></div>',
+        '<div class="founder-system-id"><span>Overseer Command System</span><strong>Private · Local</strong></div>',
+        '<span class="solo-mode-chip">Mode: Solo Founder</span>',
+      '</section>',
+      '<section class="overseer-premium-hero">',
+        '<div class="overseer-hero-copy">',
+          '<span class="overseer-eyebrow">OVERSEER / COMMAND SYSTEM</span>',
+          '<h2>Build the machine.<br>Control the scope.<br>Execute the next system.</h2>',
+          '<p>Private command system for Freddie Murray. Ambition stays visible; current execution stays disciplined.</p>',
+          '<div class="overseer-directive"><span>Current Directive</span><strong>One finished system beats ten legendary plans.</strong></div>',
+        '</div>',
+        '<article class="overseer-mission-console">',
+          '<div class="mission-console-head"><span>Current Mission</span><i></i></div>',
+          '<h3>' + escapeHtml(helperState.solo.activeSystem || "First playable money loop") + '</h3>',
+          '<dl>',
+            '<div><dt>Active project</dt><dd>Luxury Life Tycoon / Creator Academy</dd></div>',
+            '<div><dt>Phase</dt><dd>' + currentPhase.id + ' · ' + escapeHtml(currentPhase.name) + '</dd></div>',
+            '<div><dt>Current objective</dt><dd>' + escapeHtml(next.title) + '</dd></div>',
+            '<div><dt>Next concrete action</dt><dd>' + escapeHtml(next.detail) + '</dd></div>',
+            '<div><dt>Current bottleneck</dt><dd>' + escapeHtml(helperState.solo.learningBlocker) + '</dd></div>',
+          '</dl>',
+        '</article>',
+      '</section>',
+      '<div class="empire-status-row">',
+        '<span><small>Mode</small><strong>Solo Founder</strong></span>',
+        '<span><small>Phase</small><strong>' + escapeHtml(currentPhase.name) + '</strong></span>',
+        '<span><small>Focus</small><strong>' + escapeHtml(helperState.solo.activeSystem) + '</strong></span>',
+        '<span data-tone="' + (overload.overloaded ? "bad" : "good") + '"><small>Feature load</small><strong>' + (overload.overloaded ? "Overloaded" : "Controlled") + '</strong></span>',
+        '<span data-tone="' + risk.tone + '"><small>Risk</small><strong>' + escapeHtml(risk.label) + '</strong></span>',
+        '<span><small>Next skill</small><strong>' + escapeHtml(helperState.solo.learningBlocker) + '</strong></span>',
+        '<span><small>Empire trajectory</small><strong>No Ceiling</strong></span>',
+      '</div>',
+      '<div class="first-screen-answers">',
+        '<article><small>What am I building?</small><strong>' + escapeHtml(helperState.solo.activeSystem) + '</strong></article>',
+        '<article><small>What do I do next?</small><strong>' + escapeHtml(next.title) + '</strong></article>',
+        '<article><small>What should I ignore?</small><strong>' + escapeHtml(ignored ? ignored.title : "Unplanned expansion") + '</strong></article>',
+        '<article><small>What is the risk?</small><strong>' + escapeHtml(overload.overloaded ? overload.message : risk.detail) + '</strong></article>',
+        '<article><small>What is the long-term vision?</small><strong>Skill → product → cashflow → assets → trophies → empire</strong></article>',
+      '</div>'
+    ].join("");
+  }
+
+  function commandCenterHtml(next, counts, overload, risk) {
+    var parked = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; }).slice(0, 5);
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Freddie\'s Command Center</span><h3>Execution Engine</h3><p>Only the decisions and actions needed to move the current build forward.</p></section>',
+      '<div class="command-center-grid">',
+        '<article class="helper-card command-primary-card"><span class="command-card-label">Next build action</span><h3>' + escapeHtml(next.title) + '</h3><p>' + escapeHtml(next.detail) + '</p>' + (next.id ? '<button type="button" class="helper-button primary" onclick="helperSetTaskStatus(\'' + next.id + '\', \'completed\')">Mark complete</button>' : '') + '</article>',
+        '<article class="helper-card command-metric-card"><span>Launch readiness</span><strong>' + localReadinessScore() + '%</strong><div class="command-progress"><i style="width:' + localReadinessScore() + '%"></i></div><small>Local planning estimate, not a production claim.</small></article>',
+        '<article class="helper-card command-metric-card" data-tone="' + risk.tone + '"><span>Founder discipline</span><strong>' + (overload.overloaded ? "Scope breach" : "Controlled") + '</strong><small>' + escapeHtml(overload.message) + '</small></article>',
+        '<article class="helper-card command-stack-card"><span class="command-card-label">Mission stack · next three</span>' + soloNextActionsHtml() + '</article>',
+        '<article class="helper-card command-stack-card"><span class="command-card-label">Parked future ideas</span>' + compactList(parked.map(function (task) { return task.title; })) + '</article>',
+        '<article class="helper-card command-warning-card"><span class="command-card-label">Build discipline warning</span><strong>' + escapeHtml(overload.overloaded ? hardTruths[0] : hardTruths[7]) + '</strong><p>' + escapeHtml(risk.detail) + '</p></article>',
+      '</div>',
+      '<div class="command-quick-actions"><button type="button" onclick="helperSetSection(\'brain\')">Ask Overseer Brain</button><button type="button" onclick="helperSetSection(\'roadmap\')">Open build roadmap</button><button type="button" onclick="helperOpenCourses()">Open courses</button><button type="button" onclick="helperOpenProgress()">Review progress</button></div>'
+    ].join("");
+  }
+
+  function blueprintHtml() {
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Game Blueprint</span><h3>Luxury Life Tycoon</h3><p>A premium progression game where property, vehicles, businesses and status grow from one understandable playable loop.</p></section>',
+      '<div class="blueprint-grid">',
+        '<article class="helper-card blueprint-core"><span>Player fantasy</span><h3>Start small. Build income. Upgrade life. Earn visible status.</h3><p>The player should feel progression through useful assets and increasingly premium spaces—not repetitive chores.</p></article>',
+        '<article class="helper-card"><span>Core loop</span>' + compactList(["Earn cash", "Buy one meaningful upgrade", "Unlock a better vehicle/property option", "Show progress", "Reinvest into the next milestone"]) + '</article>',
+        '<article class="helper-card"><span>Minimum viable version</span>' + compactList(["One plot", "One house path", "One garage", "One working car", "Simple cash earning", "Basic upgrade buttons"]) + '</article>',
+        '<article class="helper-card"><span>Zones</span>' + focusChips(["Starter plot", "Residential upgrade", "Garage", "Dealership later", "Tuning shop later", "Car meet plaza later"]) + '</article>',
+        '<article class="helper-card"><span>Progression</span>' + compactList(["Starter income", "House upgrades", "Garage access", "Vehicle quality", "Businesses", "Prestige only after the loop proves itself"]) + '</article>',
+        '<article class="helper-card"><span>Businesses</span>' + compactList(["Dealership", "Tuning shop", "Private bank", "Property income", "Future service businesses"]) + '</article>',
+      '</div>',
+      '<article class="helper-card blueprint-guardrail"><strong>Blueprint guardrail</strong><span>Do not build the city, prestige empire or dozens of vehicles before one plot, one money loop and one car work cleanly.</span></article>'
+    ].join("");
+  }
+
+  function carSystemsHtml() {
+    var cards = [
+      ["Vehicle customisation", ["Paint colour", "Wheel choice", "Custom plates", "Body kits parked until later"]],
+      ["Vehicle audio", ["Startup state", "Idle loop", "Driving loop", "No overlapping audio", "Licensed assets only"]],
+      ["Startup sequence", ["Enter prompt", "Align to door", "Door animation", "Sit placeholder", "Startup sound", "Dashboard light"]],
+      ["Damage and repair", ["Clear damage states", "Repair cost", "No pointless punishment", "Insurance/protection later"]],
+      ["Garage display", ["Owned vehicles", "Rarity label", "Status presentation", "Photo spot", "Player viewing later"]],
+      ["Driving feel", ["Reliable basic handling", "Ordinary-hardware performance", "Camera clarity", "Input feedback", "Advanced tuning later"]],
+      ["Interaction animation", ["One door", "One seat", "One clean transition", "Fallback if animation fails"]]
+    ];
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Car Systems</span><h3>Premium vehicle feel, built in the right order</h3><p>One complete car interaction is the checkpoint. A fleet is future scope.</p></section>',
+      '<div class="system-card-grid">' + cards.map(function (card, index) { return '<article class="helper-card system-detail-card"><span class="system-index">0' + (index + 1) + '</span><h3>' + card[0] + '</h3>' + compactList(card[1]) + '</article>'; }).join("") + '</div>',
+      '<article class="helper-card system-sequence"><span>Current recommended sequence</span><strong>One car → enter prompt → reliable drive → startup sound → idle loop → no overlap → one door animation → dashboard light</strong></article>'
+    ].join("");
+  }
+
+  function lifeSystemsHtml() {
+    var systems = [
+      ["Banking app / bank", "Make income, spending and future business upgrades understandable."],
+      ["Business income", "Support the tycoon loop with clear payout timing and upgrade value."],
+      ["Car damage and repair", "Create consequences that support vehicle ownership without becoming tedious."],
+      ["Insurance / protection", "Future risk-management layer after damage and repair work."],
+      ["Discipline and motivation", "Reward meaningful sessions, milestones and returning to useful work."],
+      ["Sleep / 3AM motivation", "Use sparingly as a strategic boost, not a repetitive micro-chore."],
+      ["Burnout / energy", "Only include if it creates useful decisions rather than slowing the player."],
+      ["Reputation / status", "Make progress visible through garages, cars, businesses and social spaces."]
+    ];
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Life Systems</span><h3>Selective mechanics that support progression</h3><p>Life simulation exists to strengthen the tycoon fantasy. Boring chores stay out.</p></section>',
+      '<div class="life-system-grid">' + systems.map(function (system) { return '<article class="helper-card life-system-card"><span></span><div><h3>' + system[0] + '</h3><p>' + system[1] + '</p></div></article>'; }).join("") + '</div>',
+      '<article class="helper-card blueprint-guardrail"><strong>Cut rule</strong><span>No barber visits, filler errands or realism-for-realism\'s-sake unless the mechanic directly supports gameplay, economy, ownership or status.</span></article>'
+    ].join("");
+  }
+
+  function founderSystemsHtml(counts, overload, risk, currentPhase, parkedTasks, neededSkills) {
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Founder Systems</span><h3>Freddie\'s personal execution system</h3><p>Discipline, learning and workload control for a long solo build.</p></section>',
+      '<section class="solo-founder-command founder-page-command">',
+        '<div class="solo-founder-header"><div><span class="solo-mode-chip">Mode: Solo Founder</span><h3>Build Control</h3><p>No excuses, no uncontrolled scope, and no dependency on unavailable people.</p></div><div class="solo-risk" data-tone="' + risk.tone + '"><span>Overload risk</span><strong>' + risk.label + '</strong><small>' + risk.detail + '</small></div></div>',
+        '<div class="solo-founder-grid">',
+          '<article class="solo-command-card"><span>Weekly focus</span><input id="soloActiveSystem" maxlength="200" value="' + escapeHtml(helperState.solo.activeSystem) + '"></article>',
+          '<article class="solo-command-card"><span>Learning blocker</span><input id="soloLearningBlocker" maxlength="200" value="' + escapeHtml(helperState.solo.learningBlocker) + '"></article>',
+          '<article class="solo-command-card"><span>Current phase</span><select id="soloPhaseSelect" onchange="helperSetSoloPhase(this.value)">' + phaseOptions() + '</select></article>',
+          '<article class="solo-command-card"><span>Feature load</span><strong>' + counts.active + ' active</strong><small>' + overload.slots.core + ' core · ' + overload.slots.support + ' support · ' + overload.slots.polish + ' polish</small></article>',
+        '</div>',
+        '<div class="solo-save-row"><span>No-excuse rule: finish the selected system before expanding scope.</span><button type="button" class="helper-button primary" onclick="helperSaveSoloState()">Save founder focus</button></div>',
+        '<div class="solo-overload-warning ' + (overload.overloaded ? "danger" : "controlled") + '"><strong>' + overload.message + '</strong><span>' + (overload.overloaded ? hardTruths[0] : hardTruths[6]) + '</span></div>',
+      '</section>',
+      '<div class="founder-system-grid">',
+        '<article class="helper-card"><span class="command-card-label">Motivation tracker</span><strong>The dream is allowed.</strong><p>The current sprint must remain small enough to finish.</p></article>',
+        '<article class="helper-card"><span class="command-card-label">Parked scope</span>' + compactList(parkedTasks.map(function (task) { return task.title; })) + '</article>',
+        '<article class="helper-card"><span class="command-card-label">Skills blocking the next phase</span>' + compactList(neededSkills.map(function (skill) { return skill.name + ': ' + skill.exercise; })) + '</article>',
+      '</div>',
+      '<div class="helper-section-heading"><div><span class="helper-section-label">Capability building</span><h3>Solo skill tracker</h3></div><p>Evidence and exercises, not confidence alone.</p></div>',
+      '<article class="helper-card solo-skills-card"><div class="solo-skills-grid">' + skillRows() + '</div></article>',
+      '<details class="helper-card solo-rules-card" open><summary><div><span class="helper-section-label">Permanent principles</span><h3>Founder operating rules</h3></div><span>10 rules</span></summary>' + operatingRulesHtml() + '</details>'
+    ].join("");
+  }
+
+  function roadmapHtml(currentPhase) {
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Empire Build Path</span><h3>Seven-phase solo roadmap</h3><p>Only Phase ' + currentPhase.id + ' drives the current sprint. Later phases remain visible but inactive.</p></section>',
+      '<div class="roadmap-current-banner"><span>Current phase</span><strong>' + currentPhase.id + ' · ' + currentPhase.name + '</strong><small>' + currentPhase.items.join(" → ") + '</small></div>',
+      '<div class="solo-roadmap roadmap-page">' + soloRoadmapHtml() + '</div>'
+    ].join("");
+  }
+
+  function brainHtml(next, overload) {
+    var ignore = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; }).slice(0, 3);
+    var blocked = tasks.filter(function (task) { return taskStatus(task.id) === "blocked"; }).slice(0, 3);
+    var intake = intakeProgress();
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Overseer Brain</span><h3>Local rule-based intelligence</h3><p>Priorities, scope control, feature scoring and ChatGPT prompt construction. No cloud inference is running here.</p></section>',
+      '<div class="brain-summary-grid">',
+        '<article class="helper-card"><span>Top priority</span><strong>' + escapeHtml(next.title) + '</strong><p>' + escapeHtml(next.detail) + '</p></article>',
+        '<article class="helper-card"><span>What to ignore</span>' + compactList(ignore.map(function (task) { return task.title; })) + '</article>',
+        '<article class="helper-card"><span>What is blocked</span>' + (blocked.length ? compactList(blocked.map(function (task) { return task.title; })) : '<p>No explicit blockers recorded.</p>') + '</article>',
+        '<article class="helper-card" data-tone="' + (overload.overloaded ? "bad" : "good") + '"><span>Feature load</span><strong>' + (overload.overloaded ? "Over-scoped" : "Controlled") + '</strong><p>' + overload.message + '</p></article>',
+      '</div>',
+      '<div class="helper-section-heading"><div><span class="helper-section-label">Solo evaluation</span><h3>Solo Build Score</h3></div><p>Value − difficulty − dependency − maintenance risk.</p></div>',
+      '<article class="helper-card solo-feature-card"><div class="solo-feature-head"><span>Feature</span><span>Score</span><span>Recommendation</span></div><div class="solo-feature-list">' + featureScoreRows() + '</div><div class="solo-brain-questions"><strong>Overseer checks:</strong><span>Can Freddie build it alone?</span><span>Does it help the core loop?</span><span>What skill blocks it?</span><span>What is the smallest useful version?</span></div></article>',
+      '<div class="overseer-intelligence-grid brain-intelligence-grid">',
+        '<article id="overseerIntake" class="helper-card overseer-intake-card"><div class="overseer-card-heading"><div><span class="helper-section-label">Information intake</span><h3>Give Overseer useful context</h3><p>Everything stays in this browser.</p></div><div class="overseer-progress-ring" style="--progress:' + intake.percent + '"><strong>' + intake.percent + '%</strong><span>' + intake.answered + '/' + intake.total + '</span></div></div><div class="overseer-intake-grid">' + intakeFieldsHtml() + '</div><div class="overseer-intake-footer"><span>Local draft · not secure</span><button type="button" class="helper-button primary" onclick="helperSaveIntake()">Save information</button></div></article>',
+        '<article class="helper-card overseer-prompt-card"><div class="overseer-card-heading compact"><div><span class="helper-section-label">ChatGPT prompt lab</span><h3>Build a context-rich prompt</h3><p>Review and copy manually.</p></div></div><div class="overseer-prompt-modes">' + promptModeButtons() + '</div><textarea id="overseerGeneratedPrompt" class="overseer-generated-prompt" readonly>' + escapeHtml(buildPrompt()) + '</textarea><div class="overseer-prompt-footer"><span>Nothing is transmitted automatically.</span><button type="button" class="helper-button primary" onclick="helperCopyPrompt()">Copy prompt</button></div></article>',
+      '</div>'
+    ].join("");
+  }
+
+  function decisionsHtml() {
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Decisions</span><h3>Project memory</h3><p>Record what changed, why, its consequences and whether it can be reversed.</p></section>',
+      '<div class="decision-layout">',
+        '<article class="helper-card decision-guide"><span>Decision format</span>' + compactList(["Decision made", "Reason", "Consequences", "Reversible or permanent", "Related feature or project", "Date reviewed"]) + '</article>',
+        '<article class="helper-card decision-editor"><label for="overseerDecisions">Local decision log</label><textarea id="overseerDecisions" maxlength="8000" placeholder="Decision:\nReason:\nConsequences:\nReversible:\nRelated feature:\n">' + escapeHtml(helperState.decisions) + '</textarea><div><span>Local only · not secure · no sync</span><button type="button" class="helper-button primary" onclick="helperSaveDecisions()">Save decisions</button></div></article>',
+      '</div>'
+    ].join("");
+  }
+
+  function vaultHtml() {
+    return [
+      '<section class="command-section-head"><span class="helper-section-label">Future Vault</span><h3>Long-term ambition without current-sprint pollution</h3><p>The empire has no ceiling. The active build still has strict limits.</p></section>',
+      '<div class="vault-grid">',
+        '<article class="helper-card"><span>Future cars / checkpoints</span>' + compactList(["Higher rarity vehicles", "Special vehicle classes", "Custom plates", "Photo-ready garage displays"]) + '</article>',
+        '<article class="helper-card"><span>Parked 10-year features</span>' + compactList(["Huge custom city", "Large vehicle fleet", "Advanced body-kit ecosystem", "Deep prestige economy"]) + '</article>',
+        '<article class="helper-card"><span>Studio-stage ideas</span>' + compactList(["Custom vehicle pipeline", "Seasonal events", "Live analytics", "Dedicated content team"]) + '</article>',
+        '<article class="helper-card"><span>Outsourcing ideas</span>' + compactList(["High-end vehicle models", "Properly licensed audio packs", "Trailer editing", "Specialist animation polish"]) + '</article>',
+        '<article class="helper-card vault-trajectory"><span>Empire trajectory</span><strong>No Ceiling</strong><p>Skill → product → cashflow → assets → trophies → empire.</p></article>',
+      '</div>',
+      '<article class="helper-card vault-editor"><label for="overseerVault">Local vault notes</label><textarea id="overseerVault" maxlength="8000" placeholder="Store future ideas here instead of activating them now...">' + escapeHtml(helperState.vault) + '</textarea><div><span>Parked locally · not part of the active sprint</span><button type="button" class="helper-button primary" onclick="helperSaveVault()">Save vault</button></div></article>'
+    ].join("");
+  }
+
+  function renderDashboard() {
+    helperState.currentView = "dashboard";
+    installShell();
+    var app = appRoot();
+    if (!app) return;
+    var next = overseerNextAction();
+    var counts = taskCounts();
+    var overload = overloadState();
+    var risk = burnoutRisk();
+    var currentPhase = soloPhases[helperState.solo.phase - 1];
+    var parkedTasks = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; }).slice(0, 5);
+    var neededSkills = soloSkills.filter(function (skill) { return helperState.skills[skill.id] !== "Working" && helperState.skills[skill.id] !== "Confident"; }).slice(0, 4);
+    var sectionHtml = "";
+
+    if (helperState.activeSection === "command") sectionHtml = commandCenterHtml(next, counts, overload, risk);
+    if (helperState.activeSection === "blueprint") sectionHtml = blueprintHtml();
+    if (helperState.activeSection === "cars") sectionHtml = carSystemsHtml();
+    if (helperState.activeSection === "life") sectionHtml = lifeSystemsHtml();
+    if (helperState.activeSection === "founder") sectionHtml = founderSystemsHtml(counts, overload, risk, currentPhase, parkedTasks, neededSkills);
+    if (helperState.activeSection === "roadmap") sectionHtml = roadmapHtml(currentPhase);
+    if (helperState.activeSection === "brain") sectionHtml = brainHtml(next, overload);
+    if (helperState.activeSection === "decisions") sectionHtml = decisionsHtml();
+    if (helperState.activeSection === "vault") sectionHtml = vaultHtml();
+
+    app.innerHTML = '<section class="helper-dashboard helper-enter organised-overseer" aria-label="Overseer command system">' + founderTopHtml(next, counts, overload, risk, currentPhase) + '<main class="overseer-section-content" data-section="' + helperState.activeSection + '">' + sectionHtml + '</main></section>';
+  }
+
   function captureIntakeFromDom(persist) {
     intakeFields.forEach(function (field) {
       var input = document.getElementById("overseer-intake-" + field.id);
@@ -757,6 +993,29 @@
     });
     if (persist) writeLocalJson(INTAKE_STORAGE_KEY, helperState.intake);
   }
+
+  window.helperSetSection = function (sectionId) {
+    helperState.activeSection = normaliseSection(sectionId);
+    writeLocalText(UI_STORAGE_KEY, helperState.activeSection);
+    renderDashboard();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  window.helperSaveDecisions = function () {
+    var field = document.getElementById("overseerDecisions");
+    if (!field) return;
+    helperState.decisions = String(field.value || "").slice(0, 8000);
+    writeLocalText(DECISIONS_STORAGE_KEY, helperState.decisions);
+    showHelperToast("Local decision log saved.");
+  };
+
+  window.helperSaveVault = function () {
+    var field = document.getElementById("overseerVault");
+    if (!field) return;
+    helperState.vault = String(field.value || "").slice(0, 8000);
+    writeLocalText(VAULT_STORAGE_KEY, helperState.vault);
+    showHelperToast("Future Vault saved locally.");
+  };
 
   window.helperSaveIntake = function () {
     captureIntakeFromDom(true);
