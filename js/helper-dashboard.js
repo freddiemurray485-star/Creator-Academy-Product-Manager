@@ -1,5 +1,5 @@
 /*
-  Creator Academy Helper — local Overseer dashboard.
+  Overseer — private local founder command system.
   LocalStorage is limited to harmless task state and notes on this device.
   It is not secure storage and never grants paid, admin, owner, or account access.
 */
@@ -17,20 +17,15 @@
   var VALID_TASK_STATES = ["active", "completed", "blocked", "parked"];
   var SECTION_IDS = ["command", "blueprint", "cars", "life", "founder", "roadmap", "brain", "decisions", "vault"];
 
-  var originalActions = {
-    showLevelHub: typeof window.showLevelHub === "function" ? window.showLevelHub : null,
-    showProgress: typeof window.showProgress === "function" ? window.showProgress : null
-  };
-
   var tasks = [
     { id: "roblox-core-loop", area: "Roblox Studio", title: "Define the first playable money loop", detail: "Choose one plot, one upgrade path and one clear cash-earning action.", priority: 1, slot: "core", tag: "Solo-safe", defaultStatus: "active" },
     { id: "lua-systems", area: "Roblox Studio", title: "Build the Lua basics practice list", detail: "Learn only the scripting needed for the current playable milestone.", priority: 2, slot: "support", tag: "Learning required", defaultStatus: "active" },
     { id: "studio-ui", area: "Roblox Studio", title: "Create readable button labels and feedback", detail: "Polish the minimum UI needed to understand the current loop.", priority: 3, slot: "polish", tag: "Prototype only", defaultStatus: "active" },
     { id: "tycoon-events", area: "Roblox Studio", title: "Outline Tycoon and event-system boundaries", detail: "Separate trusted server logic, client UI and safe event controls.", priority: 4, slot: "core", tag: "Learning required", defaultStatus: "parked" },
-    { id: "academy-map", area: "Creator Academy", title: "Review the course and path structure", detail: "Confirm what belongs in each path before adding more lessons.", priority: 4, slot: "support", tag: "Solo-safe", defaultStatus: "parked" },
-    { id: "lesson-template", area: "Creator Academy", title: "Standardise the next lesson template", detail: "Keep outcomes, examples, tasks and evidence requirements consistent.", priority: 5, slot: "support", tag: "Production-ready", defaultStatus: "parked" },
-    { id: "assessment-plan", area: "Creator Academy", title: "Plan the next assessment and homework set", detail: "Connect each assessment to a real lesson outcome.", priority: 6, slot: "support", tag: "Prototype only", defaultStatus: "parked" },
-    { id: "portfolio-public-notes", area: "Creator Academy", title: "Capture portfolio and public-site ideas", detail: "Keep future public-facing ideas separate from the active build.", priority: 7, slot: "polish", tag: "Parked", defaultStatus: "parked" },
+    { id: "academy-map", area: "Tracked project", title: "Record the Creator Academy Hub boundary", detail: "Keep it parked as a separate public product; Overseer stores status and planning notes only.", priority: 4, slot: "support", tag: "Parked", defaultStatus: "parked" },
+    { id: "lesson-template", area: "Tracked project", title: "Record Creator Academy Hub status", detail: "Track its current state, next review date and owner decision without building product content here.", priority: 5, slot: "support", tag: "Parked", defaultStatus: "parked" },
+    { id: "assessment-plan", area: "Tracked project", title: "Capture Creator Academy Hub risks", detail: "Keep risks and unresolved decisions as private project notes.", priority: 6, slot: "support", tag: "Parked", defaultStatus: "parked" },
+    { id: "portfolio-public-notes", area: "Tracked project", title: "Park Creator Academy Hub future ideas", detail: "Store future ideas without turning them into active Overseer features.", priority: 7, slot: "polish", tag: "Parked", defaultStatus: "parked" },
     { id: "pwa-review", area: "Launch readiness", title: "Review PWA readiness", detail: "Document manifest, install and offline work without claiming readiness.", priority: 8, slot: "polish", tag: "Parked", defaultStatus: "parked" },
     { id: "seo-review", area: "Launch readiness", title: "Review the SEO checklist", detail: "Check metadata, indexing files and future public-page wording.", priority: 9, slot: "polish", tag: "Parked", defaultStatus: "parked" },
     { id: "custom-vehicle-pack", area: "Future studio", title: "Commission a high-end custom vehicle pack", detail: "Keep this out of the current sprint until budget and licensing are clear.", priority: 10, slot: "polish", tag: "Outsource later", defaultStatus: "parked" },
@@ -38,37 +33,29 @@
     { id: "decorative-command-room", area: "Future studio", title: "Build decorative command-room features before gameplay", detail: "This does not support the first playable loop.", priority: 12, slot: "polish", tag: "Cut", defaultStatus: "parked" }
   ];
 
-  var robloxFocus = [
-    "Roblox Lua learning",
-    "Game systems",
-    "UI work",
-    "Tycoon systems",
-    "Admin and event safety",
-    "Blender, Moon Animator and VFX"
-  ];
-
   var academyFocus = [
-    "Course structure",
-    "Lesson planning",
-    "Path planning",
-    "Portfolio ideas",
-    "Assessments and homework",
-    "Public website notes"
+    "Project status",
+    "Roadmap",
+    "Tasks",
+    "Decisions",
+    "Risks",
+    "Private notes",
+    "Future ideas"
   ];
 
   var intakeFields = [
     { id: "currentBuild", label: "Current Roblox Studio build", question: "What are you building in Roblox Studio right now?", placeholder: "Example: a tycoon upgrade system, UI flow, event system or Lua practice project" },
     { id: "biggestBlocker", label: "Biggest blocker", question: "What is slowing the project down most?", placeholder: "Describe the bug, missing decision, skill gap or unclear requirement" },
-    { id: "courseFocus", label: "Course focus", question: "Which Creator Academy lesson, path or course area needs attention?", placeholder: "Example: Lua foundations, UI design, assessment planning or portfolio work" },
-    { id: "requestedHelp", label: "ChatGPT help needed", question: "What do you want ChatGPT to help with?", placeholder: "Example: explain code, debug a script, improve a lesson, write a checklist or review a plan" },
-    { id: "targetOutcome", label: "Target outcome", question: "What should a useful answer or finished task produce?", placeholder: "Example: working Lua code with explanation, a lesson outline, or a launch checklist" },
+    { id: "courseFocus", label: "Creator Academy Hub tracking note", question: "What status, risk, decision or future idea should Overseer record for this separate project?", placeholder: "Example: parked, next review date, unresolved boundary, project risk or future idea" },
+    { id: "requestedHelp", label: "ChatGPT help needed", question: "What do you want ChatGPT to help with?", placeholder: "Example: explain code, debug a script, review a project decision or write a checklist" },
+    { id: "targetOutcome", label: "Target outcome", question: "What should a useful answer or finished task produce?", placeholder: "Example: working Lua code, a decision record or a focused execution checklist" },
     { id: "constraints", label: "Constraints and context", question: "What constraints, tools or details must the answer respect?", placeholder: "Example: beginner-friendly, Roblox server-authoritative, local-only, no paid services" }
   ];
 
   var promptModes = {
-    project: { label: "Project adviser", instruction: "Act as a pragmatic Roblox and Creator Academy project adviser. Give one prioritised next step, then a short execution plan." },
+    project: { label: "Project adviser", instruction: "Act as a pragmatic private project-operations adviser. Give one prioritised next step, then a short execution plan." },
     lua: { label: "Lua debugger", instruction: "Act as a Roblox Lua debugging partner. Explain the likely cause, show a minimal safe fix, and include checks to prove it works." },
-    lesson: { label: "Lesson planner", instruction: "Act as a practical course designer. Create a clear lesson outcome, teaching sequence, example, learner task and evidence check." },
+    decision: { label: "Decision reviewer", instruction: "Act as a strict project decision reviewer. Clarify the decision, evidence, risks, reversibility and single next action." },
     launch: { label: "Launch reviewer", instruction: "Act as a cautious launch reviewer. Separate confirmed facts from assumptions and list only the highest-impact blockers and next actions." }
   };
 
@@ -101,7 +88,7 @@
     { id: "blender", name: "Blender modelling", evidence: "Custom vehicle and asset ambitions are documented.", exercise: "Optimise and import one simple prop with correct scale.", feature: "Custom garage assets", blocked: "High-end vehicle models" },
     { id: "audio", name: "Audio design / licensing", evidence: "Understands the no-overlap state-system concept.", exercise: "Play one startup sound, then begin one idle loop when it ends.", feature: "Premium car startup sequence", blocked: "RPM blending and licensed audio packs" },
     { id: "economy", name: "Game economy", evidence: "A money and upgrade loop is part of the foundation plan.", exercise: "Balance five upgrades using a simple cost/reward table.", feature: "Basic tycoon loop", blocked: "Prestige and private-bank systems" },
-    { id: "monetisation", name: "Monetisation", evidence: "Future review is planned; no production claim is made.", exercise: "Write a fair free-versus-paid value outline after the loop works.", feature: "Launch review", blocked: "Real product sales and paid access" },
+    { id: "release", name: "Release planning", evidence: "Future review is planned; no production claim is made.", exercise: "Define private-test entry and exit checks after the loop works.", feature: "Launch review", blocked: "Public release claims" },
     { id: "marketing", name: "Marketing / devlogs", evidence: "Public site and launch content remain future work.", exercise: "Capture one honest weekly build update with a screenshot.", feature: "Devlog cadence", blocked: "Launch campaign" },
     { id: "optimisation", name: "Optimisation", evidence: "Ordinary-hardware performance is a permanent rule.", exercise: "Profile one scene and remove one measurable bottleneck.", feature: "Stable playable build", blocked: "Large city and content density" },
     { id: "versioning", name: "Version control / backups", evidence: "GitHub publishing and local backups are active practices.", exercise: "Create a verified backup before the next structural edit.", feature: "Safe solo workflow", blocked: "Risky large refactors" }
@@ -113,7 +100,7 @@
     "Build from skill → product → cashflow → assets → trophies → empire.",
     "No real car brands, logos or audio unless legally licensed.",
     "Local-only app for now.",
-    "No login, database or Supabase unless Freddie explicitly reopens that direction.",
+    "Overseer stays private and local; public product systems belong in separate projects.",
     "Back up the main project before major edits.",
     "Build for performance on ordinary hardware first.",
     "Every big feature must have a minimum viable version.",
@@ -249,8 +236,8 @@
     var brand = document.querySelector(".topbar .brand");
     if (brand) {
       brand.innerHTML = [
-        '<span class="brand-mark" aria-hidden="true">CA</span>',
-        '<div><h1>Creator Academy Helper</h1><p>Overseer · local project operations</p></div>'
+        '<span class="brand-mark" aria-hidden="true">OV</span>',
+        '<div><h1>Overseer</h1><p>Private · local founder command system</p></div>'
       ].join("");
     }
     renderNavigation();
@@ -422,15 +409,17 @@
     return [
       mode.instruction,
       "",
-      "Project context:",
-      "- Project: Creator Academy, currently operated by Freddie Murray as solo founder, project lead, main developer and final approver.",
+      "System context:",
+      "- Overseer is Freddie Murray's private local founder command system. It organises projects; it is not any tracked product.",
+      "- Active tracked project: Luxury Life Tycoon, a Roblox game project.",
+      "- Parked tracked project: Creator Academy Hub, a separate future public/student product. Treat it only as status, roadmap, task, decision, risk, note or future-idea metadata.",
       "- Team status: Mason Harris has left for now and must not be treated as an active dependency or task assignee.",
       "- Solo phase: Phase " + helperState.solo.phase + " — " + soloPhases[helperState.solo.phase - 1].name,
       "- Active solo system: " + promptValue(helperState.solo.activeSystem, "Not provided yet"),
       "- Current learning blocker: " + promptValue(helperState.solo.learningBlocker, "Not provided yet"),
       "- Current Roblox Studio build: " + promptValue(helperState.intake.currentBuild, "Not provided yet"),
       "- Biggest blocker: " + promptValue(helperState.intake.biggestBlocker, "Not provided yet"),
-      "- Creator Academy focus: " + promptValue(helperState.intake.courseFocus, "Not provided yet"),
+      "- Creator Academy Hub tracking note: " + promptValue(helperState.intake.courseFocus, "Not provided yet"),
       "- Help requested: " + promptValue(helperState.intake.requestedHelp, "Not provided yet"),
       "- Target outcome: " + promptValue(helperState.intake.targetOutcome, "Not provided yet"),
       "- Constraints and context: " + promptValue(helperState.intake.constraints, "Not provided yet"),
@@ -439,6 +428,8 @@
       "- Be direct, practical and specific.",
       "- Ask up to three focused questions if critical information is missing.",
       "- Do not invent completed work, production readiness, secure accounts or paid access.",
+      "- Do not generate Creator Academy lessons, curriculum, public pages, pricing, accounts, payment flows or student dashboards for Overseer.",
+      "- Keep Overseer, Creator Academy Hub and Luxury Life Tycoon as three clearly separate systems.",
       "- Keep Roblox trust-sensitive logic server-authoritative.",
       "- Apply Solo Founder limits: one core system, one support system and one polish task active at most.",
       "- Flag ideas that should be parked, outsourced or delayed until team stage.",
@@ -465,7 +456,7 @@
         ? { label: "Structure detected", detail: "Install and offline behaviour still need manual testing.", tone: "good" }
         : { label: "Planning needed", detail: "Manifest or service worker setup is still outstanding.", tone: "warn" },
       deployment: { label: "Later", detail: "This is a local prototype; hosting is not a readiness claim.", tone: "warn" },
-      stripe: { label: "Later", detail: "Payments and entitlements require a real server-side implementation.", tone: "warn" },
+      separation: { label: "Protected", detail: "Public products remain separate from this private local command system.", tone: "good" },
       backend: { label: "Not needed locally", detail: "Only add backend/auth if a production product later needs users or sync.", tone: "good" },
       seo: hasSeoBaseline
         ? { label: "Baseline present", detail: "Metadata exists; public wording and indexing still need review.", tone: "good" }
@@ -590,9 +581,9 @@
       '<section class="helper-dashboard helper-enter" aria-label="Overseer dashboard">',
         '<header class="helper-welcome overseer-heading">',
           '<div>',
-            '<span class="helper-section-label">Creator Academy Helper</span>',
+            '<span class="helper-section-label">Overseer</span>',
             '<h2>Overseer Overview</h2>',
-            '<p>Local Overseer dashboard for Roblox Studio work, course building, launch planning and project progress.</p>',
+            '<p>Private local command system for project control, Roblox Studio work and founder execution.</p>',
           '</div>',
           '<span class="helper-session-pill">' + escapeHtml(localLabel) + ' · this device only</span>',
         '</header>',
@@ -610,12 +601,12 @@
         '<div class="overseer-overview-grid">',
           '<article class="helper-card overseer-lead-card">',
             '<div class="overseer-mark">OV</div>',
-            '<div><span class="helper-section-label">What Overseer does</span><h3>One place to keep the project moving.</h3><p>Overseer helps track the Creator Academy project, Roblox Studio development, course-building tasks, and launch readiness from one local dashboard.</p></div>',
+            '<div><span class="helper-section-label">What Overseer does</span><h3>One place to control separate projects.</h3><p>Overseer tracks project status, tasks, decisions, risks and notes. It does not become the products it tracks.</p></div>',
           '</article>',
           '<article class="helper-card overseer-mission-card">',
             '<span class="helper-section-label">Current mission</span>',
             '<h3>Build the next useful piece without expanding scope too early.</h3>',
-            '<p>Keep Roblox Studio progress and Creator Academy planning connected through small, testable milestones.</p>',
+            '<p>Keep Luxury Life Tycoon active while Creator Academy Hub remains a separate parked planning reference.</p>',
           '</article>',
           '<article class="helper-card overseer-members-card">',
             '<span class="helper-section-label">Operating structure</span>',
@@ -682,15 +673,15 @@
         '<div class="overseer-operations-grid">',
           '<article class="helper-card overseer-area-card roblox">',
             '<div class="overseer-area-heading"><span class="overseer-area-icon">R</span><div><span class="helper-section-label">Build operations</span><h3>Roblox Studio Work</h3></div></div>',
-            '<p>Track practical building, scripting and production work without mixing it into course-page marketing.</p>',
+            '<p>Track practical building, scripting and production work for Luxury Life Tycoon.</p>',
             focusChips(robloxFocus),
             areaTaskList("Roblox Studio"),
           '</article>',
           '<article class="helper-card overseer-area-card academy">',
-            '<div class="overseer-area-heading"><span class="overseer-area-icon">C</span><div><span class="helper-section-label">Learning operations</span><h3>Creator Academy Development</h3></div></div>',
-            '<p>Organise curriculum, evidence and future public-site ideas from the same project view.</p>',
+            '<div class="overseer-area-heading"><span class="overseer-area-icon">C</span><div><span class="helper-section-label">Tracked project</span><h3>Creator Academy Hub</h3></div></div>',
+            '<p>Parked · local-only planning reference. Status, roadmap, tasks, decisions, risks, notes and future ideas only.</p>',
             focusChips(academyFocus),
-            areaTaskList("Creator Academy"),
+            areaTaskList("Tracked project"),
           '</article>',
         '</div>',
 
@@ -733,7 +724,7 @@
         '<div class="helper-status-grid overseer-readiness-grid">',
           statusCard("pwa", "PWA status", launch.pwa),
           statusCard("deployment", "Deployment", launch.deployment),
-          statusCard("stripe", "Stripe", launch.stripe),
+          statusCard("separation", "Project separation", launch.separation),
           statusCard("backend", "Backend and auth", launch.backend),
           statusCard("seo", "SEO checklist", launch.seo),
         '</div>',
@@ -746,17 +737,17 @@
         '<div class="helper-work-grid">',
           '<article class="helper-card helper-work-card helper-notes-card">',
             '<h3>Local Overseer notes</h3>',
-            '<p>Stored only in this browser. Do not put passwords, payment data or sensitive information here.</p>',
-            '<textarea id="helperLocalNotes" class="helper-notes" maxlength="4000" placeholder="Capture the next Roblox Studio task, course decision, blocker or launch note...">' + escapeHtml(helperState.notes) + '</textarea>',
+            '<p>Stored only in this browser. Do not put secrets or sensitive information here.</p>',
+            '<textarea id="helperLocalNotes" class="helper-notes" maxlength="4000" placeholder="Capture the next Roblox Studio task, project decision, blocker or launch note...">' + escapeHtml(helperState.notes) + '</textarea>',
             '<div class="helper-notes-footer"><span id="helperNotesStatus">Local only · not secure</span><button type="button" class="helper-button" onclick="helperSaveNotes()">Save notes</button></div>',
           '</article>',
           '<article class="helper-card helper-work-card overseer-later-card">',
             '<h3>Production work for later</h3>',
             '<p>Only add these when the project genuinely moves beyond a local prototype.</p>',
             '<ul class="helper-list">',
-              '<li><span class="helper-list-index">P</span><span>Stripe checkout, webhooks and entitlement revocation need a real backend.</span></li>',
+              '<li><span class="helper-list-index">S</span><span>Creator Academy Hub public-product work stays outside Overseer.</span></li>',
               '<li><span class="helper-list-index">D</span><span>Deployment needs monitoring, recovery, headers and public copy review.</span></li>',
-              '<li><span class="helper-list-index">A</span><span>Authentication and synced data are needed only if future users require accounts or cross-device access.</span></li>',
+              '<li><span class="helper-list-index">A</span><span>Any future public-product infrastructure must be designed in its own project.</span></li>',
             '</ul>',
           '</article>',
         '</div>',
@@ -788,7 +779,7 @@
           '<div class="mission-console-head"><span>Current Mission</span><i></i></div>',
           '<h3>' + escapeHtml(helperState.solo.activeSystem || "First playable money loop") + '</h3>',
           '<dl>',
-            '<div><dt>Active project</dt><dd>Luxury Life Tycoon / Creator Academy</dd></div>',
+            '<div><dt>Active project</dt><dd>Luxury Life Tycoon</dd></div>',
             '<div><dt>Phase</dt><dd>' + currentPhase.id + ' · ' + escapeHtml(currentPhase.name) + '</dd></div>',
             '<div><dt>Current objective</dt><dd>' + escapeHtml(next.title) + '</dd></div>',
             '<div><dt>Next concrete action</dt><dd>' + escapeHtml(next.detail) + '</dd></div>',
@@ -805,6 +796,11 @@
         '<span><small>Next skill</small><strong>' + escapeHtml(helperState.solo.learningBlocker) + '</strong></span>',
         '<span><small>Empire trajectory</small><strong>No Ceiling</strong></span>',
       '</div>',
+      '<section class="project-separation-row" aria-label="Project boundaries">',
+        '<article data-state="system"><small>Command system</small><strong>Overseer</strong><span>Private · local · controls projects</span></article>',
+        '<article data-state="active"><small>Active tracked project</small><strong>Luxury Life Tycoon</strong><span>Roblox game · current build</span></article>',
+        '<article data-state="parked"><small>Parked tracked project</small><strong>Creator Academy Hub</strong><span>Separate product · planning references only</span></article>',
+      '</section>',
       '<div class="first-screen-answers">',
         '<article><small>What am I building?</small><strong>' + escapeHtml(helperState.solo.activeSystem) + '</strong></article>',
         '<article><small>What do I do next?</small><strong>' + escapeHtml(next.title) + '</strong></article>',
@@ -827,7 +823,7 @@
         '<article class="helper-card command-stack-card"><span class="command-card-label">Parked future ideas</span>' + compactList(parked.map(function (task) { return task.title; })) + '</article>',
         '<article class="helper-card command-warning-card"><span class="command-card-label">Build discipline warning</span><strong>' + escapeHtml(overload.overloaded ? hardTruths[0] : hardTruths[7]) + '</strong><p>' + escapeHtml(risk.detail) + '</p></article>',
       '</div>',
-      '<div class="command-quick-actions"><button type="button" onclick="helperSetSection(\'brain\')">Ask Overseer Brain</button><button type="button" onclick="helperSetSection(\'roadmap\')">Open build roadmap</button><button type="button" onclick="helperOpenCourses()">Open courses</button><button type="button" onclick="helperOpenProgress()">Review progress</button></div>'
+      '<div class="command-quick-actions"><button type="button" onclick="helperSetSection(\'brain\')">Ask Overseer Brain</button><button type="button" onclick="helperSetSection(\'roadmap\')">Open build roadmap</button><button type="button" onclick="helperSetSection(\'decisions\')">Record a decision</button><button type="button" onclick="helperSetSection(\'vault\')">Park a future idea</button></div>'
     ].join("");
   }
 
@@ -1120,20 +1116,6 @@
     }
   };
 
-  window.helperOpenCourses = function () {
-    helperState.currentView = "courses";
-    renderNavigation();
-    if (originalActions.showLevelHub) originalActions.showLevelHub();
-    else showHelperToast("Course route is not available in this build.");
-  };
-
-  window.helperOpenProgress = function () {
-    helperState.currentView = "progress";
-    renderNavigation();
-    if (originalActions.showProgress) originalActions.showProgress();
-    else showHelperToast("Progress route is not available in this build.");
-  };
-
   window.showCreatorAcademyHelper = renderDashboard;
 
   function install() {
@@ -1145,7 +1127,4 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install, { once: true });
   else install();
 
-  // Older course layers use delayed startup repairs; retain Overseer as the final home surface.
-  window.setTimeout(function () { window.showHome = renderDashboard; }, 700);
-  window.setTimeout(function () { window.showHome = renderDashboard; if (helperState.currentView === "dashboard") renderDashboard(); }, 2800);
 }());

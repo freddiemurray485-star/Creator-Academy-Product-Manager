@@ -1,4 +1,4 @@
-/* Creator Academy Helper: focused application shell loaded after legacy styles. */
+/* Overseer: private local founder command system. */
 :root {
 	--helper-bg: #080b12;
 	--helper-panel: rgba(17, 22, 32, 0.92);
@@ -398,6 +398,42 @@ body.helper-app #app.helper-root {
 .empire-status-row [data-tone="good"] strong { color: var(--helper-green); }
 .empire-status-row [data-tone="warn"] strong { color: var(--helper-amber); }
 .empire-status-row [data-tone="bad"] strong { color: var(--helper-red); }
+
+.project-separation-row {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 7px;
+}
+
+.project-separation-row article {
+	position: relative;
+	min-width: 0;
+	padding: 12px 14px 12px 17px;
+	border: 1px solid var(--helper-line);
+	border-radius: 11px;
+	background: rgba(11, 15, 23, 0.78);
+}
+
+.project-separation-row article::before {
+	content: "";
+	position: absolute;
+	top: 12px;
+	bottom: 12px;
+	left: 0;
+	width: 2px;
+	border-radius: 2px;
+	background: var(--helper-accent);
+}
+
+.project-separation-row article[data-state="active"]::before { background: var(--helper-green); }
+.project-separation-row article[data-state="parked"]::before { background: #64748b; }
+
+.project-separation-row small,
+.project-separation-row strong,
+.project-separation-row span { display: block; }
+.project-separation-row small { color: var(--helper-muted); font-size: 7px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.project-separation-row strong { margin-top: 5px; color: #e2e8f0; font-size: 11px; }
+.project-separation-row span { margin-top: 3px; color: var(--helper-muted); font-size: 8px; line-height: 1.4; }
 
 .first-screen-answers {
 	display: grid;
@@ -2066,6 +2102,7 @@ body.helper-app #app.helper-root {
 	body.helper-app .nav-actions.overseer-nav { width: 100%; justify-content: flex-start; }
 	.overseer-premium-hero { grid-template-columns: 1fr; }
 	.empire-status-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+	.project-separation-row { grid-template-columns: 1fr; }
 	.first-screen-answers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
@@ -2134,6 +2171,7 @@ body.helper-app #app.helper-root {
 	.overseer-hero-copy h2 { font-size: 31px; }
 	.overseer-mission-console dl div { grid-template-columns: 1fr; gap: 3px; }
 	.empire-status-row,
+	.project-separation-row,
 	.first-screen-answers,
 	.blueprint-grid,
 	.system-card-grid,
