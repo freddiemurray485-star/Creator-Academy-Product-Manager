@@ -16,6 +16,17 @@
   var VAULT_STORAGE_KEY = "creatorAcademyHelper.localVault.v1";
   var VALID_TASK_STATES = ["active", "completed", "blocked", "parked"];
   var SECTION_IDS = ["command", "blueprint", "cars", "life", "founder", "roadmap", "brain", "decisions", "vault"];
+  var NAV_SECTIONS = [
+    { id: "command", label: "Command Center" },
+    { id: "blueprint", label: "Game Blueprint" },
+    { id: "cars", label: "Car Systems" },
+    { id: "life", label: "Life Systems" },
+    { id: "founder", label: "Founder Systems" },
+    { id: "roadmap", label: "Roadmap" },
+    { id: "brain", label: "Overseer Brain" },
+    { id: "decisions", label: "Decisions" },
+    { id: "vault", label: "Vault" }
+  ];
 
   var tasks = [
     { id: "roblox-core-loop", area: "Roblox Studio", title: "Define the first playable money loop", detail: "Choose one plot, one upgrade path and one clear cash-earning action.", priority: 1, slot: "core", tag: "Solo-safe", defaultStatus: "active" },
@@ -246,15 +257,17 @@
   function renderNavigation() {
     var nav = document.querySelector(".topbar .nav-actions");
     if (!nav) return;
-    var sections = [
-      ["command", "Command Center"], ["blueprint", "Game Blueprint"], ["cars", "Car Systems"],
-      ["life", "Life Systems"], ["founder", "Founder Systems"], ["roadmap", "Roadmap"],
-      ["brain", "Overseer Brain"], ["decisions", "Decisions"], ["vault", "Vault"]
-    ];
     nav.classList.add("overseer-nav");
-    nav.innerHTML = sections.map(function (section) {
-      return '<button type="button" class="helper-nav-button ' + (helperState.activeSection === section[0] ? "active" : "") + '" onclick="helperSetSection(\'' + section[0] + '\')">' + section[1] + '</button>';
+    nav.setAttribute("aria-label", "Overseer sections");
+    nav.innerHTML = NAV_SECTIONS.map(function (section) {
+      var active = helperState.activeSection === section.id;
+      return '<button type="button" class="helper-nav-button ' + (active ? "active" : "") + '" data-section="' + section.id + '" aria-controls="overseerSectionContent" aria-pressed="' + (active ? "true" : "false") + '"' + (active ? ' aria-current="page"' : "") + '>' + section.label + '</button>';
     }).join("");
+    Array.prototype.forEach.call(nav.querySelectorAll("button[data-section]"), function (button) {
+      button.addEventListener("click", function () {
+        setActiveSection(button.getAttribute("data-section"));
+      });
+    });
   }
 
   function taskStatus(taskId) {
@@ -979,7 +992,10 @@
     if (helperState.activeSection === "decisions") sectionHtml = decisionsHtml();
     if (helperState.activeSection === "vault") sectionHtml = vaultHtml();
 
-    app.innerHTML = '<section class="helper-dashboard helper-enter organised-overseer" aria-label="Overseer command system">' + founderTopHtml(next, counts, overload, risk, currentPhase) + '<main class="overseer-section-content" data-section="' + helperState.activeSection + '">' + sectionHtml + '</main></section>';
+    var commandOverview = helperState.activeSection === "command"
+      ? founderTopHtml(next, counts, overload, risk, currentPhase)
+      : "";
+    app.innerHTML = '<section class="helper-dashboard helper-enter organised-overseer" aria-label="Overseer command system">' + commandOverview + '<main id="overseerSectionContent" class="overseer-section-content" data-section="' + helperState.activeSection + '">' + sectionHtml + '</main></section>';
   }
 
   function captureIntakeFromDom(persist) {
@@ -990,12 +1006,17 @@
     if (persist) writeLocalJson(INTAKE_STORAGE_KEY, helperState.intake);
   }
 
-  window.helperSetSection = function (sectionId) {
+  function setActiveSection(sectionId) {
     helperState.activeSection = normaliseSection(sectionId);
     writeLocalText(UI_STORAGE_KEY, helperState.activeSection);
     renderDashboard();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    var section = document.getElementById("overseerSectionContent");
+    if (section && typeof section.scrollIntoView === "function") {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  window.helperSetSection = setActiveSection;
 
   window.helperSaveDecisions = function () {
     var field = document.getElementById("overseerDecisions");
@@ -1116,11 +1137,8 @@
     }
   };
 
-  window.showCreatorAcademyHelper = renderDashboard;
-
   function install() {
     installShell();
-    window.showHome = renderDashboard;
     renderDashboard();
   }
 

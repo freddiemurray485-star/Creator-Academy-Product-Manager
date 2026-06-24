@@ -139,6 +139,18 @@ body.helper-app button.helper-button:hover {
 	transform: none;
 }
 
+body.helper-app .nav-actions button[aria-current="page"] {
+	border-color: rgba(139, 156, 255, 0.42);
+	background: rgba(139, 156, 255, 0.12);
+	color: #eef0ff;
+	box-shadow: inset 0 -2px 0 var(--helper-accent);
+}
+
+body.helper-app .nav-actions button:focus-visible {
+	outline: 2px solid var(--helper-accent);
+	outline-offset: 2px;
+}
+
 body.helper-app .nav-actions .helper-signout {
 	margin-left: 5px;
 	border-color: var(--helper-line);
