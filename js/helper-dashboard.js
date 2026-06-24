@@ -9,7 +9,9 @@
   var TASK_STORAGE_KEY = "creatorAcademyHelper.localTasks.v1";
   var NOTES_STORAGE_KEY = "creatorAcademyHelper.localNotes.v1";
   var INTAKE_STORAGE_KEY = "creatorAcademyHelper.localIntake.v1";
-  var VALID_TASK_STATES = ["active", "completed", "blocked"];
+  var SOLO_STORAGE_KEY = "creatorAcademyHelper.soloMode.v1";
+  var SKILL_STORAGE_KEY = "creatorAcademyHelper.soloSkills.v1";
+  var VALID_TASK_STATES = ["active", "completed", "blocked", "parked"];
 
   var originalActions = {
     showLevelHub: typeof window.showLevelHub === "function" ? window.showLevelHub : null,
@@ -17,16 +19,19 @@
   };
 
   var tasks = [
-    { id: "roblox-core-loop", area: "Roblox Studio", title: "Define the next Roblox Studio build milestone", detail: "Choose one small playable system to complete before expanding scope.", priority: 1 },
-    { id: "lua-systems", area: "Roblox Studio", title: "Create the Lua systems practice list", detail: "Track the scripting concepts needed for current game systems.", priority: 2 },
-    { id: "studio-ui", area: "Roblox Studio", title: "Map the next UI flow", detail: "List the screens, states and player feedback needed for the next build.", priority: 3 },
-    { id: "tycoon-events", area: "Roblox Studio", title: "Outline Tycoon and event-system boundaries", detail: "Separate trusted server logic, client UI and safe admin/event controls.", priority: 4 },
-    { id: "academy-map", area: "Creator Academy", title: "Review the course and path structure", detail: "Confirm what belongs in each path before adding more lessons.", priority: 2 },
-    { id: "lesson-template", area: "Creator Academy", title: "Standardise the next lesson template", detail: "Keep outcomes, examples, tasks and evidence requirements consistent.", priority: 3 },
-    { id: "assessment-plan", area: "Creator Academy", title: "Plan the next assessment and homework set", detail: "Connect each assessment to a real lesson outcome.", priority: 4 },
-    { id: "portfolio-public-notes", area: "Creator Academy", title: "Capture portfolio and public-site ideas", detail: "Keep future public-facing ideas separate from this local dashboard.", priority: 5 },
-    { id: "pwa-review", area: "Launch readiness", title: "Review PWA readiness", detail: "Document manifest, install and offline work without claiming readiness.", priority: 6 },
-    { id: "seo-review", area: "Launch readiness", title: "Review the SEO checklist", detail: "Check metadata, indexing files and future public-page wording.", priority: 7 }
+    { id: "roblox-core-loop", area: "Roblox Studio", title: "Define the first playable money loop", detail: "Choose one plot, one upgrade path and one clear cash-earning action.", priority: 1, slot: "core", tag: "Solo-safe", defaultStatus: "active" },
+    { id: "lua-systems", area: "Roblox Studio", title: "Build the Lua basics practice list", detail: "Learn only the scripting needed for the current playable milestone.", priority: 2, slot: "support", tag: "Learning required", defaultStatus: "active" },
+    { id: "studio-ui", area: "Roblox Studio", title: "Create readable button labels and feedback", detail: "Polish the minimum UI needed to understand the current loop.", priority: 3, slot: "polish", tag: "Prototype only", defaultStatus: "active" },
+    { id: "tycoon-events", area: "Roblox Studio", title: "Outline Tycoon and event-system boundaries", detail: "Separate trusted server logic, client UI and safe event controls.", priority: 4, slot: "core", tag: "Learning required", defaultStatus: "parked" },
+    { id: "academy-map", area: "Creator Academy", title: "Review the course and path structure", detail: "Confirm what belongs in each path before adding more lessons.", priority: 4, slot: "support", tag: "Solo-safe", defaultStatus: "parked" },
+    { id: "lesson-template", area: "Creator Academy", title: "Standardise the next lesson template", detail: "Keep outcomes, examples, tasks and evidence requirements consistent.", priority: 5, slot: "support", tag: "Production-ready", defaultStatus: "parked" },
+    { id: "assessment-plan", area: "Creator Academy", title: "Plan the next assessment and homework set", detail: "Connect each assessment to a real lesson outcome.", priority: 6, slot: "support", tag: "Prototype only", defaultStatus: "parked" },
+    { id: "portfolio-public-notes", area: "Creator Academy", title: "Capture portfolio and public-site ideas", detail: "Keep future public-facing ideas separate from the active build.", priority: 7, slot: "polish", tag: "Parked", defaultStatus: "parked" },
+    { id: "pwa-review", area: "Launch readiness", title: "Review PWA readiness", detail: "Document manifest, install and offline work without claiming readiness.", priority: 8, slot: "polish", tag: "Parked", defaultStatus: "parked" },
+    { id: "seo-review", area: "Launch readiness", title: "Review the SEO checklist", detail: "Check metadata, indexing files and future public-page wording.", priority: 9, slot: "polish", tag: "Parked", defaultStatus: "parked" },
+    { id: "custom-vehicle-pack", area: "Future studio", title: "Commission a high-end custom vehicle pack", detail: "Keep this out of the current sprint until budget and licensing are clear.", priority: 10, slot: "polish", tag: "Outsource later", defaultStatus: "parked" },
+    { id: "huge-city-map", area: "Future studio", title: "Build a huge city with dozens of custom vehicles", detail: "This scope requires a later team/studio phase and strong optimisation evidence.", priority: 11, slot: "core", tag: "Team-stage", defaultStatus: "parked" },
+    { id: "decorative-command-room", area: "Future studio", title: "Build decorative command-room features before gameplay", detail: "This does not support the first playable loop.", priority: 12, slot: "polish", tag: "Cut", defaultStatus: "parked" }
   ];
 
   var robloxFocus = [
@@ -63,12 +68,74 @@
     launch: { label: "Launch reviewer", instruction: "Act as a cautious launch reviewer. Separate confirmed facts from assumptions and list only the highest-impact blockers and next actions." }
   };
 
+  var soloPhases = [
+    { id: 1, name: "Foundation", items: ["Lua basics", "Roblox Studio workflow", "Clean file organisation", "Simple tycoon button system", "Basic money loop", "Save backups"] },
+    { id: 2, name: "First Playable Loop", items: ["One plot", "One house upgrade path", "One garage", "One car", "Basic drive system", "Basic paint/wheel customisation", "Simple cash earning", "Basic save/load if ready"] },
+    { id: 3, name: "Premium Vehicle Feel", items: ["Enter vehicle prompt", "Character align to door", "Door open animation", "Sit animation placeholder", "Startup sound", "Idle and driving loops", "No overlapping audio", "Basic dashboard light effect"] },
+    { id: 4, name: "Status / Flex Layer", items: ["Garage display", "Car rarity labels", "Custom plates", "Photo spot", "Simple car meet plaza", "Player garage viewing"] },
+    { id: 5, name: "Tycoon Expansion", items: ["More house upgrades", "Business upgrades", "Dealership", "Tuning shop", "Private bank", "Prestige logic"] },
+    { id: 6, name: "Polish and Launch Prep", items: ["UI cleanup", "Performance optimisation", "Bug testing", "Monetisation review", "Icon/thumbnail/trailer", "Private test", "Soft launch"] },
+    { id: 7, name: "Live Updates", items: ["New cars", "New events", "Seasonal content", "New customisation", "Balance patches", "Analytics review", "Player feedback loop"] }
+  ];
+
+  var soloFeatures = [
+    { name: "Basic money loop", value: 10, difficulty: 3, dependency: 1, maintenance: 2, core: 10 },
+    { name: "One clean car startup and idle audio system", value: 9, difficulty: 4, dependency: 1, maintenance: 2, core: 7 },
+    { name: "Simple enter-car animation with one door and seat", value: 8, difficulty: 6, dependency: 2, maintenance: 2, core: 6 },
+    { name: "Full body-kit system across many cars", value: 7, difficulty: 9, dependency: 6, maintenance: 8, core: 4, defer: true },
+    { name: "Huge city map with dozens of custom vehicles", value: 8, difficulty: 10, dependency: 10, maintenance: 10, core: 5 },
+    { name: "High-end custom vehicle models or licensed audio pack", value: 7, difficulty: 9, dependency: 8, maintenance: 4, core: 5, outsource: true },
+    { name: "Decorative command room before the game loop works", value: 2, difficulty: 5, dependency: 2, maintenance: 4, core: 1 }
+  ];
+
+  var soloSkills = [
+    { id: "lua", name: "Lua scripting", evidence: "Can explain basic variables, events and server/client boundaries.", exercise: "Build one tycoon purchase button with server validation.", feature: "Basic money loop", blocked: "Advanced game systems and secure purchases" },
+    { id: "studio", name: "Roblox Studio building", evidence: "Project workflow still needs regular hands-on practice.", exercise: "Create one organised plot with named folders and backups.", feature: "One-plot playable loop", blocked: "Large map production" },
+    { id: "vehicles", name: "Vehicle systems", evidence: "Understands the desired premium vehicle sequence.", exercise: "Make one vehicle drive reliably before adding entry polish.", feature: "First working car", blocked: "Advanced handling and vehicle fleets" },
+    { id: "ui", name: "UI / UX", evidence: "Can identify the need for clear states and feedback.", exercise: "Build one purchase button with hover, disabled and success states.", feature: "Tycoon and garage UI", blocked: "Large dashboard systems" },
+    { id: "animation", name: "Animation / Moon Animator", evidence: "Premium entry animation is planned but not proven.", exercise: "Prototype one door-open animation and a placeholder sit transition.", feature: "Vehicle entry sequence", blocked: "Multi-car animation library" },
+    { id: "blender", name: "Blender modelling", evidence: "Custom vehicle and asset ambitions are documented.", exercise: "Optimise and import one simple prop with correct scale.", feature: "Custom garage assets", blocked: "High-end vehicle models" },
+    { id: "audio", name: "Audio design / licensing", evidence: "Understands the no-overlap state-system concept.", exercise: "Play one startup sound, then begin one idle loop when it ends.", feature: "Premium car startup sequence", blocked: "RPM blending and licensed audio packs" },
+    { id: "economy", name: "Game economy", evidence: "A money and upgrade loop is part of the foundation plan.", exercise: "Balance five upgrades using a simple cost/reward table.", feature: "Basic tycoon loop", blocked: "Prestige and private-bank systems" },
+    { id: "monetisation", name: "Monetisation", evidence: "Future review is planned; no production claim is made.", exercise: "Write a fair free-versus-paid value outline after the loop works.", feature: "Launch review", blocked: "Real product sales and paid access" },
+    { id: "marketing", name: "Marketing / devlogs", evidence: "Public site and launch content remain future work.", exercise: "Capture one honest weekly build update with a screenshot.", feature: "Devlog cadence", blocked: "Launch campaign" },
+    { id: "optimisation", name: "Optimisation", evidence: "Ordinary-hardware performance is a permanent rule.", exercise: "Profile one scene and remove one measurable bottleneck.", feature: "Stable playable build", blocked: "Large city and content density" },
+    { id: "versioning", name: "Version control / backups", evidence: "GitHub publishing and local backups are active practices.", exercise: "Create a verified backup before the next structural edit.", feature: "Safe solo workflow", blocked: "Risky large refactors" }
+  ];
+
+  var operatingRules = [
+    "One playable system beats ten imaginary systems.",
+    "Cars are checkpoints, not the ceiling.",
+    "Build from skill → product → cashflow → assets → trophies → empire.",
+    "No real car brands, logos or audio unless legally licensed.",
+    "Local-only app for now.",
+    "No login, database or Supabase unless Freddie explicitly reopens that direction.",
+    "Back up the main project before major edits.",
+    "Build for performance on ordinary hardware first.",
+    "Every big feature must have a minimum viable version.",
+    "Overseer exists to reduce chaos, not store chaos neatly."
+  ];
+
+  var hardTruths = [
+    "You are solo. Build the core loop before the empire.",
+    "This idea is valid, but not for this phase.",
+    "One polished car beats ten broken cars.",
+    "A realistic startup sequence is valuable only after the car can actually drive.",
+    "Do not build luxury polish on top of a weak money loop.",
+    "No team means no excuses, but also no uncontrolled scope.",
+    "The dream is allowed. The current sprint must be small.",
+    "If it does not help the first playable loop, park it.",
+    "Stop designing the 10-year version before the 10-minute version works."
+  ];
+
   var helperState = {
     currentView: "dashboard",
     taskState: normaliseTaskState(readLocalJson(TASK_STORAGE_KEY, {})),
     notes: readLocalText(NOTES_STORAGE_KEY),
     intake: normaliseIntake(readLocalJson(INTAKE_STORAGE_KEY, {})),
-    promptMode: "project"
+    promptMode: "project",
+    solo: normaliseSoloState(readLocalJson(SOLO_STORAGE_KEY, {})),
+    skills: normaliseSkillState(readLocalJson(SKILL_STORAGE_KEY, {}))
   };
 
   function readLocalJson(key, fallback) {
@@ -101,7 +168,7 @@
       var value = stored && stored[task.id];
       if (value === true) value = "completed";
       if (value === false) value = "active";
-      clean[task.id] = VALID_TASK_STATES.indexOf(value) >= 0 ? value : "active";
+      clean[task.id] = VALID_TASK_STATES.indexOf(value) >= 0 ? value : task.defaultStatus;
     });
     return clean;
   }
@@ -110,6 +177,26 @@
     var clean = {};
     intakeFields.forEach(function (field) {
       clean[field.id] = String(stored && stored[field.id] || "").trim().slice(0, 1200);
+    });
+    return clean;
+  }
+
+  function normaliseSoloState(stored) {
+    var phase = Number(stored && stored.phase);
+    if (!Number.isInteger(phase) || phase < 1 || phase > soloPhases.length) phase = 1;
+    return {
+      phase: phase,
+      activeSystem: String(stored && stored.activeSystem || "First playable money loop").trim().slice(0, 200),
+      learningBlocker: String(stored && stored.learningBlocker || "Lua scripting fundamentals").trim().slice(0, 200),
+      masonActive: Boolean(stored && stored.masonActive)
+    };
+  }
+
+  function normaliseSkillState(stored) {
+    var validLevels = ["Not assessed", "Beginner", "Learning", "Working", "Confident"];
+    var clean = {};
+    soloSkills.forEach(function (skill) {
+      clean[skill.id] = validLevels.indexOf(stored && stored[skill.id]) >= 0 ? stored[skill.id] : "Not assessed";
     });
     return clean;
   }
@@ -174,9 +261,71 @@
   }
 
   function taskCounts() {
-    var counts = { active: 0, completed: 0, blocked: 0 };
+    var counts = { active: 0, completed: 0, blocked: 0, parked: 0 };
     tasks.forEach(function (task) { counts[taskStatus(task.id)] += 1; });
     return counts;
+  }
+
+  function activeSlotCounts() {
+    var slots = { core: 0, support: 0, polish: 0 };
+    tasks.forEach(function (task) {
+      if (taskStatus(task.id) === "active" && slots[task.slot] !== undefined) slots[task.slot] += 1;
+    });
+    return slots;
+  }
+
+  function overloadState() {
+    var slots = activeSlotCounts();
+    var overloaded = slots.core > 1 || slots.support > 1 || slots.polish > 1;
+    return {
+      overloaded: overloaded,
+      slots: slots,
+      message: overloaded
+        ? "Feature overload detected. You are acting like a 10-person studio. Pick one system and finish it."
+        : "Feature load controlled: one core, one support and one polish slot maximum."
+    };
+  }
+
+  function nextThreeActions() {
+    return tasks
+      .filter(function (task) { return taskStatus(task.id) === "active"; })
+      .sort(function (a, b) { return a.priority - b.priority; })
+      .slice(0, 3);
+  }
+
+  function soloBuildScore(feature) {
+    return feature.value - feature.difficulty - feature.dependency - feature.maintenance;
+  }
+
+  function featureRecommendation(feature) {
+    var score = soloBuildScore(feature);
+    if (feature.core <= 2) return "Cut for now";
+    if (feature.outsource) return "Outsource later";
+    if (feature.dependency >= 9) return "Needs team later";
+    if (feature.defer) return "Save for later";
+    if (score >= 4) return "Build alone now";
+    if (score >= 1) return "Prototype alone";
+    if (score >= -3) return "Learn first";
+    if (score >= -8) return "Save for later";
+    return "Needs team later";
+  }
+
+  function localReadinessScore() {
+    var counts = taskCounts();
+    var completedRatio = counts.completed / tasks.length;
+    var score = 15 + Math.round(completedRatio * 45);
+    if (document.querySelector("link[rel='manifest']")) score += 10;
+    if (document.querySelector("meta[name='description']")) score += 5;
+    if (document.querySelector("link[rel='canonical']")) score += 5;
+    return Math.min(score, 75);
+  }
+
+  function burnoutRisk() {
+    var counts = taskCounts();
+    var overload = overloadState();
+    if (overload.overloaded || counts.active > 3) return { label: "High", tone: "bad", detail: "Reduce active scope before adding work." };
+    if (counts.blocked > 2) return { label: "Watch", tone: "warn", detail: "Resolve or park blockers before expanding." };
+    return { label: "Controlled", tone: "good", detail: "Current active limits support steady solo execution." };
   }
 
   function intakeProgress() {
@@ -225,18 +374,9 @@
 
   function overseerNextAction() {
     var missing = nextIntakeQuestion();
-    if (missing) {
-      return {
-        id: "",
-        area: "Information needed",
-        title: missing.question,
-        detail: "Answer this once and Overseer will use it to build more specific ChatGPT prompts and project guidance.",
-        kind: "intake",
-        fieldId: missing.id
-      };
-    }
     var task = nextAction();
     task.kind = "task";
+    task.missingQuestion = missing;
     return task;
   }
 
@@ -269,7 +409,11 @@
       mode.instruction,
       "",
       "Project context:",
-      "- Project: Creator Academy, a small founder-led project by Freddie Murray with Mason Harris as a recently joined co-founder/founding member.",
+      "- Project: Creator Academy, currently operated by Freddie Murray as solo founder, project lead, main developer and final approver.",
+      "- Team status: Mason Harris has left for now and must not be treated as an active dependency or task assignee.",
+      "- Solo phase: Phase " + helperState.solo.phase + " — " + soloPhases[helperState.solo.phase - 1].name,
+      "- Active solo system: " + promptValue(helperState.solo.activeSystem, "Not provided yet"),
+      "- Current learning blocker: " + promptValue(helperState.solo.learningBlocker, "Not provided yet"),
       "- Current Roblox Studio build: " + promptValue(helperState.intake.currentBuild, "Not provided yet"),
       "- Biggest blocker: " + promptValue(helperState.intake.biggestBlocker, "Not provided yet"),
       "- Creator Academy focus: " + promptValue(helperState.intake.courseFocus, "Not provided yet"),
@@ -282,6 +426,8 @@
       "- Ask up to three focused questions if critical information is missing.",
       "- Do not invent completed work, production readiness, secure accounts or paid access.",
       "- Keep Roblox trust-sensitive logic server-authoritative.",
+      "- Apply Solo Founder limits: one core system, one support system and one polish task active at most.",
+      "- Flag ideas that should be parked, outsourced or delayed until team stage.",
       "- End with the single best next action."
     ].join("\n");
   }
@@ -332,15 +478,80 @@
       var status = taskStatus(task.id);
       return [
         '<article class="helper-task-row ' + status + '">',
-          '<div><span class="helper-task-area">' + escapeHtml(task.area) + '</span><strong>' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.detail) + '</small></div>',
+          '<div><span class="helper-task-area">' + escapeHtml(task.area) + '</span><span class="solo-task-tag">' + escapeHtml(task.tag) + '</span><strong>' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.detail) + '</small></div>',
           '<select class="helper-task-state" aria-label="Status for ' + escapeHtml(task.title) + '" onchange="helperSetTaskStatus(\'' + task.id + '\', this.value)">',
             '<option value="active"' + (status === "active" ? " selected" : "") + '>Active</option>',
             '<option value="completed"' + (status === "completed" ? " selected" : "") + '>Completed</option>',
             '<option value="blocked"' + (status === "blocked" ? " selected" : "") + '>Blocked</option>',
+            '<option value="parked"' + (status === "parked" ? " selected" : "") + '>Parked</option>',
           '</select>',
         '</article>'
       ].join("");
     }).join("");
+  }
+
+  function soloNextActionsHtml() {
+    var actions = nextThreeActions();
+    if (!actions.length) return '<p class="solo-empty">No active solo tasks. Unpark one focused task before adding new scope.</p>';
+    return '<ol class="solo-next-list">' + actions.map(function (task) {
+      return '<li><span>' + escapeHtml(task.slot) + '</span><strong>' + escapeHtml(task.title) + '</strong></li>';
+    }).join("") + '</ol>';
+  }
+
+  function phaseOptions() {
+    return soloPhases.map(function (phase) {
+      return '<option value="' + phase.id + '"' + (helperState.solo.phase === phase.id ? " selected" : "") + '>Phase ' + phase.id + ': ' + escapeHtml(phase.name) + '</option>';
+    }).join("");
+  }
+
+  function soloRoadmapHtml() {
+    return soloPhases.map(function (phase) {
+      var state = phase.id < helperState.solo.phase ? "complete" : (phase.id === helperState.solo.phase ? "current" : "future");
+      return [
+        '<details class="solo-phase ' + state + '"' + (phase.id === helperState.solo.phase ? " open" : "") + '>',
+          '<summary><span class="solo-phase-number">' + phase.id + '</span><div><strong>' + escapeHtml(phase.name) + '</strong><small>' + (state === "current" ? "Current solo phase" : state === "complete" ? "Earlier phase" : "Future phase") + '</small></div><span class="solo-phase-count">' + phase.items.length + ' steps</span></summary>',
+          '<ul>' + phase.items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>',
+        '</details>'
+      ].join("");
+    }).join("");
+  }
+
+  function featureScoreRows() {
+    return soloFeatures.map(function (feature) {
+      var score = soloBuildScore(feature);
+      var recommendation = featureRecommendation(feature);
+      var tone = recommendation === "Build alone now" ? "good" : (recommendation === "Prototype alone" || recommendation === "Learn first" ? "warn" : "bad");
+      return [
+        '<article class="solo-feature-row" data-tone="' + tone + '">',
+          '<div><strong>' + escapeHtml(feature.name) + '</strong><small>Value ' + feature.value + ' − difficulty ' + feature.difficulty + ' − dependency ' + feature.dependency + ' − maintenance ' + feature.maintenance + '</small></div>',
+          '<span class="solo-score">' + score + '</span>',
+          '<span class="solo-recommendation">' + escapeHtml(recommendation) + '</span>',
+        '</article>'
+      ].join("");
+    }).join("");
+  }
+
+  function skillRows() {
+    var levels = ["Not assessed", "Beginner", "Learning", "Working", "Confident"];
+    return soloSkills.map(function (skill) {
+      var current = helperState.skills[skill.id];
+      return [
+        '<details class="solo-skill-row">',
+          '<summary><div><strong>' + escapeHtml(skill.name) + '</strong><small>' + escapeHtml(skill.feature) + '</small></div>',
+            '<select aria-label="Current level for ' + escapeHtml(skill.name) + '" onchange="event.stopPropagation(); helperSetSkillLevel(\'' + skill.id + '\', this.value)">',
+              levels.map(function (level) { return '<option value="' + level + '"' + (current === level ? " selected" : "") + '>' + level + '</option>'; }).join(""),
+            '</select>',
+          '</summary>',
+          '<dl><div><dt>Evidence</dt><dd>' + escapeHtml(skill.evidence) + '</dd></div><div><dt>Next exercise</dt><dd>' + escapeHtml(skill.exercise) + '</dd></div><div><dt>Related feature</dt><dd>' + escapeHtml(skill.feature) + '</dd></div><div><dt>Blocked features</dt><dd>' + escapeHtml(skill.blocked) + '</dd></div></dl>',
+        '</details>'
+      ].join("");
+    }).join("");
+  }
+
+  function operatingRulesHtml() {
+    return '<ol class="solo-rules-list">' + operatingRules.map(function (rule) {
+      return '<li>' + escapeHtml(rule) + '</li>';
+    }).join("") + '</ol>';
   }
 
   function renderDashboard() {
@@ -352,6 +563,13 @@
     var counts = taskCounts();
     var intake = intakeProgress();
     var launch = launchStatuses();
+    var overload = overloadState();
+    var risk = burnoutRisk();
+    var currentPhase = soloPhases[helperState.solo.phase - 1];
+    var parkedTasks = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; }).slice(0, 4);
+    var neededSkills = soloSkills.filter(function (skill) {
+      return helperState.skills[skill.id] !== "Working" && helperState.skills[skill.id] !== "Confident";
+    }).slice(0, 3);
     var localLabel = isLocalHost() ? "Local prototype" : "Hosted copy of local prototype";
 
     app.innerHTML = [
@@ -366,9 +584,11 @@
         '</header>',
 
         '<div class="overseer-command-strip">',
-          '<span class="overseer-live"><i></i> Overseer active</span>',
+          '<span class="overseer-live"><i></i> Mode: Solo Founder</span>',
+          '<span>Phase <strong>' + helperState.solo.phase + ' · ' + escapeHtml(currentPhase.name) + '</strong></span>',
           '<span>Information profile <strong>' + intake.percent + '%</strong></span>',
           '<span>Tasks <strong>' + counts.active + ' active</strong></span>',
+          '<span>Readiness <strong>' + localReadinessScore() + '% local estimate</strong></span>',
           '<span>Sync <strong>off</strong></span>',
           '<span>Storage <strong>local only</strong></span>',
         '</div>',
@@ -384,22 +604,43 @@
             '<p>Keep Roblox Studio progress and Creator Academy planning connected through small, testable milestones.</p>',
           '</article>',
           '<article class="helper-card overseer-members-card">',
-            '<span class="helper-section-label">Current members</span>',
-            '<div class="overseer-member"><span class="overseer-avatar">FM</span><div><strong>Freddie Murray</strong><small>Founder · Original Creator · Project Lead</small></div></div>',
-            '<div class="overseer-member"><span class="overseer-avatar mason">MH</span><div><strong>Mason Harris</strong><small>Co-Founder · Founding Member</small></div></div>',
-            '<p>Creator Academy is a small, founder-led project. Freddie created the original project; Mason recently joined as a founder-level member.</p>',
+            '<span class="helper-section-label">Operating structure</span>',
+            '<div class="overseer-member"><span class="overseer-avatar">FM</span><div><strong>Freddie Murray</strong><small>Solo Founder · Project Lead · Main Developer · Final Approver</small></div><span class="member-status active">Active</span></div>',
+            '<div class="overseer-member ' + (helperState.solo.masonActive ? "" : "inactive") + '"><span class="overseer-avatar mason">MH</span><div><strong>Mason Harris</strong><small>Previous role: Junior Developer / Developer-in-Training · Left project for now</small></div><span class="member-status ' + (helperState.solo.masonActive ? "active" : "inactive") + '">' + (helperState.solo.masonActive ? "Manually reactivated" : "Inactive / Left Project") + '</span><button type="button" class="member-action" onclick="helperToggleMason()">' + (helperState.solo.masonActive ? "Return to inactive" : "Reactivate later") + '</button></div>',
+            '<p>Freddie is the only active project dependency. Mason remains in historical context; even if manually reactivated, current recommendations stay solo-safe until Freddie explicitly assigns work.</p>',
           '</article>',
           '<article class="helper-card overseer-project-card">',
             '<span class="helper-section-label">Project status</span>',
-            '<div class="overseer-project-status"><strong>Active planning</strong><span>Local prototype</span></div>',
-            '<dl><div><dt>Active</dt><dd>' + counts.active + '</dd></div><div><dt>Completed</dt><dd>' + counts.completed + '</dd></div><div><dt>Blocked</dt><dd>' + counts.blocked + '</dd></div></dl>',
+            '<div class="overseer-project-status"><strong>Solo execution</strong><span>Founder-led</span></div>',
+            '<dl><div><dt>Active</dt><dd>' + counts.active + '</dd></div><div><dt>Completed</dt><dd>' + counts.completed + '</dd></div><div><dt>Parked</dt><dd>' + counts.parked + '</dd></div></dl>',
             '<p>Task status and notes are browser-only preferences, not secure project records.</p>',
           '</article>',
         '</div>',
 
+        '<section class="solo-founder-command" aria-label="Solo Founder command center">',
+          '<div class="solo-founder-header">',
+            '<div><span class="solo-mode-chip">Mode: Solo Founder</span><h3>Solo Founder Command Center</h3><p>High ambition, practical sequencing, and no roadmap dependency on unavailable team members.</p></div>',
+            '<div class="solo-risk" data-tone="' + risk.tone + '"><span>Overload risk</span><strong>' + escapeHtml(risk.label) + '</strong><small>' + escapeHtml(risk.detail) + '</small></div>',
+          '</div>',
+          '<div class="solo-founder-grid">',
+            '<article class="solo-command-card"><span>Current solo workload</span><strong>' + counts.active + ' active features</strong><small>' + overload.slots.core + ' core · ' + overload.slots.support + ' support · ' + overload.slots.polish + ' polish</small></article>',
+            '<article class="solo-command-card"><span>Active build focus</span><input id="soloActiveSystem" maxlength="200" value="' + escapeHtml(helperState.solo.activeSystem) + '" aria-label="Active build focus"></article>',
+            '<article class="solo-command-card"><span>Maximum recommended</span><strong>3 active features</strong><small>1 core · 1 support · 1 polish</small></article>',
+            '<article class="solo-command-card"><span>Current learning blocker</span><input id="soloLearningBlocker" maxlength="200" value="' + escapeHtml(helperState.solo.learningBlocker) + '" aria-label="Current learning blocker"></article>',
+          '</div>',
+          '<div class="solo-focus-grid">',
+            '<article><span class="helper-section-label">Solo build phase</span><select id="soloPhaseSelect" onchange="helperSetSoloPhase(this.value)">' + phaseOptions() + '</select><p>Current: <strong>Phase ' + currentPhase.id + ' · ' + escapeHtml(currentPhase.name) + '</strong></p></article>',
+            '<article><span class="helper-section-label">Next three solo actions</span>' + soloNextActionsHtml() + '</article>',
+            '<article><span class="helper-section-label">Postpone until later</span><ul>' + parkedTasks.map(function (task) { return '<li>' + escapeHtml(task.title) + '</li>'; }).join("") + '</ul></article>',
+            '<article><span class="helper-section-label">Skills before next phase</span><ul>' + neededSkills.map(function (skill) { return '<li><strong>' + escapeHtml(skill.name) + '</strong> · ' + escapeHtml(skill.exercise) + '</li>'; }).join("") + '</ul></article>',
+          '</div>',
+          '<div class="solo-save-row"><span>Outsource later: high-end custom vehicle models or a properly licensed audio pack.</span><button type="button" class="helper-button primary" onclick="helperSaveSoloState()">Save solo focus</button></div>',
+          '<div class="solo-overload-warning ' + (overload.overloaded ? "danger" : "controlled") + '"><strong>' + escapeHtml(overload.message) + '</strong><span>' + escapeHtml(overload.overloaded ? hardTruths[0] : hardTruths[6]) + '</span></div>',
+        '</section>',
+
         '<article class="helper-card helper-next-card">',
           '<div class="helper-priority">' + (next.kind === "intake" ? "INFO" : (next.id ? "HIGH" : "NEXT")) + '</div>',
-          '<div><span class="helper-section-label">What should I do next?</span><h3>' + escapeHtml(next.title) + '</h3><p><strong>' + escapeHtml(next.area) + ':</strong> ' + escapeHtml(next.detail) + '</p></div>',
+          '<div><span class="helper-section-label">What should Freddie build next?</span><h3>' + escapeHtml(next.title) + '</h3><p><strong>' + escapeHtml(next.area) + ':</strong> ' + escapeHtml(next.detail) + '</p>' + (next.missingQuestion ? '<small class="solo-overseer-question">Overseer also needs: ' + escapeHtml(next.missingQuestion.question) + '</small>' : '') + '</div>',
           (next.kind === "intake"
             ? '<button type="button" class="helper-button primary" onclick="helperFocusIntake(\'' + next.fieldId + '\')">Answer now</button>'
             : (next.id ? '<button type="button" class="helper-button primary" onclick="helperSetTaskStatus(\'' + next.id + '\', \'completed\')">Mark complete</button>' : '<button type="button" class="helper-button primary" onclick="helperFocusNotes()">Open notes</button>')),
@@ -440,11 +681,34 @@
         '</div>',
 
         '<div class="helper-section-heading">',
+          '<div><span class="helper-section-label">Overseer Brain</span><h3>Solo Build Score</h3></div>',
+          '<p>Score = value − difficulty − dependency − maintenance risk.</p>',
+        '</div>',
+        '<article class="helper-card solo-feature-card">',
+          '<div class="solo-feature-head"><span>Feature</span><span>Score</span><span>Recommendation</span></div>',
+          '<div class="solo-feature-list">' + featureScoreRows() + '</div>',
+          '<div class="solo-brain-questions"><strong>Overseer checks:</strong><span>Can Freddie build it alone?</span><span>Does it help the core loop?</span><span>What skill blocks it?</span><span>Is it a launch distraction?</span><span>What is the smallest useful version?</span></div>',
+        '</article>',
+
+        '<div class="helper-section-heading">',
+          '<div><span class="helper-section-label">Practical sequencing</span><h3>Seven-phase solo roadmap</h3></div>',
+          '<p>The 10-year ambition stays visible; only the current phase drives execution.</p>',
+        '</div>',
+        '<div class="solo-roadmap">' + soloRoadmapHtml() + '</div>',
+
+        '<div class="helper-section-heading">',
+          '<div><span class="helper-section-label">Capability building</span><h3>Solo skill tracker</h3></div>',
+          '<p>Track evidence and the next practical exercise—not confidence alone.</p>',
+        '</div>',
+        '<article class="helper-card solo-skills-card"><div class="solo-skills-grid">' + skillRows() + '</div></article>',
+
+        '<div class="helper-section-heading">',
           '<div><span class="helper-section-label">Local workflow</span><h3>Task tracker</h3></div>',
-          '<div class="helper-task-summary"><span>' + counts.active + ' active</span><span>' + counts.completed + ' completed</span><span>' + counts.blocked + ' blocked</span></div>',
+          '<div class="helper-task-summary"><span>' + counts.active + ' active</span><span>' + counts.completed + ' completed</span><span>' + counts.blocked + ' blocked</span><span>' + counts.parked + ' parked</span></div>',
         '</div>',
         '<article class="helper-card helper-work-card">',
-          '<p>Change each task between active, completed and blocked. Saved on this browser only.</p>',
+          '<p>Change each task between active, completed, blocked and parked. Saved on this browser only.</p>',
+          '<div class="solo-tag-legend"><span>Solo-safe</span><span>Learning required</span><span>Prototype only</span><span>Production-ready</span><span>Outsource later</span><span>Team-stage</span><span>Parked</span><span>Cut</span></div>',
           '<div class="helper-task-list">' + taskRows() + '</div>',
         '</article>',
 
@@ -459,6 +723,11 @@
           statusCard("backend", "Backend and auth", launch.backend),
           statusCard("seo", "SEO checklist", launch.seo),
         '</div>',
+
+        '<details class="helper-card solo-rules-card">',
+          '<summary><div><span class="helper-section-label">Permanent principles</span><h3>Solo operating rules</h3></div><span>10 rules</span></summary>',
+          operatingRulesHtml(),
+        '</details>',
 
         '<div class="helper-work-grid">',
           '<article class="helper-card helper-work-card helper-notes-card">',
@@ -527,6 +796,40 @@
     } catch (error) {
       showHelperToast("Copy was unavailable. Select the prompt manually.");
     }
+  };
+
+  window.helperSaveSoloState = function () {
+    var activeSystem = document.getElementById("soloActiveSystem");
+    var blocker = document.getElementById("soloLearningBlocker");
+    var phase = document.getElementById("soloPhaseSelect");
+    if (activeSystem) helperState.solo.activeSystem = String(activeSystem.value || "").trim().slice(0, 200);
+    if (blocker) helperState.solo.learningBlocker = String(blocker.value || "").trim().slice(0, 200);
+    if (phase) helperState.solo.phase = Math.max(1, Math.min(soloPhases.length, Number(phase.value) || 1));
+    writeLocalJson(SOLO_STORAGE_KEY, helperState.solo);
+    renderDashboard();
+    showHelperToast("Solo Founder focus saved on this device.");
+  };
+
+  window.helperSetSoloPhase = function (value) {
+    helperState.solo.phase = Math.max(1, Math.min(soloPhases.length, Number(value) || 1));
+    writeLocalJson(SOLO_STORAGE_KEY, helperState.solo);
+    renderDashboard();
+  };
+
+  window.helperToggleMason = function () {
+    helperState.solo.masonActive = !helperState.solo.masonActive;
+    writeLocalJson(SOLO_STORAGE_KEY, helperState.solo);
+    renderDashboard();
+    showHelperToast(helperState.solo.masonActive ? "Mason marked manually reactivated. No tasks were assigned." : "Mason returned to inactive historical status.");
+  };
+
+  window.helperSetSkillLevel = function (skillId, level) {
+    var skillExists = soloSkills.some(function (skill) { return skill.id === skillId; });
+    var validLevels = ["Not assessed", "Beginner", "Learning", "Working", "Confident"];
+    if (!skillExists || validLevels.indexOf(level) < 0) return;
+    helperState.skills[skillId] = level;
+    writeLocalJson(SKILL_STORAGE_KEY, helperState.skills);
+    showHelperToast("Solo skill level saved locally.");
   };
 
   window.helperSetTaskStatus = function (taskId, status) {
