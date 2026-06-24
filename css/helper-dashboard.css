@@ -13,6 +13,28 @@
 	--helper-red: #f47f8f;
 }
 
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	min-height: 100%;
+	background: var(--helper-bg);
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
+button {
+	-webkit-tap-highlight-color: transparent;
+}
+
 body.helper-app {
 	min-height: 100vh;
 	margin: 0;
