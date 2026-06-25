@@ -2343,6 +2343,273 @@ body.helper-app .helper-button.danger {
 .decision-table td { padding: 11px 10px; border-bottom: 1px solid rgba(148, 163, 184, .08); color: #cbd5e1; font-size: 9px; line-height: 1.45; vertical-align: top; }
 .decision-table td:last-child { width: 100px; }
 
+.current-directive-card { grid-column: span 12; border-color: rgba(139, 156, 255, .25); background: linear-gradient(135deg, rgba(139, 156, 255, .08), rgba(17, 22, 32, .94)); }
+.solo-load-card,
+.command-next-three { grid-column: span 6; }
+.launch-snapshot-card { grid-column: span 2; }
+.launch-snapshot-card .detail-table { min-width: 520px; }
+
+.detail-definition-list {
+	display: grid;
+	gap: 8px;
+	margin: 12px 0 0;
+}
+
+.detail-definition-list div {
+	display: grid;
+	grid-template-columns: minmax(110px, .34fr) minmax(0, 1fr);
+	gap: 12px;
+	padding-top: 8px;
+	border-top: 1px solid rgba(148, 163, 184, .09);
+}
+
+.detail-definition-list dt {
+	color: var(--helper-muted);
+	font-size: 8px;
+	font-weight: 850;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.detail-definition-list dd {
+	margin: 0;
+	color: #d8e1ed;
+	font-size: 9px;
+	line-height: 1.45;
+}
+
+.scope-warning {
+	display: grid;
+	gap: 5px;
+	margin-top: 14px;
+	padding: 11px;
+	border-radius: 10px;
+	font-size: 9px;
+	line-height: 1.45;
+}
+
+.scope-warning strong { font-size: 10px; }
+.scope-warning span { color: var(--helper-muted); }
+.scope-warning.controlled { border: 1px solid rgba(85, 214, 165, .22); background: rgba(85, 214, 165, .06); color: #b7f4db; }
+.scope-warning.danger { border: 1px solid rgba(244, 127, 143, .28); background: rgba(244, 127, 143, .08); color: #fecdd3; }
+
+.detail-table-wrap {
+	width: 100%;
+	overflow-x: auto;
+	margin-top: 14px;
+	border: 1px solid rgba(148, 163, 184, .08);
+	border-radius: 12px;
+	background: rgba(2, 6, 23, .2);
+}
+
+.detail-table {
+	width: 100%;
+	min-width: 760px;
+	border-collapse: collapse;
+}
+
+.detail-table th {
+	padding: 9px 10px;
+	border-bottom: 1px solid var(--helper-line);
+	color: #9fb1c8;
+	font-size: 7px;
+	font-weight: 900;
+	letter-spacing: .08em;
+	text-align: left;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.detail-table td {
+	padding: 10px;
+	border-bottom: 1px solid rgba(148, 163, 184, .07);
+	color: #cad5e3;
+	font-size: 8px;
+	line-height: 1.45;
+	vertical-align: top;
+}
+
+.detail-table tr:last-child td { border-bottom: 0; }
+.detail-table td:first-child { color: #e2e8f0; font-weight: 800; }
+
+.detail-panel {
+	padding: 0;
+	overflow: hidden;
+}
+
+.detail-panel summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 18px;
+	cursor: pointer;
+	list-style: none;
+}
+
+.detail-panel summary::-webkit-details-marker { display: none; }
+.detail-panel summary h3 { margin: 7px 0 0; font-size: 16px; letter-spacing: -.02em; }
+.detail-panel summary > span {
+	flex: 0 0 auto;
+	padding: 5px 8px;
+	border: 1px solid var(--helper-line);
+	border-radius: 999px;
+	color: var(--helper-muted);
+	font-size: 8px;
+	font-weight: 800;
+}
+
+.detail-panel .detail-table-wrap {
+	margin: 0 18px 18px;
+}
+
+.detail-note {
+	margin: -5px 18px 18px;
+	color: #aebbd0;
+	font-size: 10px;
+	line-height: 1.55;
+}
+
+.detailed-blueprint .blueprint-core {
+	grid-column: span 2;
+}
+
+.loop-flow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+.loop-flow span {
+	position: relative;
+	padding: 8px 10px;
+	border: 1px solid rgba(139, 156, 255, .18);
+	border-radius: 999px;
+	background: rgba(139, 156, 255, .06);
+	color: #dfe4ff;
+	font-size: 9px;
+	font-weight: 800;
+}
+
+.detail-card-grid,
+.zone-card-grid,
+.vault-category-grid,
+.brain-recommendation-grid,
+.life-detail-grid {
+	display: grid;
+	gap: 10px;
+}
+
+.detail-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.zone-card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vault-category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.life-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.brain-recommendation-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.detailed-mini-card {
+	min-width: 0;
+	padding: 16px;
+	box-shadow: none;
+}
+
+.detailed-mini-card h3,
+.brain-recommendation-detail h3 {
+	margin: 0 0 8px;
+	font-size: 14px;
+	letter-spacing: -.02em;
+}
+
+.detailed-mini-card p,
+.brain-recommendation-detail p {
+	margin: 0 0 10px;
+	color: var(--helper-muted);
+	font-size: 9px;
+	line-height: 1.5;
+}
+
+.brain-recommendation-detail {
+	min-width: 0;
+	padding: 16px;
+	box-shadow: none;
+}
+
+.brain-recommendation-detail > span {
+	display: inline-flex;
+	margin-bottom: 10px;
+	padding: 5px 7px;
+	border-radius: 999px;
+	background: rgba(148, 163, 184, .09);
+	color: var(--helper-muted);
+	font-size: 7px;
+	font-weight: 900;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+.brain-recommendation-detail[data-tone="good"] > span { background: rgba(85, 214, 165, .1); color: #8ce8c3; }
+.brain-recommendation-detail[data-tone="warn"] > span { background: rgba(244, 191, 103, .1); color: #ffd58d; }
+.brain-recommendation-detail[data-tone="bad"] > span { background: rgba(244, 127, 143, .1); color: #fda4af; }
+
+.life-detail-grid .life-system-card {
+	min-height: 100%;
+}
+
+.crownvault-card {
+	background: linear-gradient(135deg, rgba(139, 156, 255, .08), rgba(17, 22, 32, .94));
+}
+
+.solo-next-list li {
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: start;
+	padding: 9px 0;
+	border-top: 1px solid rgba(148, 163, 184, .08);
+}
+
+.solo-next-list li:first-child { border-top: 0; }
+.solo-next-list li > div { min-width: 0; }
+.solo-next-list li > div span {
+	display: inline-flex;
+	margin-bottom: 5px;
+	padding: 3px 6px;
+	border-radius: 999px;
+	background: rgba(244, 191, 103, .08);
+	color: var(--helper-amber);
+	font-size: 7px;
+	font-weight: 900;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+.solo-next-list li > div small {
+	display: block;
+	margin-top: 4px;
+	color: var(--helper-muted);
+	font-size: 8px;
+	line-height: 1.45;
+}
+
+.solo-next-list dl {
+	grid-column: 2;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 7px 0 0;
+}
+
+.solo-next-list dl div {
+	display: inline-flex;
+	gap: 5px;
+	padding: 4px 6px;
+	border: 1px solid rgba(148, 163, 184, .1);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .015);
+	font-size: 7px;
+}
+
+.solo-next-list dt { color: var(--helper-muted); }
+.solo-next-list dd { margin: 0; color: #cdd6e3; }
+
 .overseer-system-footer {
 	display: flex;
 	align-items: center;
@@ -2385,6 +2652,9 @@ body.helper-app .helper-button.danger {
 	.empire-status-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 	.project-separation-row { grid-template-columns: 1fr; }
 	.first-screen-answers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.zone-card-grid,
+	.vault-category-grid,
+	.brain-recommendation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 980px) {
@@ -2392,6 +2662,9 @@ body.helper-app .helper-button.danger {
 	body.helper-app #app.helper-root { width: min(100% - 28px, 760px); padding-top: 22px; }
 	.mission-focus-grid { grid-template-columns: 1fr; }
 	.command-execution-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+	.current-directive-card,
+	.solo-load-card,
+	.launch-snapshot-card,
 	.command-next-three,
 	.command-brain-card { grid-column: 1 / -1; }
 	.command-signal-card { grid-column: span 2; }
@@ -2409,7 +2682,10 @@ body.helper-app .helper-button.danger {
 	.command-stack-card,
 	.command-warning-card { grid-column: span 6; }
 	.blueprint-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.detailed-blueprint .blueprint-core { grid-column: 1 / -1; }
 	.system-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.detail-card-grid,
+	.life-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.brain-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.brain-summary-grid article,
 	.brain-summary-grid .brain-priority-card,
@@ -2430,6 +2706,9 @@ body.helper-app .helper-button.danger {
 	.command-execution-grid,
 	.command-lower-grid { grid-template-columns: 1fr; }
 	.command-next-three,
+	.current-directive-card,
+	.solo-load-card,
+	.launch-snapshot-card,
 	.command-signal-card,
 	.command-brain-card { grid-column: 1 / -1; }
 	.command-brain-card { grid-template-columns: 1fr; }
@@ -2482,6 +2761,11 @@ body.helper-app .helper-button.danger {
 	.project-separation-row,
 	.first-screen-answers,
 	.blueprint-grid,
+	.detail-card-grid,
+	.zone-card-grid,
+	.vault-category-grid,
+	.brain-recommendation-grid,
+	.life-detail-grid,
 	.system-card-grid,
 	.life-system-grid,
 	.founder-system-grid,
@@ -2496,6 +2780,8 @@ body.helper-app .helper-button.danger {
 	.system-sequence,
 	.roadmap-current-banner { grid-template-columns: 1fr; }
 	.decision-layout { grid-template-columns: 1fr; }
+	.detail-definition-list div { grid-template-columns: 1fr; gap: 4px; }
+	.detail-panel summary { align-items: flex-start; flex-direction: column; }
 	.decision-editor textarea { min-height: 300px; }
 	.blueprint-guardrail { align-items: flex-start; flex-direction: column; }
 }

@@ -29,10 +29,13 @@
   ];
 
   var tasks = [
-    { id: "roblox-core-loop", area: "Roblox Studio", title: "Define the first playable money loop", detail: "Choose one plot, one upgrade path and one clear cash-earning action.", priority: 1, slot: "core", tag: "Solo-safe", defaultStatus: "active" },
-    { id: "lua-systems", area: "Roblox Studio", title: "Build the Lua basics practice list", detail: "Learn only the scripting needed for the current playable milestone.", priority: 2, slot: "support", tag: "Learning required", defaultStatus: "active" },
-    { id: "studio-ui", area: "Roblox Studio", title: "Create readable button labels and feedback", detail: "Polish the minimum UI needed to understand the current loop.", priority: 3, slot: "polish", tag: "Prototype only", defaultStatus: "active" },
-    { id: "tycoon-events", area: "Roblox Studio", title: "Outline Tycoon and event-system boundaries", detail: "Separate trusted server logic, client UI and safe event controls.", priority: 4, slot: "core", tag: "Learning required", defaultStatus: "parked" },
+    { id: "vehicle-audio-loop", area: "Roblox Studio", title: "Script startup -> idle no-overlap sequence", detail: "Startup plays once, idle begins after startup finishes, and driving audio never stacks.", why: "This creates the first premium vehicle feel without needing a whole fleet.", effort: "Medium", skill: "Roblox Lua audio states", priority: 1, slot: "core", tag: "Build now", defaultStatus: "active" },
+    { id: "test-vehicle-prompt", area: "Roblox Studio", title: "Create one test vehicle with a driver prompt", detail: "Use one car, one seat, one ProximityPrompt and one clear entry state.", why: "A real test vehicle proves the loop before animations and customisation expand.", effort: "Small", skill: "Roblox Studio setup", priority: 2, slot: "support", tag: "Solo-safe", defaultStatus: "active" },
+    { id: "vehicle-condition-value", area: "Roblox Studio", title: "Add a simple vehicle condition value", detail: "Store a harmless prototype value such as condition = 100 for future damage and repair systems.", why: "This keeps damage planning ready without building the full repair economy too early.", effort: "Small", skill: "Lua values / attributes", priority: 3, slot: "polish", tag: "Prototype only", defaultStatus: "active" },
+    { id: "roblox-core-loop", area: "Roblox Studio", title: "Prove the first playable money loop", detail: "One earning action, one bank/app claim path, one upgrade purchase and one visible result.", why: "The luxury fantasy needs a money loop before the empire can matter.", effort: "Heavy", skill: "Server-authoritative economy", priority: 4, slot: "core", tag: "Next foundation", defaultStatus: "parked" },
+    { id: "lua-systems", area: "Roblox Studio", title: "Build the Lua basics practice list", detail: "Learn only the scripting needed for the current playable milestone.", why: "Targeted practice prevents tutorial drift and unlocks the next feature.", effort: "Small", skill: "Lua fundamentals", priority: 5, slot: "support", tag: "Learning required", defaultStatus: "parked" },
+    { id: "studio-ui", area: "Roblox Studio", title: "Create readable button labels and feedback", detail: "Polish the minimum UI needed to understand the current loop.", why: "Clear feedback makes testing faster and lowers confusion during solo builds.", effort: "Small", skill: "UI / UX", priority: 6, slot: "polish", tag: "Prototype only", defaultStatus: "parked" },
+    { id: "tycoon-events", area: "Roblox Studio", title: "Outline Tycoon and event-system boundaries", detail: "Separate trusted server logic, client UI and safe event controls.", why: "Server authority matters before anything becomes public or monetised.", effort: "Medium", skill: "RemoteEvents / server validation", priority: 7, slot: "core", tag: "Learning required", defaultStatus: "parked" },
     { id: "academy-map", area: "Tracked project", title: "Record the Creator Academy Hub boundary", detail: "Keep it parked as a separate public product; Overseer stores status and planning notes only.", priority: 4, slot: "support", tag: "Parked", defaultStatus: "parked" },
     { id: "lesson-template", area: "Tracked project", title: "Record Creator Academy Hub status", detail: "Track its current state, next review date and owner decision without building product content here.", priority: 5, slot: "support", tag: "Parked", defaultStatus: "parked" },
     { id: "assessment-plan", area: "Tracked project", title: "Capture Creator Academy Hub risks", detail: "Keep risks and unresolved decisions as private project notes.", priority: 6, slot: "support", tag: "Parked", defaultStatus: "parked" },
@@ -71,38 +74,40 @@
   };
 
   var soloPhases = [
-    { id: 1, name: "Foundation", items: ["Lua basics", "Roblox Studio workflow", "Clean file organisation", "Simple tycoon button system", "Basic money loop", "Save backups"] },
-    { id: 2, name: "First Playable Loop", items: ["One plot", "One house upgrade path", "One garage", "One car", "Basic drive system", "Basic paint/wheel customisation", "Simple cash earning", "Basic save/load if ready"] },
-    { id: 3, name: "Premium Vehicle Feel", items: ["Enter vehicle prompt", "Character align to door", "Door open animation", "Sit animation placeholder", "Startup sound", "Idle and driving loops", "No overlapping audio", "Basic dashboard light effect"] },
-    { id: 4, name: "Status / Flex Layer", items: ["Garage display", "Car rarity labels", "Custom plates", "Photo spot", "Simple car meet plaza", "Player garage viewing"] },
-    { id: 5, name: "Tycoon Expansion", items: ["More house upgrades", "Business upgrades", "Dealership", "Tuning shop", "Private bank", "Prestige logic"] },
-    { id: 6, name: "Polish and Launch Prep", items: ["UI cleanup", "Performance optimisation", "Bug testing", "Monetisation review", "Icon/thumbnail/trailer", "Private test", "Soft launch"] },
-    { id: 7, name: "Live Updates", items: ["New cars", "New events", "Seasonal content", "New customisation", "Balance patches", "Analytics review", "Player feedback loop"] }
+    { id: 1, name: "Foundation", items: ["Basic money system", "One plot", "One upgrade path", "Clean project structure", "Backup/version habit", "Basic UI shell"] },
+    { id: 2, name: "First Playable Loop", items: ["Earn money", "Claim through bank/app", "Buy first garage", "Spawn one car", "Drive one car", "Save basic progress if ready"] },
+    { id: 3, name: "Premium Vehicle Feel", items: ["Enter prompt", "Door animation placeholder", "Startup sound", "Idle loop", "Basic driving loop", "Dashboard light effect", "No overlapping sound"] },
+    { id: 4, name: "Customisation Starter", items: ["Paint", "Wheels", "Underglow", "Number plate", "Save build preset"] },
+    { id: 5, name: "Life Tycoon Depth", items: ["Car condition", "Damage", "Repair garage", "Business revenue", "Discipline/motivation", "Insurance later"] },
+    { id: 6, name: "Status / Flex", items: ["Garage display", "Car meet plaza", "Rating/voting", "Photo mode", "Rarity labels"] },
+    { id: 7, name: "Expansion", items: ["More cars", "More businesses", "More zones", "Prestige", "Events"] },
+    { id: 8, name: "Launch Prep", items: ["UI polish", "Optimisation", "Bug testing", "Icons/thumbnails", "Trailer", "Soft launch checklist"] }
   ];
 
   var soloFeatures = [
-    { name: "Basic money loop", value: 10, difficulty: 3, dependency: 1, maintenance: 2, core: 10 },
-    { name: "One clean car startup and idle audio system", value: 9, difficulty: 4, dependency: 1, maintenance: 2, core: 7 },
-    { name: "Simple enter-car animation with one door and seat", value: 8, difficulty: 6, dependency: 2, maintenance: 2, core: 6 },
-    { name: "Full body-kit system across many cars", value: 7, difficulty: 9, dependency: 6, maintenance: 8, core: 4, defer: true },
-    { name: "Huge city map with dozens of custom vehicles", value: 8, difficulty: 10, dependency: 10, maintenance: 10, core: 5 },
-    { name: "High-end custom vehicle models or licensed audio pack", value: 7, difficulty: 9, dependency: 8, maintenance: 4, core: 5, outsource: true },
-    { name: "Decorative command room before the game loop works", value: 2, difficulty: 5, dependency: 2, maintenance: 4, core: 1 }
+    { name: "Startup-to-idle vehicle audio", reason: "High premium value, manageable solo scope, and directly supports the first car.", status: "Prototype target", risk: "Audio overlap and poor asset quality", next: "Use one startup one-shot, then start one idle loop on completion.", action: "Build Now", value: 9, difficulty: 4, riskScore: 2, dependency: 1, solo: 9, maintenance: 2, core: 8 },
+    { name: "One test vehicle with driver prompt", reason: "Proves the car is usable before custom animation work starts.", status: "Needed before polish", risk: "Prompt state can desync if not reset on exit.", next: "Create one car rig with one seat and one prompt.", action: "Build Now", value: 9, difficulty: 3, riskScore: 2, dependency: 1, solo: 10, maintenance: 2, core: 9 },
+    { name: "Enter-car animation", reason: "Valuable for premium feel but timing may be complex.", status: "One-car prototype only", risk: "Door, seat and camera timing can become a rabbit hole.", next: "Prototype one door and one sit transition only.", action: "Prototype Only", value: 8, difficulty: 6, riskScore: 4, dependency: 2, solo: 6, maintenance: 3, core: 6 },
+    { name: "Basic money loop", reason: "The whole game needs cashflow, bank claim and upgrade feedback.", status: "Foundation dependency", risk: "Weak economy makes luxury systems feel pointless.", next: "Build one earning action and one bank/app claim path.", action: "Build Now", value: 10, difficulty: 4, riskScore: 3, dependency: 1, solo: 8, maintenance: 3, core: 10 },
+    { name: "Full body-kit system across all cars", reason: "Great long-term flex feature, but too much asset and UI work now.", status: "Parked", risk: "High workload before one car is proven.", next: "Keep minimum paint/wheels/plate first.", action: "Park for Later", value: 7, difficulty: 9, riskScore: 8, dependency: 6, solo: 3, maintenance: 8, core: 4, defer: true },
+    { name: "Licensed sound pack", reason: "Could massively improve premium feel, but needs money and legal clarity.", status: "Future procurement", risk: "Licensing cost and permissions.", next: "Use approved placeholder audio until budget exists.", action: "Outsource Later", value: 8, difficulty: 8, riskScore: 7, dependency: 5, solo: 2, maintenance: 4, core: 5, outsource: true },
+    { name: "Huge city map", reason: "Supports empire fantasy later but will overwhelm current solo execution.", status: "Team-stage later", risk: "Performance, content volume and maintenance.", next: "Build Starter Plot and Luxury Estate first.", action: "Team Stage Later", value: 8, difficulty: 10, riskScore: 9, dependency: 10, solo: 2, maintenance: 10, core: 5 },
+    { name: "Barber-style life chores", reason: "Does not support the luxury ownership fantasy strongly enough.", status: "Cut from current direction", risk: "Adds busywork and distracts from cars, money and status.", next: "Replace with discipline, business and ownership consequences.", action: "Cut for Now", value: 2, difficulty: 5, riskScore: 5, dependency: 2, solo: 6, maintenance: 4, core: 1 }
   ];
 
   var soloSkills = [
-    { id: "lua", name: "Lua scripting", evidence: "Can explain basic variables, events and server/client boundaries.", exercise: "Build one tycoon purchase button with server validation.", feature: "Basic money loop", blocked: "Advanced game systems and secure purchases" },
-    { id: "studio", name: "Roblox Studio building", evidence: "Project workflow still needs regular hands-on practice.", exercise: "Create one organised plot with named folders and backups.", feature: "One-plot playable loop", blocked: "Large map production" },
-    { id: "vehicles", name: "Vehicle systems", evidence: "Understands the desired premium vehicle sequence.", exercise: "Make one vehicle drive reliably before adding entry polish.", feature: "First working car", blocked: "Advanced handling and vehicle fleets" },
-    { id: "ui", name: "UI / UX", evidence: "Can identify the need for clear states and feedback.", exercise: "Build one purchase button with hover, disabled and success states.", feature: "Tycoon and garage UI", blocked: "Large dashboard systems" },
-    { id: "animation", name: "Animation / Moon Animator", evidence: "Premium entry animation is planned but not proven.", exercise: "Prototype one door-open animation and a placeholder sit transition.", feature: "Vehicle entry sequence", blocked: "Multi-car animation library" },
-    { id: "blender", name: "Blender modelling", evidence: "Custom vehicle and asset ambitions are documented.", exercise: "Optimise and import one simple prop with correct scale.", feature: "Custom garage assets", blocked: "High-end vehicle models" },
-    { id: "audio", name: "Audio design / licensing", evidence: "Understands the no-overlap state-system concept.", exercise: "Play one startup sound, then begin one idle loop when it ends.", feature: "Premium car startup sequence", blocked: "RPM blending and licensed audio packs" },
-    { id: "economy", name: "Game economy", evidence: "A money and upgrade loop is part of the foundation plan.", exercise: "Balance five upgrades using a simple cost/reward table.", feature: "Basic tycoon loop", blocked: "Prestige and private-bank systems" },
-    { id: "release", name: "Release planning", evidence: "Future review is planned; no production claim is made.", exercise: "Define private-test entry and exit checks after the loop works.", feature: "Launch review", blocked: "Public release claims" },
-    { id: "marketing", name: "Marketing / devlogs", evidence: "Public site and launch content remain future work.", exercise: "Capture one honest weekly build update with a screenshot.", feature: "Devlog cadence", blocked: "Launch campaign" },
-    { id: "optimisation", name: "Optimisation", evidence: "Ordinary-hardware performance is a permanent rule.", exercise: "Profile one scene and remove one measurable bottleneck.", feature: "Stable playable build", blocked: "Large city and content density" },
-    { id: "versioning", name: "Version control / backups", evidence: "GitHub publishing and local backups are active practices.", exercise: "Create a verified backup before the next structural edit.", feature: "Safe solo workflow", blocked: "Risky large refactors" }
+    { id: "lua", name: "Lua scripting", level: "Beginner", evidence: "Understands the need for server/client separation and focused practice.", exercise: "Build one tycoon purchase button with server validation.", feature: "Basic money loop", blocked: "Advanced game systems and secure purchases" },
+    { id: "studio", name: "Roblox Studio building", level: "Learning", evidence: "Project workflow and organised folders are part of the foundation plan.", exercise: "Create one organised plot with named folders and backups.", feature: "One-plot playable loop", blocked: "Large map production" },
+    { id: "vehicles", name: "Vehicle systems", level: "Beginner", evidence: "Understands the desired premium vehicle sequence.", exercise: "Make one vehicle drive reliably before adding entry polish.", feature: "First working car", blocked: "Advanced handling and vehicle fleets" },
+    { id: "ui", name: "UI / UX", level: "Learning", evidence: "Can identify the need for clear states and feedback.", exercise: "Build one purchase button with hover, disabled and success states.", feature: "Tycoon and garage UI", blocked: "Large dashboard systems" },
+    { id: "animation", name: "Moon Animator / animation", level: "Beginner", evidence: "Premium entry animation is planned but not proven.", exercise: "Prototype one door-open animation and a placeholder sit transition.", feature: "Vehicle entry sequence", blocked: "Multi-car animation library" },
+    { id: "blender", name: "Blender modelling", level: "Beginner", evidence: "Custom vehicle and asset ambitions are documented.", exercise: "Optimise and import one simple prop with correct scale.", feature: "Custom garage assets", blocked: "High-end vehicle models" },
+    { id: "audio", name: "Audio design / licensing", level: "Beginner", evidence: "Understands startup -> idle no-overlap system.", exercise: "Script one startup sound, then begin one idle loop when it ends.", feature: "Premium vehicle feel", blocked: "RPM blending and licensed audio packs" },
+    { id: "economy", name: "Game economy", level: "Learning", evidence: "A money and upgrade loop is part of the foundation plan.", exercise: "Balance five upgrades using a simple cost/reward table.", feature: "Basic tycoon loop", blocked: "Prestige and private-bank systems" },
+    { id: "monetisation", name: "Monetisation", level: "Not assessed", evidence: "Not active; no fake premium or paid access exists in Overseer.", exercise: "Write a future-only monetisation ethics checklist after gameplay works.", feature: "Future public launch", blocked: "Production backend and policy review" },
+    { id: "marketing", name: "Marketing / devlogs", level: "Beginner", evidence: "Public site and launch content remain future work.", exercise: "Capture one honest weekly build update with a screenshot.", feature: "Devlog cadence", blocked: "Launch campaign" },
+    { id: "optimisation", name: "Optimisation", level: "Beginner", evidence: "Ordinary-hardware performance is a permanent rule.", exercise: "Profile one scene and remove one measurable bottleneck.", feature: "Stable playable build", blocked: "Large city and content density" },
+    { id: "versioning", name: "Version control / backups", level: "Learning", evidence: "GitHub publishing and local backups are active practices.", exercise: "Create a verified backup before the next structural edit.", feature: "Safe solo workflow", blocked: "Risky large refactors" }
   ];
 
   var operatingRules = [
@@ -130,13 +135,239 @@
     "Stop designing the 10-year version before the 10-minute version works."
   ];
 
+  var directive = {
+    activeProject: "Luxury Life Tycoon",
+    phase: "Phase 3 - Premium Vehicle Feel",
+    system: "Vehicle Audio",
+    objective: "Build the first premium vehicle loop: one car, one entry prompt, one startup sound, one idle loop and one clean drive test.",
+    nextAction: "Script startup -> idle no-overlap sequence.",
+    done: "One test car can be entered, started, idled and driven without audio stacking or constant loop restarts.",
+    risk: "Feature overload: full city, full body kits and hypercar vault must stay parked until the first playable car loop works."
+  };
+
+  var launchReadiness = [
+    ["Core loop", "Prototype", "Money loop is planned; prove earn -> bank/app claim -> upgrade next."],
+    ["Vehicle system", "Prototype", "One test car and audio state sequence are the active target."],
+    ["Banking / income", "Missing", "CrownVault concept exists; no working Lua system yet."],
+    ["Car customisation", "Prototype", "Start with paint, wheels, underglow and plates only."],
+    ["Damage / repair", "Missing", "Condition value can be seeded before visual damage."],
+    ["UI polish", "Prototype", "Only minimum feedback needed until gameplay works."],
+    ["Save system", "Missing", "Add only after values and loop are stable."],
+    ["Monetisation readiness", "Missing", "No fake paid access; future review only."],
+    ["Testing", "Missing", "Needs one laptop-safe playtest checklist."]
+  ];
+
+  var gameIdentity = [
+    ["Working title", "Luxury Life Tycoon"],
+    ["Genre", "Tycoon foundation + luxury life simulator + vehicle ownership progression."],
+    ["Core fantasy", "Start with a basic property, build wealth through believable systems, own and customise cars, manage condition, grow businesses and climb into elite founder status."],
+    ["Player promise", "Every upgrade should make the player's life, garage or status visibly better."],
+    ["Main audience", "Roblox players who like tycoon progress, cars, flex culture, houses, business upgrades and visible status."],
+    ["Different because", "It combines money flow, vehicle ownership, car feel and selective life systems instead of plain button-spam tycoon progression."]
+  ];
+
+  var coreLoopSteps = [
+    "Earn income",
+    "Claim through CrownVault bank/app",
+    "Buy upgrades",
+    "Unlock garage",
+    "Customise and drive cars",
+    "Repair/manage vehicles",
+    "Expand businesses",
+    "Prestige/status",
+    "Unlock richer districts"
+  ];
+
+  var playerProgression = [
+    "Starter property",
+    "First garage",
+    "First car",
+    "First business income",
+    "First custom car build",
+    "First damaged/repair loop",
+    "Mansion upgrade path",
+    "Dealership/tuning shop",
+    "Private bank account",
+    "Luxury district",
+    "Hypercar vault",
+    "Founder city / empire stage"
+  ];
+
+  var zoneCards = [
+    { name: "Starter Plot", purpose: "Teach earning, upgrading and ownership basics.", unlock: "Default spawn.", systems: "Basic money, first upgrades, intro UI.", rewards: "Starter house, first income source, clear upgrade path." },
+    { name: "Luxury Estate", purpose: "Make wealth visible through property upgrades.", unlock: "Complete starter property milestones.", systems: "Mansion path, garage expansion, status display.", rewards: "Bigger house, garage slots, richer visual feedback." },
+    { name: "Supercar District", purpose: "Turn vehicle ownership into a destination.", unlock: "Own first upgraded garage and car.", systems: "Dealerships, car meets, rarity labels.", rewards: "Higher-tier cars, showcase spaces, photo spots." },
+    { name: "Business Row", purpose: "Give the player believable income sources.", unlock: "First business purchase.", systems: "Dealership, tuning shop, repair garage, revenue reports.", rewards: "Business income, upgrades, brand/status growth." },
+    { name: "Private Island", purpose: "Hold long-term trophy progression.", unlock: "Late prestige and high wealth.", systems: "Exclusive garage, island assets, private events.", rewards: "Rare displays, elite status, event space." },
+    { name: "Hypercar Vault", purpose: "Store and flex top-tier vehicle achievements.", unlock: "Very late garage and wealth milestones.", systems: "Rare vehicles, trophies, controlled access.", rewards: "Hypercar showcase, collection status, trophy wall." },
+    { name: "Founder City", purpose: "Empire-stage expansion after core game proves itself.", unlock: "Studio-stage later.", systems: "Large city, multiple businesses, events.", rewards: "Endgame map expansion and prestige loops." }
+  ];
+
+  var customisationCategories = [
+    ["Paint", "Preset colours or one colour picker", "Gloss, matte, metallic, pearl, carbon", "Personal identity", "Low", "Medium", "Early"],
+    ["Finish", "Gloss/matte selector", "Layered finish presets", "Premium feel", "Low", "Medium", "Early"],
+    ["Wraps", "One simple stripe/decal slot", "Full wrap library", "Flex and variety", "Medium", "High", "Later"],
+    ["Wheels", "Three wheel presets", "Rim size, material and brand-safe styles", "Visible upgrade", "Medium", "Medium", "Early"],
+    ["Tyres", "Basic tyre type label", "Grip/road/track tyres", "Performance identity", "Medium", "Medium", "Mid"],
+    ["Suspension", "One lowered stance option", "Ride height presets", "Car meet appeal", "Medium", "Medium", "Mid"],
+    ["Underglow", "On/off colour presets", "Animated glow modes", "Night flex", "Low", "High", "Early"],
+    ["Window tint", "Three tint levels", "Material-aware tint", "Luxury style", "Low", "Low", "Mid"],
+    ["Lights", "Simple headlight colour", "LED styles and dashboard sync", "Premium feedback", "Medium", "Medium", "Mid"],
+    ["Body kits", "Parked", "Front/rear/side kits per car", "High-end custom builds", "Heavy", "High", "Later"],
+    ["Spoilers", "One spoiler option", "Multiple aero styles", "Sports identity", "Medium", "Medium", "Mid"],
+    ["Exhaust tips", "One visual option", "Tips linked to sound profile", "Audio/visual connection", "Medium", "Medium", "Mid"],
+    ["Interior", "Basic seat colour", "Materials, trim and dashboard glow", "Luxury ownership", "Heavy", "Medium", "Later"],
+    ["Dashboard glow", "Startup light effect", "Themes tied to car build", "Start sequence payoff", "Medium", "Low", "Early"],
+    ["Number plates", "Short custom text", "Plate styles and rarity frames", "Personal ownership", "Low", "Medium", "Early"],
+    ["Engine sound profile", "One approved placeholder", "Multiple licensed/approved profiles", "Premium identity", "Medium", "High", "Early"],
+    ["Performance upgrades", "Simple speed/handling tiers", "Engine, brakes, turbo, suspension", "Progression power", "Heavy", "High", "Mid"],
+    ["Saved builds", "One saved preset", "Named presets per car", "Retention and collection", "Medium", "Medium", "Mid"]
+  ];
+
+  var audioStates = [
+    ["Off", "Silent parked state", "State", "No engine loops running", "Low", "Early"],
+    ["Startup", "Make the car feel premium", "One-shot", "Play once; idle waits until it ends", "High", "Early"],
+    ["Idle", "Engine alive while stationary", "Loop", "One loop only; fade out on shutdown", "High", "Early"],
+    ["Low RPM", "Gentle movement sound", "Loop / pitch band", "Adjust pitch/volume, do not restart constantly", "Medium", "Mid"],
+    ["High RPM", "Speed and power feedback", "Loop / pitch band", "Blend from low RPM, no stacking", "Medium", "Mid"],
+    ["Gear shift", "Short punch during acceleration", "One-shot", "Cooldown to avoid spam", "Medium", "Later"],
+    ["Turbo spool", "Performance upgrade identity", "Layer", "Only with turbo profile and volume limits", "Medium", "Later"],
+    ["Backfire/crackle", "Sport exhaust personality", "One-shot", "Rare triggers, not constant noise", "Medium", "Later"],
+    ["Shutdown", "Clean ending", "One-shot", "Stop loops before or during shutdown fade", "Medium", "Mid"]
+  ];
+
+  var soundProfiles = [
+    ["Inline-6 Legend", "Smooth tuner/sport vibe", "Startup, idle, low/high RPM, shift", "Pairs with Track Exhaust and turbo upgrades", "Use approved/licensed assets only"],
+    ["Twin-Turbo V8", "Modern supercar aggression", "Startup, idle, low/high RPM, turbo, crackle", "High-tier exhaust and performance upgrades", "Use approved/licensed assets only"],
+    ["Royal V12", "Luxury flagship power", "Startup, idle, low/high RPM, shutdown", "Luxury estate and hypercar status", "Use approved/licensed assets only"],
+    ["Deep V8 Rumble", "Muscle luxury rumble", "Startup, idle, low/high RPM, backfire", "Classic/garage identity", "Use approved/licensed assets only"],
+    ["Electric Hyperdrive", "Future silent acceleration", "Power-on, hum loop, acceleration whine", "Late-game electric hypercar", "Use approved/licensed assets only"],
+    ["Track Exhaust", "Sharper racing tone", "Startup, idle, high RPM, shift, crackle", "Track kit/performance package", "Use approved/licensed assets only"],
+    ["Stealth Exhaust", "Quiet luxury", "Soft startup, low idle, muted drive", "Executive/luxury builds", "Use approved/licensed assets only"]
+  ];
+
+  var interactionSequence = [
+    ["Approach car", "Walks into range", "Prompt activates", "None", "Camera unchanged", "nearby", "Prompt remains hidden"],
+    ["Press E", "Input confirms", "Seat reservation starts", "Click/confirm", "Slight focus", "entering", "Double input / two players"],
+    ["Controls lock", "Movement pauses", "Car locks driver slot", "None", "Camera stabilises", "locked", "Player gets stuck if cancelled"],
+    ["Align to door", "Character moves to point", "Door target selected", "Footstep optional", "Slight side angle", "aligning", "Bad door offset"],
+    ["Reach handle", "Plays reach animation", "Door handle target", "Handle click", "Close framing", "animating", "Animation mismatch"],
+    ["Door opens", "Waits", "Door hinge opens", "Door sound", "Subtle shake optional", "doorOpen", "Door clips model"],
+    ["Enter and sit", "Sits in seat", "Seat occupant assigned", "Seat sound", "Enter framing", "seated", "Seat not assigned"],
+    ["Door closes", "Settles in car", "Door closes", "Door close", "Camera returns", "readyToStart", "Door stays open"],
+    ["Press F to Start", "Start input", "Dashboard lights on", "Button/key sound", "Dashboard focus", "starting", "Input accepted too early"],
+    ["Startup sound", "No movement yet", "Engine state startup", "Startup one-shot", "Small shake", "startup", "Idle starts too early"],
+    ["Idle loop begins", "Driving unlocks", "Engine state idle", "Idle loop", "Normal vehicle camera", "drivable", "Loops overlap"],
+    ["Drive test", "Player drives", "Vehicle responds", "Low/high RPM blend", "Driving camera", "driving", "Loop restarts constantly"]
+  ];
+
+  var damageSystems = [
+    ["Vehicle health", "Single condition value and UI bar", "Controls repair thresholds", "Garage service", "Early"],
+    ["Scratches", "Light decals or material marks", "Cosmetic wear only", "Detail wash/paint fix", "Mid"],
+    ["Dents", "Visible body damage presets", "Lowers condition and resale/status", "Body repair", "Later"],
+    ["Engine damage", "Smoke or warning light", "Lower acceleration/top speed", "Garage service", "Mid"],
+    ["Tyre damage", "Tyre warning icon", "Handling or speed penalty", "Tyre replacement", "Later"],
+    ["Suspension damage", "Tilt/ride-height problem", "Handling penalty", "Mechanic repair", "Later"],
+    ["Window damage", "Cracked glass material", "Cosmetic/status penalty", "Glass repair", "Later"],
+    ["Totalled state", "Disabled vehicle state", "Tow/repair requirement", "Insurance or full repair", "Much later"],
+    ["Insurance/protection", "Protection plan label", "Reduces repair shock", "Premium future system only", "Later"],
+    ["Service history", "Simple log of repairs", "Ownership credibility", "Automatically recorded", "Later"],
+    ["Vehicle condition UI", "Condition label and warning", "Clear player feedback", "Shown in garage/app", "Early"]
+  ];
+
+  var bankOptions = ["CrownVault", "PrimeLedger", "VaultCore", "Atlas Capital", "Empire Bank"];
+  var bankingApp = [
+    "Available balance",
+    "Pending business income",
+    "Revenue breakdown",
+    "Claim income button",
+    "Upgrade account",
+    "Transaction history",
+    "Business performance",
+    "Investment tab later"
+  ];
+
+  var businessSystems = [
+    ["Dealership", "First business license", "Car sales / commissions", "More slots, higher-tier stock", "Vehicle ownership", "Stock cost and reputation", "Discipline improves consistency"],
+    ["Tuning shop", "Garage + first customisation", "Upgrade/service revenue", "Paint, wheels, sound, performance bays", "Car customisation", "Queue and part costs", "Discipline improves upgrade quality"],
+    ["Repair garage", "Damage system live", "Repair and service fees", "Faster repair, better parts", "Damage/repair loop", "Player annoyance if too punishing", "Discipline lowers neglected repairs"],
+    ["Luxury rental service", "Own multiple vehicles", "Rental income", "Better fleet and clients", "Garage collection", "Vehicle condition and availability", "Discipline improves rental ratings"],
+    ["Private bank partnership", "High wealth + business row", "Account bonuses", "Better terms and reports", "CrownVault banking", "Balance risk if too strong", "Discipline improves stable revenue"],
+    ["Racing club", "Premium vehicle feel proven", "Event rewards", "Higher event tiers", "Driving skill and status", "Fairness and anti-cheat", "Discipline improves entry consistency"],
+    ["Security company", "Luxury estate stage", "Protection income", "More contracts", "Ownership protection", "Maintenance costs", "Discipline lowers losses"],
+    ["Hotel/property business", "Luxury district", "Rental/property income", "Rooms, quality, reputation", "Property empire", "Complex economy", "Discipline improves operations"]
+  ];
+
+  var disciplineRules = [
+    ["Motivation", "Temporary boost from milestones, clips, wins or rare 3AM ideas.", "Short-term build speed or income bonus."],
+    ["Discipline", "Earned by finishing daily business tasks, repairs, reinvestment, contracts, training and streaks.", "Stable business revenue and better long-term efficiency."],
+    ["Energy", "Optional resource, not forced chores.", "Signals when the player is pushing too hard."],
+    ["Burnout", "Punishes messy overwork and ignored maintenance.", "Lowers efficiency until the player stabilises systems."],
+    ["Focus", "Improves when the player commits to one clear task.", "Better business output and fewer mistakes."]
+  ];
+
+  var ownershipConsequences = [
+    ["Car condition", "Affects status, driving and repair decisions."],
+    ["Insurance", "Future protection against painful repair spikes."],
+    ["Repair cost", "Creates ownership responsibility without boring chores."],
+    ["Service quality", "Better shops create better long-term condition."],
+    ["Garage storage", "Forces meaningful collection choices."],
+    ["Business maintenance", "Businesses should need attention, not constant babysitting."],
+    ["Security/protection", "Protects luxury assets and creates future business hooks."],
+    ["Reputation/status", "Ties clean ownership, businesses and cars into social proof."]
+  ];
+
+  var founderDiscipline = [
+    ["Current focus", "First premium vehicle loop"],
+    ["Daily build rule", "Ship one small testable improvement before opening new ideas."],
+    ["This week's build target", "One test car with prompt, startup sound, idle loop and clean drive test."],
+    ["What to avoid", "Full city, full body kits, hypercar vault, public Creator Academy rebuild."],
+    ["Current distraction risk", "Designing empire-stage systems before the first playable vehicle loop."]
+  ];
+
+  var defaultDecisions = [
+    ["Overseer remains local-only.", "Current need is private planning, not accounts.", "No login, database or cloud sync is required.", "Yes"],
+    ["Freddie is solo founder.", "Freddie is the only active project lead and final approver.", "Recommendations must be solo-safe and not depend on Mason.", "Yes"],
+    ["Mason is inactive / left project for now.", "He is not an active dependency.", "No tasks are assigned to him.", "Yes"],
+    ["Creator Academy is tracked only.", "Overseer must not become the public/student product.", "Only status, roadmap, decisions, risks, notes and future ideas appear here.", "No"],
+    ["Game direction is luxury life tycoon, not plain tycoon.", "The game needs cars, business, ownership and status fantasy.", "Roadmap prioritises money, vehicles, life systems and premium feel.", "Yes"],
+    ["Money does not come from mailbox.", "Bank/app/business income feels more premium and believable.", "CrownVault and business payout systems should replace mailbox cash.", "Yes"],
+    ["Car audio must use licensed/approved sounds only.", "Real engine audio can create legal/licensing risk.", "Use approved placeholders until licensing is clear.", "No"],
+    ["Real car names/logos/audio are avoided unless legally licensed.", "Brand and audio rights matter.", "Use fictional or inspired profiles and original assets.", "No"],
+    ["Motivation is temporary; discipline is earned.", "The life system should reward consistency, not random boosts.", "Discipline gives stable progress; motivation gives short bursts.", "Yes"],
+    ["Build one complete car system before expanding to many cars.", "One polished car beats ten broken cars.", "Fleet, body kits and huge city stay parked until one car works.", "Yes"]
+  ];
+
+  var vaultCategories = [
+    ["10-year features", ["Full cinematic car entry system across every vehicle", "Huge city map", "Founder City", "Advanced body kits", "Seasonal luxury events"]],
+    ["Hypercar inspiration", ["Hypercar vault", "Rare vehicle trophies", "Electric Hyperdrive profile", "Private island garage", "Photo-ready display rooms"]],
+    ["Studio-stage systems", ["Dedicated content team", "Live analytics", "Car meet championships", "Large vehicle pipeline", "Events calendar"]],
+    ["Outsource later", ["Licensed sound pack", "High-end vehicle models", "Trailer editing", "Specialist animation polish", "Icon/thumbnail art"]],
+    ["Future tech", ["AI command room", "Advanced optimisation tooling", "Automated QA checklist", "Better backup/export system"]],
+    ["Parked game ideas", ["Private island zone", "Luxury rental empire", "Security company expansion", "Hotel/property business"]],
+    ["Big money checkpoints", ["First polished car loop", "First stable income loop", "First public test", "First premium-looking trailer", "Studio hiring later"]],
+    ["Separate product work", ["Creator Academy public platform work", "Creator Academy website rebuild", "Student-facing dashboard later only in its own product"]]
+  ];
+
+  function defaultDecisionLog() {
+    return defaultDecisions.map(function (item) {
+      return "Decision: " + item[0] + "\nReason: " + item[1] + "\nConsequence: " + item[2] + "\nReversible: " + item[3];
+    }).join("\n\n");
+  }
+
+  function defaultVaultText() {
+    return vaultCategories.map(function (category) {
+      return category[0] + ":\n- " + category[1].join("\n- ");
+    }).join("\n\n");
+  }
+
   var helperState = {
     currentView: "dashboard",
     activeSection: normaliseSection(readLocalText(UI_STORAGE_KEY)),
     taskState: normaliseTaskState(readLocalJson(TASK_STORAGE_KEY, {})),
     notes: readLocalText(NOTES_STORAGE_KEY),
-    decisions: readLocalText(DECISIONS_STORAGE_KEY),
-    vault: readLocalText(VAULT_STORAGE_KEY),
+    decisions: readLocalText(DECISIONS_STORAGE_KEY) || defaultDecisionLog(),
+    vault: readLocalText(VAULT_STORAGE_KEY) || defaultVaultText(),
     intake: normaliseIntake(readLocalJson(INTAKE_STORAGE_KEY, {})),
     promptMode: "project",
     solo: normaliseSoloState(readLocalJson(SOLO_STORAGE_KEY, {})),
@@ -192,10 +423,10 @@
 
   function normaliseSoloState(stored) {
     var phase = Number(stored && stored.phase);
-    if (!Number.isInteger(phase) || phase < 1 || phase > soloPhases.length) phase = 1;
+    if (!Number.isInteger(phase) || phase < 1 || phase > soloPhases.length) phase = 3;
     return {
       phase: phase,
-      activeSystem: String(stored && stored.activeSystem || "First playable money loop").trim().slice(0, 200),
+      activeSystem: String(stored && stored.activeSystem || "Vehicle Audio - first premium vehicle loop").trim().slice(0, 200),
       learningBlocker: String(stored && stored.learningBlocker || "Lua scripting fundamentals").trim().slice(0, 200),
       masonActive: Boolean(stored && stored.masonActive)
     };
@@ -205,7 +436,7 @@
     var validLevels = ["Not assessed", "Beginner", "Learning", "Working", "Confident"];
     var clean = {};
     soloSkills.forEach(function (skill) {
-      clean[skill.id] = validLevels.indexOf(stored && stored[skill.id]) >= 0 ? stored[skill.id] : "Not assessed";
+      clean[skill.id] = validLevels.indexOf(stored && stored[skill.id]) >= 0 ? stored[skill.id] : skill.level || "Not assessed";
     });
     return clean;
   }
@@ -496,7 +727,7 @@
       var status = taskStatus(task.id);
       return [
         '<article class="helper-task-row ' + status + '">',
-          '<div><span class="helper-task-area">' + escapeHtml(task.area) + '</span><span class="solo-task-tag">' + escapeHtml(task.tag) + '</span><strong>' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.detail) + '</small></div>',
+          '<div><span class="helper-task-area">' + escapeHtml(task.area) + '</span><span class="solo-task-tag">' + escapeHtml(task.tag) + '</span><strong>' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.detail) + '</small>' + (task.why ? '<small><b>Why:</b> ' + escapeHtml(task.why) + ' | <b>Skill:</b> ' + escapeHtml(task.skill) + ' | <b>Effort:</b> ' + escapeHtml(task.effort) + '</small>' : '') + '</div>',
           '<select class="helper-task-state" aria-label="Status for ' + escapeHtml(task.title) + '" onchange="helperSetTaskStatus(\'' + task.id + '\', this.value)">',
             '<option value="active"' + (status === "active" ? " selected" : "") + '>Active</option>',
             '<option value="completed"' + (status === "completed" ? " selected" : "") + '>Completed</option>',
@@ -512,7 +743,12 @@
     var actions = nextThreeActions();
     if (!actions.length) return '<p class="solo-empty">No active solo tasks. Unpark one focused task before adding new scope.</p>';
     return '<ol class="solo-next-list">' + actions.map(function (task) {
-      return '<li><span>' + escapeHtml(task.slot) + '</span><strong>' + escapeHtml(task.title) + '</strong></li>';
+      return [
+        '<li>',
+          '<div><span>' + escapeHtml(task.effort || task.slot) + '</span><strong>' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.why || task.detail) + '</small></div>',
+          '<dl><div><dt>Skill</dt><dd>' + escapeHtml(task.skill || "Project execution") + '</dd></div><div><dt>Status</dt><dd>' + escapeHtml(taskStatus(task.id)) + '</dd></div></dl>',
+        '</li>'
+      ].join("");
     }).join("") + '</ol>';
   }
 
@@ -704,7 +940,7 @@
         '</div>',
         '<article class="helper-card solo-feature-card">',
           '<div class="solo-feature-head"><span>Feature</span><span>Score</span><span>Recommendation</span></div>',
-          '<div class="solo-feature-list">' + featureScoreRows() + '</div>',
+          '<div class="solo-feature-list">' + featureScoreRowsDetailed() + '</div>',
           '<div class="solo-brain-questions"><strong>Overseer checks:</strong><span>Can Freddie build it alone?</span><span>Does it help the core loop?</span><span>What skill blocks it?</span><span>Is it a launch distraction?</span><span>What is the smallest useful version?</span></div>',
         '</article>',
 
@@ -772,6 +1008,52 @@
     return '<ul class="command-compact-list">' + items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
   }
 
+  function detailTable(headers, rows, className) {
+    return [
+      '<div class="detail-table-wrap ' + escapeHtml(className || "") + '"><table class="detail-table"><thead><tr>',
+      headers.map(function (header) { return '<th>' + escapeHtml(header) + '</th>'; }).join(""),
+      '</tr></thead><tbody>',
+      rows.map(function (row) {
+        return '<tr>' + row.map(function (cell) { return '<td>' + escapeHtml(cell) + '</td>'; }).join("") + '</tr>';
+      }).join(""),
+      '</tbody></table></div>'
+    ].join("");
+  }
+
+  function definitionList(rows) {
+    return '<dl class="detail-definition-list">' + rows.map(function (row) {
+      return '<div><dt>' + escapeHtml(row[0]) + '</dt><dd>' + escapeHtml(row[1]) + '</dd></div>';
+    }).join("") + '</dl>';
+  }
+
+  function detailCards(items, className) {
+    return '<div class="' + escapeHtml(className || "detail-card-grid") + '">' + items.map(function (item) {
+      var title = item.name || item[0];
+      var body = item.purpose ? '<p>' + escapeHtml(item.purpose) + '</p>' : "";
+      var details = item.unlock ? definitionList([["Unlock", item.unlock], ["Main systems", item.systems], ["Example rewards", item.rewards]]) : compactList(item.items || item[1] || []);
+      return '<article class="helper-card detailed-mini-card"><h3>' + escapeHtml(title) + '</h3>' + body + details + '</article>';
+    }).join("") + '</div>';
+  }
+
+  function launchSnapshotHtml() {
+    return detailTable(["Area", "Status", "Evidence / next check"], launchReadiness, "launch-snapshot-table");
+  }
+
+  function featureScoreRowsDetailed() {
+    return soloFeatures.map(function (feature) {
+      var score = soloBuildScore(feature);
+      var recommendation = feature.action || featureRecommendation(feature);
+      var tone = recommendation === "Build Now" ? "good" : (recommendation === "Prototype Only" || recommendation === "Learn First" ? "warn" : "bad");
+      return [
+        '<article class="solo-feature-row" data-tone="' + tone + '">',
+          '<div><strong>' + escapeHtml(feature.name) + '</strong><small>Value ' + feature.value + ' - difficulty ' + feature.difficulty + ' - risk ' + (feature.riskScore || 0) + ' - dependency ' + feature.dependency + ' - maintenance ' + feature.maintenance + ' - solo suitability ' + (feature.solo || "n/a") + '</small></div>',
+          '<span class="solo-score">' + score + '</span>',
+          '<span class="solo-recommendation">' + escapeHtml(recommendation) + '</span>',
+        '</article>'
+      ].join("");
+    }).join("");
+  }
+
   function emptyState(message) {
     return '<div class="overseer-empty-state"><span>—</span><p>' + escapeHtml(message) + '</p></div>';
   }
@@ -806,7 +1088,7 @@
         record[key] = match[2].trim();
       });
       return record;
-    }).filter(function (record) { return record.decision; }).slice(0, 5);
+    }).filter(function (record) { return record.decision; }).slice(0, 12);
   }
 
   function decisionTableHtml() {
@@ -840,9 +1122,43 @@
         { label: "Creator Academy", value: "Tracked Only", tone: "muted" }
       ]),
       '<section class="mission-focus-grid">',
-        '<article class="helper-card mission-focus-card"><span class="command-card-label">Current mission</span><h2>' + escapeHtml(helperState.solo.activeSystem || "First playable money loop") + '</h2><p>Luxury Life Tycoon · Phase ' + currentPhase.id + ' · ' + escapeHtml(currentPhase.name) + '</p><div class="mission-directive"><span>Current directive</span><strong>Build the playable loop before expanding the empire.</strong></div></article>',
+        '<article class="helper-card mission-focus-card"><span class="command-card-label">Current mission</span><h2>First premium vehicle loop</h2><p>Luxury Life Tycoon - Phase ' + currentPhase.id + ' - ' + escapeHtml(currentPhase.name) + '</p><div class="mission-directive"><span>Current directive</span><strong>' + escapeHtml(directive.objective) + '</strong></div></article>',
         '<article class="helper-card next-action-card"><span class="command-card-label">Next concrete action</span><h3>' + escapeHtml(next.title) + '</h3><p>' + escapeHtml(next.detail) + '</p>' + (next.id ? '<button type="button" class="helper-button primary" onclick="helperSetTaskStatus(\'' + next.id + '\', \'completed\')">Mark complete</button>' : '') + '</article>',
       '</section>'
+    ].join("");
+  }
+
+  function currentDirectiveHtml() {
+    return [
+      '<article class="helper-card current-directive-card">',
+        '<div class="card-heading-row"><div><span class="command-card-label">Current Directive</span><h3>First premium vehicle loop</h3></div><span class="status-count">Active Project</span></div>',
+        definitionList([
+          ["Active Project", directive.activeProject],
+          ["Current Phase", directive.phase],
+          ["Current System", directive.system],
+          ["Current Objective", directive.objective],
+          ["Next Concrete Action", directive.nextAction],
+          ["Definition of Done", directive.done],
+          ["Current Risk", directive.risk]
+        ]),
+      '</article>'
+    ].join("");
+  }
+
+  function soloFounderLoadHtml(overload) {
+    var parked = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; });
+    return [
+      '<article class="helper-card solo-load-card">',
+        '<span class="command-card-label">Solo Founder Load</span>',
+        definitionList([
+          ["Active core system", "Vehicle Audio"],
+          ["Active support system", "One test vehicle / driver prompt"],
+          ["Active polish task", "Vehicle condition seed value"],
+          ["Parked systems", String(parked.length) + " parked ideas and later systems"],
+          ["Recommended limit", "Maximum 1 core, 1 support and 1 polish task active at once"]
+        ]),
+        '<div class="scope-warning ' + (overload.overloaded ? "danger" : "controlled") + '"><strong>' + (overload.overloaded ? "Feature overload detected" : "Controlled: one core system active") + '</strong><span>' + escapeHtml(overload.message) + '</span></div>',
+      '</article>'
     ].join("");
   }
 
@@ -852,7 +1168,9 @@
     return [
       '<div class="command-block-heading"><span>Execution</span><h2>Control the active build</h2><p>One core system, one support system and one polish task.</p></div>',
       '<div class="command-execution-grid">',
+        currentDirectiveHtml(),
         '<article class="helper-card command-next-three"><span class="command-card-label">Next three actions</span>' + soloNextActionsHtml() + '</article>',
+        soloFounderLoadHtml(overload),
         '<article class="helper-card command-signal-card"><span>Active system</span><strong>' + escapeHtml(helperState.solo.activeSystem) + '</strong><small>' + counts.active + ' active tasks</small></article>',
         '<article class="helper-card command-signal-card"><span>Current blocker</span><strong>' + escapeHtml(helperState.solo.learningBlocker) + '</strong><small>Learn only what unlocks the next milestone.</small></article>',
         '<article class="helper-card command-signal-card" data-tone="' + (overload.overloaded ? "bad" : "good") + '"><span>Feature load</span><strong>' + (overload.overloaded ? "Overloaded" : "Controlled") + '</strong><small>' + escapeHtml(overload.message) + '</small></article>',
@@ -860,6 +1178,7 @@
       '</div>',
       '<div class="command-block-heading secondary"><span>Memory and readiness</span><h2>Keep context without clutter</h2></div>',
       '<div class="command-lower-grid">',
+        '<article class="helper-card launch-snapshot-card"><span class="command-card-label">Launch readiness snapshot</span>' + launchSnapshotHtml() + '</article>',
         '<article class="helper-card command-memory-card"><span class="command-card-label">Recent decisions</span>' + (recentDecisions.length ? compactList(recentDecisions) : emptyState("No decisions logged yet.")) + '<button type="button" class="helper-button neutral" onclick="helperSetSection(\'decisions\')">Open decision log</button></article>',
         '<article class="helper-card command-memory-card"><span class="command-card-label">Parked future ideas</span>' + (parked.length ? compactList(parked.map(function (task) { return task.title; })) : emptyState("No parked future ideas yet.")) + '<button type="button" class="helper-button neutral" onclick="helperSetSection(\'vault\')">Open Vault</button></article>',
         '<article class="helper-card command-readiness-card"><span class="command-card-label">Launch readiness</span><strong>' + localReadinessScore() + '%</strong><div class="command-progress"><i style="width:' + localReadinessScore() + '%"></i></div><p>Local planning estimate only. PWA, backup and launch checks remain evidence-based.</p><button type="button" class="helper-button neutral" onclick="helperSetSection(\'roadmap\')">Review roadmap</button></article>',
@@ -963,7 +1282,7 @@
         '<article class="helper-card" data-tone="' + (overload.overloaded ? "bad" : "good") + '"><span>Feature load</span><strong>' + (overload.overloaded ? "Over-scoped" : "Controlled") + '</strong><p>' + overload.message + '</p></article>',
       '</div>',
       '<div class="helper-section-heading"><div><span class="helper-section-label">Solo evaluation</span><h3>Solo Build Score</h3></div><p>Value − difficulty − dependency − maintenance risk.</p></div>',
-      '<article class="helper-card solo-feature-card"><div class="solo-feature-head"><span>Feature</span><span>Score</span><span>Recommendation</span></div><div class="solo-feature-list">' + featureScoreRows() + '</div><div class="solo-brain-questions"><strong>Overseer checks:</strong><span>Can Freddie build it alone?</span><span>Does it help the core loop?</span><span>What skill blocks it?</span><span>What is the smallest useful version?</span></div></article>',
+      '<article class="helper-card solo-feature-card"><div class="solo-feature-head"><span>Feature</span><span>Score</span><span>Recommendation</span></div><div class="solo-feature-list">' + featureScoreRowsDetailed() + '</div><div class="solo-brain-questions"><strong>Overseer checks:</strong><span>Can Freddie build it alone?</span><span>Does it help the core loop?</span><span>What skill blocks it?</span><span>What is the smallest useful version?</span></div></article>',
       '<div class="overseer-intelligence-grid brain-intelligence-grid">',
         '<article id="overseerIntake" class="helper-card overseer-intake-card"><div class="overseer-card-heading"><div><span class="helper-section-label">Information intake</span><h3>Give Overseer useful context</h3><p>Everything stays in this browser.</p></div><div class="overseer-progress-ring" style="--progress:' + intake.percent + '"><strong>' + intake.percent + '%</strong><span>' + intake.answered + '/' + intake.total + '</span></div></div><div class="overseer-intake-grid">' + intakeFieldsHtml() + '</div><div class="overseer-intake-footer"><span>Local draft · not secure</span><button type="button" class="helper-button primary" onclick="helperSaveIntake()">Save information</button></div></article>',
         '<article class="helper-card overseer-prompt-card"><div class="overseer-card-heading compact"><div><span class="helper-section-label">ChatGPT prompt lab</span><h3>Build a context-rich prompt</h3><p>Review and copy manually.</p></div></div><div class="overseer-prompt-modes">' + promptModeButtons() + '</div><textarea id="overseerGeneratedPrompt" class="overseer-generated-prompt" readonly>' + escapeHtml(buildPrompt()) + '</textarea><div class="overseer-prompt-footer"><span>Nothing is transmitted automatically.</span><button type="button" class="helper-button primary" onclick="helperCopyPrompt()">Copy prompt</button></div></article>',
@@ -996,6 +1315,130 @@
     ].join("");
   }
 
+  function detailedBlueprintHtml() {
+    return [
+      sectionHeaderHtml("Luxury Life Tycoon", "Game Blueprint", "Private planning blueprint for the Roblox game. This is project intelligence, not a public product page.", [{ label: "Active project", value: "Luxury Life Tycoon", tone: "accent" }, { label: "Creator Academy", value: "Tracked only", tone: "muted" }]),
+      '<div class="blueprint-grid detailed-blueprint">',
+        '<article class="helper-card blueprint-core"><span>Game Identity</span><h3>Luxury Life Tycoon</h3>' + definitionList(gameIdentity) + '</article>',
+        '<article class="helper-card loop-flow-card"><span>Core Loop</span><div class="loop-flow">' + coreLoopSteps.map(function (step) { return '<span>' + escapeHtml(step) + '</span>'; }).join("") + '</div></article>',
+        '<article class="helper-card"><span>Player progression</span>' + compactList(playerProgression) + '</article>',
+        '<article class="helper-card"><span>Core risks</span>' + compactList(["Expanding before the money loop works", "Building a fleet before one car feels premium", "Adding luxury polish before server-authoritative logic", "Designing Founder City before Starter Plot is fun"]) + '</article>',
+      '</div>',
+      '<div class="helper-section-heading"><div><span class="helper-section-label">World planning</span><h3>Zones and unlock logic</h3></div><p>These are private planning cards. Build only the smallest current zone first.</p></div>',
+      detailCards(zoneCards, "zone-card-grid"),
+      '<article class="helper-card blueprint-guardrail"><strong>Blueprint guardrail</strong><span>Do not build the city, prestige empire or dozens of vehicles before one plot, one money loop and one premium-feeling test car work cleanly.</span></article>'
+    ].join("");
+  }
+
+  function detailedCarSystemsHtml() {
+    return [
+      sectionHeaderHtml("Vehicle systems", "Car Systems", "Deep planner for customisation, audio, interaction, damage, repair and ownership.", [{ label: "Active", value: "Vehicle Audio", tone: "accent" }, { label: "Fleet", value: "Parked", tone: "muted" }, { label: "Legal rule", value: "Approved sounds only", tone: "good" }]),
+      '<details class="helper-card detail-panel" open><summary><div><span class="command-card-label">Vehicle Customisation Planner</span><h3>Minimum now, advanced later</h3></div><span>' + customisationCategories.length + ' categories</span></summary>' + detailTable(["Category", "Minimum version", "Advanced version", "Gameplay value", "Difficulty", "Monetisation potential", "Build priority"], customisationCategories, "customisation-table") + '</details>',
+      '<details class="helper-card detail-panel" open><summary><div><span class="command-card-label">Vehicle Audio Planner</span><h3>Startup must play once, then idle loop starts</h3></div><span>No overlap</span></summary>' + detailTable(["State", "Purpose", "Type", "Overlap rule", "Asset quality", "Priority"], audioStates, "audio-state-table") + '<p class="detail-note">Driving loops should not restart constantly. Use volume and pitch changes instead of stacking sounds.</p></details>',
+      '<details class="helper-card detail-panel"><summary><div><span class="command-card-label">Sound Profile Library</span><h3>Fictional / inspired profiles</h3></div><span>Licensing safe</span></summary>' + detailTable(["Profile", "Inspired vibe", "Audio states needed", "Customisation tie-in", "Legal / licence status"], soundProfiles, "sound-profile-table") + '</details>',
+      '<details class="helper-card detail-panel"><summary><div><span class="command-card-label">Vehicle Interaction Planner</span><h3>One-car entry sequence</h3></div><span>12 steps</span></summary>' + detailTable(["Step", "Character action", "Car action", "Sound", "Camera effect", "Script state", "Possible bug"], interactionSequence, "interaction-table") + '</details>',
+      '<details class="helper-card detail-panel"><summary><div><span class="command-card-label">Damage and Repair Planner</span><h3>Ownership consequences without annoying chores</h3></div><span>Selective sim</span></summary>' + detailTable(["Damage type", "Visual effect", "Gameplay effect", "Repair method", "Build priority"], damageSystems, "damage-table") + '</details>',
+      '<article class="helper-card system-sequence"><span>Current recommended sequence</span><strong>One car -> enter prompt -> reliable drive -> startup sound -> idle loop -> no overlap -> one condition value -> dashboard light -> door animation placeholder</strong></article>'
+    ].join("");
+  }
+
+  function detailedLifeSystemsHtml() {
+    return [
+      sectionHeaderHtml("Progression mechanics", "Life Systems", "Selective life simulation for banking, business, discipline, motivation and ownership consequences.", [{ label: "Bank", value: "CrownVault", tone: "accent" }, { label: "Rule", value: "No mailbox money", tone: "good" }, { label: "Chores", value: "Cut filler", tone: "muted" }]),
+      '<div class="life-detail-grid">',
+        '<article class="helper-card life-system-card crownvault-card"><span></span><div><h3>CrownVault banking system</h3><p>Money should flow through a banking app, physical bank, business payouts, contracts, investments later, dealership revenue, tuning shop revenue and rental income later.</p>' + focusChips(bankOptions) + '</div></article>',
+        '<article class="helper-card life-system-card"><span></span><div><h3>Banking app screens</h3>' + compactList(bankingApp) + '</div></article>',
+        '<article class="helper-card life-system-card"><span></span><div><h3>Discipline and motivation rules</h3>' + detailTable(["Stat", "Rule", "Effect"], disciplineRules, "discipline-table") + '</div></article>',
+        '<article class="helper-card life-system-card"><span></span><div><h3>Ownership consequences</h3><p>This is selective life simulation, not boring chores.</p>' + compactList(ownershipConsequences.map(function (item) { return item[0] + ": " + item[1]; })) + '</div></article>',
+      '</div>',
+      '<details class="helper-card detail-panel" open><summary><div><span class="command-card-label">Business System</span><h3>Revenue and maintenance planning</h3></div><span>' + businessSystems.length + ' businesses</span></summary>' + detailTable(["Business", "Unlock condition", "Revenue type", "Upgrade path", "Related gameplay", "Risk / maintenance", "Discipline effect"], businessSystems, "business-table") + '</details>',
+      '<article class="helper-card blueprint-guardrail"><strong>Cut rule</strong><span>No barber visits, filler errands or realism-for-realism&#039;s-sake unless the mechanic directly supports gameplay, economy, ownership or status.</span></article>'
+    ].join("");
+  }
+
+  function detailedFounderSystemsHtml(counts, overload, risk, currentPhase, parkedTasks, neededSkills) {
+    return [
+      sectionHeaderHtml("Founder operations", "Founder Systems", "Freddie-specific skill stack, discipline, workload and solo-founder warnings.", [{ label: "Founder", value: "Freddie Murray", tone: "accent" }, { label: "Mason", value: "Inactive", tone: "muted" }, { label: "Load", value: overload.overloaded ? "Overloaded" : "Controlled", tone: overload.overloaded ? "bad" : "good" }]),
+      '<section class="solo-founder-command founder-page-command">',
+        '<div class="solo-founder-header"><div><span class="solo-mode-chip">Mode: Solo Founder</span><h3>Build Control</h3><p>Freddie is the sole active founder, developer and final approver. Mason remains inactive historical context only.</p></div><div class="solo-risk" data-tone="' + risk.tone + '"><span>Overload risk</span><strong>' + escapeHtml(risk.label) + '</strong><small>' + escapeHtml(risk.detail) + '</small></div></div>',
+        '<div class="solo-founder-grid">',
+          '<article class="solo-command-card"><span>Weekly focus</span><input id="soloActiveSystem" maxlength="200" value="' + escapeHtml(helperState.solo.activeSystem) + '"></article>',
+          '<article class="solo-command-card"><span>Learning blocker</span><input id="soloLearningBlocker" maxlength="200" value="' + escapeHtml(helperState.solo.learningBlocker) + '"></article>',
+          '<article class="solo-command-card"><span>Current phase</span><select id="soloPhaseSelect" onchange="helperSetSoloPhase(this.value)">' + phaseOptions() + '</select></article>',
+          '<article class="solo-command-card"><span>Feature load</span><strong>' + counts.active + ' active</strong><small>' + overload.slots.core + ' core - ' + overload.slots.support + ' support - ' + overload.slots.polish + ' polish</small></article>',
+        '</div>',
+        '<div class="solo-save-row"><span>Daily build rule: ship one small testable improvement before opening new ideas.</span><button type="button" class="helper-button primary" onclick="helperSaveSoloState()">Save founder focus</button></div>',
+        '<div class="solo-overload-warning ' + (overload.overloaded ? "danger" : "controlled") + '"><strong>' + escapeHtml(overload.message) + '</strong><span>' + escapeHtml(overload.overloaded ? hardTruths[0] : hardTruths[6]) + '</span></div>',
+      '</section>',
+      '<div class="founder-system-grid">',
+        '<article class="helper-card"><span class="command-card-label">Founder Discipline</span>' + definitionList(founderDiscipline) + '</article>',
+        '<article class="helper-card"><span class="command-card-label">Solo Founder Warnings</span>' + compactList(["You are solo. Build the playable loop before the empire.", "One polished car beats ten broken cars.", "Do not build luxury polish on top of a weak money loop.", "The dream is allowed. The current sprint must be small.", "If it does not help the first playable loop, park it."]) + '</article>',
+        '<article class="helper-card"><span class="command-card-label">Skills blocking the next phase</span>' + compactList(neededSkills.map(function (skill) { return skill.name + ": " + skill.exercise; })) + '</article>',
+      '</div>',
+      '<div class="helper-section-heading"><div><span class="helper-section-label">Freddie Skill Stack</span><h3>Evidence, next exercise and unlocked feature</h3></div><p>Default levels are local planning labels, not credentials.</p></div>',
+      '<article class="helper-card solo-skills-card"><div class="solo-skills-grid">' + skillRows() + '</div></article>',
+      '<details class="helper-card solo-rules-card" open><summary><div><span class="helper-section-label">Permanent principles</span><h3>Founder operating rules</h3></div><span>10 rules</span></summary>' + operatingRulesHtml() + '</details>'
+    ].join("");
+  }
+
+  function detailedRoadmapHtml(currentPhase) {
+    return [
+      sectionHeaderHtml("Empire build path", "Roadmap", "Specific phase deliverables from Foundation to Launch Prep. Only the current phase drives execution.", [{ label: "Current", value: "Phase " + currentPhase.id, tone: "accent" }, { label: "Total phases", value: String(soloPhases.length), tone: "neutral" }]),
+      '<div class="roadmap-current-banner"><span>Current phase</span><strong>' + currentPhase.id + ' - ' + escapeHtml(currentPhase.name) + '</strong><small>' + currentPhase.items.join(" -> ") + '</small></div>',
+      '<div class="solo-roadmap roadmap-page">' + soloRoadmapHtml() + '</div>',
+      '<article class="helper-card blueprint-guardrail"><strong>Roadmap rule</strong><span>Phase 8 is not a launch claim. It is the future checklist after the playable loop, vehicle feel, customisation starter and life systems are proven.</span></article>'
+    ].join("");
+  }
+
+  function brainRecommendationCardsHtml() {
+    return '<div class="brain-recommendation-grid">' + soloFeatures.map(function (feature) {
+      var action = feature.action || featureRecommendation(feature);
+      var tone = action === "Build Now" ? "good" : (action === "Prototype Only" || action === "Learn First" ? "warn" : "bad");
+      return [
+        '<article class="helper-card brain-recommendation-detail" data-tone="' + tone + '">',
+          '<span>' + escapeHtml(action) + '</span>',
+          '<h3>' + escapeHtml(feature.name) + '</h3>',
+          '<p>' + escapeHtml(feature.reason || "") + '</p>',
+          definitionList([["Build status", feature.status || "Not set"], ["Risk", feature.risk || "Not set"], ["Next action", feature.next || "Decide smallest useful version"], ["Scoring", "Value " + feature.value + ", difficulty " + feature.difficulty + ", risk " + (feature.riskScore || 0) + ", dependency " + feature.dependency + ", solo suitability " + (feature.solo || "n/a") + ", maintenance " + feature.maintenance]]),
+        '</article>'
+      ].join("");
+    }).join("") + '</div>';
+  }
+
+  function detailedBrainHtml(next, overload) {
+    var ignore = tasks.filter(function (task) { return taskStatus(task.id) === "parked"; }).slice(0, 4);
+    var blocked = tasks.filter(function (task) { return taskStatus(task.id) === "blocked"; }).slice(0, 4);
+    var priorities = nextThreeActions();
+    var intake = intakeProgress();
+    return [
+      sectionHeaderHtml("Local intelligence", "Overseer Brain", "Rule-based recommendations using value, difficulty, risk, dependency, solo suitability, maintenance and core-loop relevance.", [{ label: "Engine", value: "Local rules", tone: "good" }, { label: "Cloud inference", value: "Off", tone: "neutral" }]),
+      '<div class="brain-summary-grid">',
+        '<article class="helper-card brain-priority-card"><span>Top 3 priorities</span>' + (priorities.length ? soloNextActionsHtml() : emptyState("Add a feature to calculate priority.")) + '</article>',
+        '<article class="helper-card brain-recommendation-card"><span>Recommended next action</span><strong>' + escapeHtml(next.title) + '</strong><p>' + escapeHtml(next.detail) + '</p></article>',
+        '<article class="helper-card"><span>What to ignore</span>' + compactList(ignore.map(function (task) { return task.title; })) + '</article>',
+        '<article class="helper-card"><span>What is blocked</span>' + (blocked.length ? compactList(blocked.map(function (task) { return task.title; })) : emptyState("No active blockers logged.")) + '</article>',
+        '<article class="helper-card" data-tone="' + (overload.overloaded ? "bad" : "good") + '"><span>Feature load</span><strong>' + (overload.overloaded ? "Over-scoped" : "Controlled") + '</strong><p>' + escapeHtml(overload.message) + '</p></article>',
+      '</div>',
+      '<div class="helper-section-heading"><div><span class="helper-section-label">Recommendations</span><h3>Build now, prototype, learn, park, outsource or cut</h3></div><p>These are local planning recommendations, not cloud AI output.</p></div>',
+      brainRecommendationCardsHtml(),
+      '<div class="helper-section-heading"><div><span class="helper-section-label">Solo evaluation</span><h3>Solo Build Score</h3></div><p>Value - difficulty - dependency - maintenance risk, with extra dimensions shown in each row.</p></div>',
+      '<article class="helper-card solo-feature-card"><div class="solo-feature-head"><span>Feature</span><span>Score</span><span>Recommendation</span></div><div class="solo-feature-list">' + featureScoreRowsDetailed() + '</div><div class="solo-brain-questions"><strong>Overseer checks:</strong><span>Can Freddie build it alone?</span><span>Does it help the core loop?</span><span>What skill blocks it?</span><span>What is the smallest useful version?</span></div></article>',
+      '<div class="overseer-intelligence-grid brain-intelligence-grid">',
+        '<article id="overseerIntake" class="helper-card overseer-intake-card"><div class="overseer-card-heading"><div><span class="helper-section-label">Information intake</span><h3>Give Overseer useful context</h3><p>Everything stays in this browser.</p></div><div class="overseer-progress-ring" style="--progress:' + intake.percent + '"><strong>' + intake.percent + '%</strong><span>' + intake.answered + '/' + intake.total + '</span></div></div><div class="overseer-intake-grid">' + intakeFieldsHtml() + '</div><div class="overseer-intake-footer"><span>Local draft - not secure</span><button type="button" class="helper-button primary" onclick="helperSaveIntake()">Save information</button></div></article>',
+        '<article class="helper-card overseer-prompt-card"><div class="overseer-card-heading compact"><div><span class="helper-section-label">ChatGPT prompt lab</span><h3>Build a context-rich prompt</h3><p>Review and copy manually.</p></div></div><div class="overseer-prompt-modes">' + promptModeButtons() + '</div><textarea id="overseerGeneratedPrompt" class="overseer-generated-prompt" readonly>' + escapeHtml(buildPrompt()) + '</textarea><div class="overseer-prompt-footer"><span>Nothing is transmitted automatically.</span><button type="button" class="helper-button primary" onclick="helperCopyPrompt()">Copy prompt</button></div></article>',
+      '</div>'
+    ].join("");
+  }
+
+  function detailedVaultHtml() {
+    return [
+      sectionHeaderHtml("Future Vault", "Vault", "Long-term empire storage. These ideas are not current tasks and should not pollute the active sprint.", [{ label: "Status", value: "Parked", tone: "muted" }, { label: "Trajectory", value: "No Ceiling", tone: "accent" }]),
+      detailCards(vaultCategories.map(function (category) { return { name: category[0], items: category[1] }; }), "vault-category-grid"),
+      '<article class="helper-card vault-trajectory"><span>Empire trajectory</span><strong>No Ceiling</strong><p>Skill -> product -> cashflow -> assets -> trophies -> empire. Current sprint still stays small.</p></article>',
+      '<article class="helper-card vault-editor"><label for="overseerVault">Local vault notes</label><textarea id="overseerVault" maxlength="8000" placeholder="Store future ideas here instead of activating them now...">' + escapeHtml(helperState.vault) + '</textarea><div><span>Parked locally - not part of the active sprint - not secure</span><button type="button" class="helper-button primary" onclick="helperSaveVault()">Save vault</button></div></article>'
+    ].join("");
+  }
+
   function systemFooterHtml() {
     return [
       '<footer class="overseer-system-footer">',
@@ -1020,14 +1463,14 @@
     var sectionHtml = "";
 
     if (helperState.activeSection === "command") sectionHtml = commandCenterHtml(next, counts, overload, risk);
-    if (helperState.activeSection === "blueprint") sectionHtml = blueprintHtml();
-    if (helperState.activeSection === "cars") sectionHtml = carSystemsHtml();
-    if (helperState.activeSection === "life") sectionHtml = lifeSystemsHtml();
-    if (helperState.activeSection === "founder") sectionHtml = founderSystemsHtml(counts, overload, risk, currentPhase, parkedTasks, neededSkills);
-    if (helperState.activeSection === "roadmap") sectionHtml = roadmapHtml(currentPhase);
-    if (helperState.activeSection === "brain") sectionHtml = brainHtml(next, overload);
+    if (helperState.activeSection === "blueprint") sectionHtml = detailedBlueprintHtml();
+    if (helperState.activeSection === "cars") sectionHtml = detailedCarSystemsHtml();
+    if (helperState.activeSection === "life") sectionHtml = detailedLifeSystemsHtml();
+    if (helperState.activeSection === "founder") sectionHtml = detailedFounderSystemsHtml(counts, overload, risk, currentPhase, parkedTasks, neededSkills);
+    if (helperState.activeSection === "roadmap") sectionHtml = detailedRoadmapHtml(currentPhase);
+    if (helperState.activeSection === "brain") sectionHtml = detailedBrainHtml(next, overload);
     if (helperState.activeSection === "decisions") sectionHtml = decisionsHtml();
-    if (helperState.activeSection === "vault") sectionHtml = vaultHtml();
+    if (helperState.activeSection === "vault") sectionHtml = detailedVaultHtml();
 
     var commandOverview = helperState.activeSection === "command"
       ? founderTopHtml(next, counts, overload, risk, currentPhase)
